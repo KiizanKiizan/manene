@@ -1,5 +1,7 @@
 import React from "react";
 import Providers from "./providers";
+import AppBarContextProvider from "./components/common/context-provider/app-bar-context-provider";
+import Header from "./components/header";
 
 export const metadata = {
   title: "Manene",
@@ -14,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body style={{ margin: 0 }}>
-        <Providers>{children}</Providers>
+        <AppBarContextProvider>
+          <Header />
+          <Providers>{children}</Providers>
+        </AppBarContextProvider>
       </body>
     </html>
   );
