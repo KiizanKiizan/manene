@@ -1,5 +1,3 @@
-"use client";
-
 import MenuAccordion from "./components/common/accordion/menu-accordion";
 import LinkButton from "./components/common/button/link-button";
 
