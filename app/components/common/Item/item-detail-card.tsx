@@ -78,7 +78,7 @@ export default function ItemDetailCard({
                 >
                   {partSizes.slice(0, 3).map((partSize) => {
                     return (
-                      <TableCell key={partSize.partSize} align="center">
+                      <TableCell key={partSize.partName} align="center">
                         {partSize.partSize}
                       </TableCell>
                     );
@@ -121,7 +121,7 @@ export default function ItemDetailCard({
                 >
                   {partSizes.slice(3, 6).map((partSize) => {
                     return (
-                      <TableCell key={partSize.partSize} align="center">
+                      <TableCell key={partSize.partName} align="center">
                         {partSize.partSize}
                       </TableCell>
                     );
