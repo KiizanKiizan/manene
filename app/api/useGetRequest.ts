@@ -13,8 +13,8 @@ export const useGetRequest = <TResponse, TParams = object, THeaders = object>({
   headers?: THeaders;
   isEnabled?: boolean;
 }) => {
-  const { data, error, isLoading } = useQuery<TResponse, Error>(
-    [path],
+  const { data, refetch, error, isLoading } = useQuery<TResponse, Error>(
+    [path, params],
     () =>
       customAxios()
         .get(`${HostUrl()}/igoue_admin/app_api/${path}`, {
@@ -36,6 +36,7 @@ export const useGetRequest = <TResponse, TParams = object, THeaders = object>({
 
   return {
     data,
+    refetch,
     error,
     isLoading,
   };
