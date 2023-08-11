@@ -1,15 +1,16 @@
 import { TItemLocationsItemScanResponse as TItemInfo } from "@/app/api/item-location/useItemLocationsItemScan";
 import { Box, Card, CardContent, Typography, styled } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
 import ItemDetailFetcher from "../../item_location/item-detail-fetcher";
+import useDisableBrowserBack from "../custom-hook/useDisableBrowserBack";
 
 type TProps = {
   Item: TItemInfo;
 };
 
 export default function ItemMiniCard({ Item }: TProps) {
-  const [isOpenItemDetailFetcher, setIsOpenItemDetailFetcher] = useState(false);
+  const { isDialogOpen, handleClickCloseDialog, handleClickOpenDialog } =
+    useDisableBrowserBack();
 
   const SCardContent = styled(CardContent)`
     &:last-child {
@@ -20,9 +21,7 @@ export default function ItemMiniCard({ Item }: TProps) {
   return (
     <>
       <Card
-        onClick={() => {
-          setIsOpenItemDetailFetcher(true);
-        }}
+        onClick={handleClickOpenDialog}
         sx={{
           borderRadius: 0,
           boxShadow: 0,
@@ -44,12 +43,10 @@ export default function ItemMiniCard({ Item }: TProps) {
         </SCardContent>
       </Card>
 
-      {isOpenItemDetailFetcher && (
+      {isDialogOpen && (
         <ItemDetailFetcher
           itemId={Item.id}
-          onClickClose={() => {
-            setIsOpenItemDetailFetcher(false);
-          }}
+          onClickClose={handleClickCloseDialog}
         />
       )}
     </>

@@ -1,7 +1,6 @@
 import useItemsShow from "@/app/api/item-location/useItemsShow";
-import ItemDetailCardContainer from "../common/Item/item-detail-card-container";
 import { CircularProgress, Dialog, DialogContent } from "@mui/material";
-import { useEffect } from "react";
+import ItemDetailCardContainer from "../common/Item/item-detail-card-container";
 
 type TProps = {
   itemId: number;
@@ -10,10 +9,6 @@ type TProps = {
 
 export default function ItemDetailFetcher({ itemId, onClickClose }: TProps) {
   const { data, error, isLoading } = useItemsShow({ id: itemId });
-
-  useEffect(() => {
-    addEventListener("popstate", onClickClose);
-  }, [onClickClose]);
 
   return (
     <>
