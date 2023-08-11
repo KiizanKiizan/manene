@@ -30,7 +30,7 @@ export default function HomePage() {
         <LinkButton buttonName={"廃棄判定"} path="" />
       </MenuAccordion>
       <MenuAccordion title={"棚管理"}>
-        <LinkButton buttonName={"棚移動"} path="" />
+        <LinkButton buttonName={"棚移動"} path="item_location" />
         <LinkButton buttonName={"棚卸し"} path="" />
       </MenuAccordion>
     </>
