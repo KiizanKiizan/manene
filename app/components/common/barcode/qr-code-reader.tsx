@@ -1,9 +1,9 @@
 "use client";
+import KeyboardAltOutlinedIcon from "@mui/icons-material/KeyboardAltOutlined";
 import { Box, Button, Modal, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
-import KeyboardAltOutlinedIcon from "@mui/icons-material/KeyboardAltOutlined";
-import BarcodeInputDialog from "./barcode-input-dialog";
 import Html5QrcodePlugin from "./Html5QrcodePlugin";
+import BarcodeInputDialog from "./barcode-input-dialog";
 
 type TProps = {
   onScan: (id: number) => void;
@@ -31,10 +31,12 @@ export default function QrCodeReader({ onScan }: TProps) {
     p: 4,
   };
   const onNewScanResult = (decodedText: string) => {
-    const chartId = JSON.parse(decodedText).chartId;
-    isNaN(chartId)
+    const id = JSON.parse(decodedText).chartId
+      ? JSON.parse(decodedText).chartId
+      : decodedText;
+    isNaN(id)
       ? setDialogMessage("再度バーコードを読み取って下さい。")
-      : onScan(parseInt(chartId));
+      : onScan(parseInt(id));
   };
 
   return (
