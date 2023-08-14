@@ -52,6 +52,7 @@ export default function BarcodeInputDialog({
                 "idがundefinedの状態でonclickが発火しようとされています。"
               );
             onClickSetId(id);
+            setId(undefined);
           }}
           disabled={id === undefined}
         >

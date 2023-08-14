@@ -2,12 +2,14 @@
   "extends": [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
-    "eslint:recommended"
+    "eslint:recommended",
+    "plugin:react/recommended"
   ],
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "error",
-    "no-console": "error"
+    "no-console": "error",
+    "react/react-in-jsx-scope": "off"
   },
   "plugins": ["@typescript-eslint"]
 }

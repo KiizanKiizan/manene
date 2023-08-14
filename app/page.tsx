@@ -2,10 +2,12 @@
 
 import MenuAccordion from "./components/common/accordion/menu-accordion";
 import LinkButton from "./components/common/button/link-button";
+import Header from "./components/common/pages/header";
 
 export default function HomePage() {
   return (
     <>
+      <Header title="メニュー" />
       <MenuAccordion title={"運営"}>
         <LinkButton buttonName={"アイテムサイズ計測"} path="" />
         <LinkButton buttonName={"クリーニングコスト登録"} path="" />
@@ -28,7 +30,7 @@ export default function HomePage() {
         <LinkButton buttonName={"廃棄判定"} path="" />
       </MenuAccordion>
       <MenuAccordion title={"棚管理"}>
-        <LinkButton buttonName={"棚移動"} path="" />
+        <LinkButton buttonName={"棚移動"} path="item_location" />
         <LinkButton buttonName={"棚卸し"} path="" />
       </MenuAccordion>
     </>

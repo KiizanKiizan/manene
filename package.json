@@ -9,6 +9,7 @@
     "start": "next build && next start -p 3001",
     "lint": "next lint",
     "test": "playwright test",
+    "test:ui": "npx playwright test --ui",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -25,12 +26,14 @@
     "@zxing/library": "^0.20.0",
     "axios": "^1.4.0",
     "axios-case-converter": "^1.1.0",
-    "eslint": "8.44.0",
+    "eslint": "^8.46.0",
     "eslint-config-next": "13.4.8",
+    "eslint-plugin-react": "^7.33.1",
     "html5-qrcode": "^2.3.8",
     "next": "13.4.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "sharp": "^0.32.4",
     "typescript": "5.1.6"
   },
   "devDependencies": {

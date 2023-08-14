@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@mui/material";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type TProps = {
   buttonName: string;
@@ -8,14 +8,11 @@ type TProps = {
 };
 
 export default function LinkButton({ buttonName, path }: TProps) {
-  const router = useRouter();
   return (
-    <Button
-      fullWidth={true}
-      sx={{ justifyContent: "flex-start" }}
-      onClick={() => router.push(path)}
-    >
-      {buttonName}
-    </Button>
+    <Link href={path}>
+      <Button fullWidth={true} sx={{ justifyContent: "flex-start" }}>
+        {buttonName}
+      </Button>
+    </Link>
   );
 }
