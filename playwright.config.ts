@@ -1,15 +1,16 @@
-import { PlaywrightTestConfig, devices } from "@playwright/test";
+import { devices } from "@playwright/test";
+import { defineConfig } from "next/experimental/testmode/playwright";
 import path from "path";
 
 const PORT = process.env.PORT || 3001;
 const baseURL = `http://localhost:${PORT}`;
 
-const config: PlaywrightTestConfig = {
+export default defineConfig({
   timeout: 5 * 1000,
   testDir: path.join(__dirname, "tests"),
   retries: 0,
   webServer: {
-    command: "yarn start",
+    command: "yarn dev -- --experimental-test-proxy",
     url: baseURL,
     timeout: 120 * 1000,
     reuseExistingServer: true,
@@ -26,5 +27,4 @@ const config: PlaywrightTestConfig = {
       },
     },
   ],
-};
-export default config;
+});

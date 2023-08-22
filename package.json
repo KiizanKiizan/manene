@@ -31,7 +31,7 @@
     "eslint-config-next": "13.4.8",
     "eslint-plugin-react": "^7.33.1",
     "html5-qrcode": "^2.3.8",
-    "next": "13.4.8",
+    "next": "^13.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.1.6"
@@ -41,11 +41,15 @@
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
-    "local-ssl-proxy": "^2.0.5"
+    "local-ssl-proxy": "^2.0.5",
+    "msw": "^1.2.3"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
     ]
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
