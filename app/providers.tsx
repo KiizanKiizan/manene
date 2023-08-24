@@ -3,6 +3,15 @@ import { ThemeOptions, ThemeProvider, createTheme } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 
+if (process.env.NEXT_PUBLIC_ENABLE_MSW === "true") {
+  if (typeof window !== "undefined") {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require("../mocks/browser");
+
+    worker.start();
+  }
+}
+
 const themeOptions: ThemeOptions = {
   palette: {
     primary: { main: "#1976d2" },

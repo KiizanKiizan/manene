@@ -4,12 +4,6 @@ import MenuAccordion from "./components/common/accordion/menu-accordion";
 import LinkButton from "./components/common/button/link-button";
 import Header from "./components/common/pages/header";
 
-if (process.env.NODE_ENV === "development") {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { worker } = require("../mocks/browser");
-  worker.start();
-}
-
 export default function HomePage() {
   return (
     <>
