@@ -13,7 +13,7 @@ type TProps = {
 
 export default function StocktakingRow({ location, onClick }: TProps) {
   return (
-    <ListItem disablePadding divider>
+    <ListItem disablePadding divider id="stocktaking-row">
       <ListItemButton
         onClick={() => onClick(location.id)}
         sx={{
@@ -29,14 +29,18 @@ export default function StocktakingRow({ location, onClick }: TProps) {
               : "white",
         }}
       >
-        {location.status === STATUS.DONE ? <DoneIcon /> : <Box width="24px" />}
+        {location.status === STATUS.DONE ? (
+          <DoneIcon data-testid="checked" />
+        ) : (
+          <Box width="24px" />
+        )}
         <ListItemText
           primary={`${location.mLocationName} ${location.totalCount}着`}
         />
 
         {location.status === STATUS.IN_PROGRESS && (
           <>
-            {!!location.mismatchingCount && (
+            {!!location.unscannedCount && (
               <Box
                 display="flex"
                 alignItems="center"
@@ -44,11 +48,12 @@ export default function StocktakingRow({ location, onClick }: TProps) {
                 bgcolor="warning.dark"
                 width={50}
                 borderRadius={30}
+                data-testid="unscanned"
               >
                 未{location.unscannedCount}
               </Box>
             )}
-            {!!location.unscannedCount && (
+            {!!location.mismatchingCount && (
               <Box
                 display="flex"
                 alignItems="center"
@@ -56,6 +61,7 @@ export default function StocktakingRow({ location, onClick }: TProps) {
                 bgcolor="warning.light"
                 width={50}
                 borderRadius={30}
+                data-testid="mismatching"
               >
                 不{location.mismatchingCount}
               </Box>
