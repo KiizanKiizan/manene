@@ -22,7 +22,6 @@ export default async function getNoCacheData<TResponse, TParams = object>({
       })
       .join("&")}`;
   };
-  console.log(`${HostUrl()}/igoue_admin/app_api/${path}${getParams()}`);
   const res = await fetch(
     `${HostUrl()}/igoue_admin/app_api/${path}${getParams()}`,
     {
