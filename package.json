@@ -42,7 +42,8 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
     "local-ssl-proxy": "^2.0.5",
-    "msw": "^1.2.3"
+    "msw": "^1.2.3",
+    "playwright-msw": "^2.2.1"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
