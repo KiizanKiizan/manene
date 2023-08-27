@@ -6,5 +6,7 @@ type TParams = {
 };
 export default async function StocktakingLocationPage({ params }: TParams) {
   const data = await getStocktakingsLocationsShow({ id: params.id });
+  console.log(data);
+  console.log("-------------------------------------------------");
   return <StocktakingLocationContainer location={data} />;
 }

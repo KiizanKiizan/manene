@@ -7,6 +7,7 @@ type TProps = {
 export default function SubHeader({ children }: TProps) {
   return (
     <Box
+      data-testId="sub-header"
       sx={{
         bgcolor: "#CCCCCC",
         height: "30px",

@@ -1,23 +1,22 @@
-import { expect, rest, test } from "next/experimental/testmode/playwright/msw";
+import { expect, rest } from "next/experimental/testmode/playwright/msw";
+import { baseUrl } from "../../app/model/Base-url";
 import {
-  mockStocktakingCurrentChecked,
-  mockStocktakingCurrentList,
-  mockStocktakingCurrentMismatching,
-  mockStocktakingCurrentMismatchingAndUnscanned,
-  mockStocktakingCurrentNull,
-  mockStocktakingCurrentUnsccaned,
+  StocktakingRowChecked,
+  mockStocktakingCurrentAllChecked,
+  stocktakingCurrentHasUnChecked,
+  stocktakingCurrentList,
+  stocktakingCurrentMismatching,
+  stocktakingCurrentMismatchingAndUnscanned,
+  stocktakingCurrentNull,
+  stocktakingCurrentUnsccaned,
 } from "../../mocks/api/stocktaking";
+import { test } from "../testUtil";
 
 test("棚卸しが開始されていない場合、「棚卸し開始」ボタンが配置されている。", async ({
   page,
   msw,
 }) => {
-  msw.use(
-    rest.get(
-      "http://127.0.0.1:3000/igoue_admin/app_api/stocktakings/current",
-      mockStocktakingCurrentNull
-    )
-  );
+  msw.use(rest.get(baseUrl("stocktakings/current"), stocktakingCurrentNull));
 
   const startStocktakingButton = page.getByRole("button", {
     name: "棚卸し開始",
@@ -30,12 +29,7 @@ test("棚卸しが既に開始されている場合、棚一覧が取得でき�
   page,
   msw,
 }) => {
-  msw.use(
-    rest.get(
-      "http://127.0.0.1:3000/igoue_admin/app_api/stocktakings/current",
-      mockStocktakingCurrentList
-    )
-  );
+  msw.use(rest.get(baseUrl("stocktakings/current"), stocktakingCurrentList));
 
   const stocktakingRow = page.locator("id=stocktaking-row");
 
@@ -52,18 +46,13 @@ test("棚卸しが既に開始されている場合、棚一覧が取得でき�
 });
 
 test("棚卸しを開始すると、棚一覧が取得できる。", async ({ page, msw }) => {
-  msw.use(
-    rest.get(
-      "http://127.0.0.1:3000/igoue_admin/app_api/stocktakings/current",
-      mockStocktakingCurrentNull
-    )
-  );
+  msw.use(rest.get(baseUrl("stocktakings/current"), stocktakingCurrentNull));
   const startStocktakingButton = page.getByRole("button", {
     name: "棚卸し開始",
   });
+  await page.goto("/stocktaking");
   const stocktakingRow = page.locator("id=stocktaking-row");
 
-  await page.goto("/stocktaking");
   await startStocktakingButton.click();
   await expect(stocktakingRow.nth(0)).toContainText("D-10-下");
   await expect(stocktakingRow.nth(1)).toContainText("D-11-上");
@@ -80,32 +69,25 @@ test("棚リストにチェック済みの棚がある場合、チェックマ�
   page,
   msw,
 }) => {
-  msw.use(
-    rest.get(
-      "http://127.0.0.1:3000/igoue_admin/app_api/stocktakings/current",
-      mockStocktakingCurrentChecked
-    )
-  );
+  const BGCOLOR = "rgb(221, 255, 221)";
+  msw.use(rest.get(baseUrl("stocktakings/current"), StocktakingRowChecked));
   const stocktakingRow = page.locator("#stocktaking-row > div");
   const checkedMark = page.getByTestId("checked");
   await page.goto("/stocktaking");
   await expect(stocktakingRow.nth(0)).toContainText("D-10-下");
   await expect(checkedMark).toBeVisible();
-  await expect(stocktakingRow.nth(0)).toHaveCSS(
-    "background-color",
-    "rgb(221, 255, 221)"
-  );
+  await expect(stocktakingRow.nth(0)).toHaveCSS("background-color", BGCOLOR);
 });
 
 test("棚リストに未スキャンアイテムがある場合、未スキャンアイテムの数が表示され、背景が赤色になる。", async ({
   page,
   msw,
 }) => {
+  const UNSCANNED_MARK_COLOR = "rgb(255, 0, 0)";
+  const BGCOLOR = "rgb(250, 219, 218)";
+
   msw.use(
-    rest.get(
-      "http://127.0.0.1:3000/igoue_admin/app_api/stocktakings/current",
-      mockStocktakingCurrentUnsccaned
-    )
+    rest.get(baseUrl("stocktakings/current"), stocktakingCurrentUnsccaned)
   );
   const stocktakingRow = page.locator("#stocktaking-row > div");
   const checkedMark = page.getByTestId("checked");
@@ -116,22 +98,22 @@ test("棚リストに未スキャンアイテムがある場合、未スキャ�
   await expect(checkedMark).toBeHidden();
   await expect(unscannedMark).toBeVisible();
   await expect(unscannedMark).toContainText("未20");
-  await expect(unscannedMark).toHaveCSS("background-color", "rgb(255, 0, 0)");
-  await expect(stocktakingRow.nth(0)).toHaveCSS(
+  await expect(unscannedMark).toHaveCSS(
     "background-color",
-    "rgb(250, 219, 218)"
+    UNSCANNED_MARK_COLOR
   );
+  await expect(stocktakingRow.nth(0)).toHaveCSS("background-color", BGCOLOR);
 });
 
 test("棚リストに不一致アイテムがある場合、不一致アイテムの数が表示され、背景が赤色になる。", async ({
   page,
   msw,
 }) => {
+  const MISMATCIHNG_COLOR = "rgb(253, 126, 0)";
+  const BGCOLOR = "rgb(250, 219, 218)";
+
   msw.use(
-    rest.get(
-      "http://127.0.0.1:3000/igoue_admin/app_api/stocktakings/current",
-      mockStocktakingCurrentMismatching
-    )
+    rest.get(baseUrl("stocktakings/current"), stocktakingCurrentMismatching)
   );
   const stocktakingRow = page.locator("#stocktaking-row > div");
   const checkedMark = page.getByTestId("checked");
@@ -144,22 +126,23 @@ test("棚リストに不一致アイテムがある場合、不一致アイテ�
   await expect(mismatchingMark).toContainText("不2");
   await expect(mismatchingMark).toHaveCSS(
     "background-color",
-    "rgb(253, 126, 0)"
+    MISMATCIHNG_COLOR
   );
-  await expect(stocktakingRow.nth(0)).toHaveCSS(
-    "background-color",
-    "rgb(250, 219, 218)"
-  );
+  await expect(stocktakingRow.nth(0)).toHaveCSS("background-color", BGCOLOR);
 });
 
 test("棚リストに不一致アイテムと未スキャンアイテム両方がある場合、両方とも表示される", async ({
   page,
   msw,
 }) => {
+  const UNSCANNED_MARK_COLOR = "rgb(255, 0, 0)";
+  const MISMATCIHNG_COLOR = "rgb(253, 126, 0)";
+  const BGCOLOR = "rgb(250, 219, 218)";
+
   msw.use(
     rest.get(
-      "http://127.0.0.1:3000/igoue_admin/app_api/stocktakings/current",
-      mockStocktakingCurrentMismatchingAndUnscanned
+      baseUrl("stocktakings/current"),
+      stocktakingCurrentMismatchingAndUnscanned
     )
   );
   const stocktakingRow = page.locator("#stocktaking-row > div");
@@ -172,15 +155,43 @@ test("棚リストに不一致アイテムと未スキャンアイテム両方�
   await expect(checkedMark).toBeHidden();
   await expect(unscannedMark).toBeVisible();
   await expect(unscannedMark).toContainText("未20");
-  await expect(unscannedMark).toHaveCSS("background-color", "rgb(255, 0, 0)");
+  await expect(unscannedMark).toHaveCSS(
+    "background-color",
+    UNSCANNED_MARK_COLOR
+  );
   await expect(mismatchingMark).toBeVisible();
   await expect(mismatchingMark).toContainText("不2");
   await expect(mismatchingMark).toHaveCSS(
     "background-color",
-    "rgb(253, 126, 0)"
+    MISMATCIHNG_COLOR
   );
-  await expect(stocktakingRow.nth(0)).toHaveCSS(
-    "background-color",
-    "rgb(250, 219, 218)"
+  await expect(stocktakingRow.nth(0)).toHaveCSS("background-color", BGCOLOR);
+});
+
+test("チェック完了していない棚がある場合、「棚卸し完了」ボタンを押すことができない", async ({
+  page,
+  msw,
+}) => {
+  msw.use(
+    rest.get(baseUrl("stocktakings/current"), stocktakingCurrentHasUnChecked)
   );
+  await page.goto("/stocktaking");
+  const completeButton = page.getByRole("button", { name: "棚卸し完了" });
+
+  await expect(completeButton).toBeDisabled();
+});
+
+test("棚リスト全てがチェック済みになった場合、「棚卸し完了」ボタンを押すことができ、棚卸しを完了してホームに戻ることができる。", async ({
+  page,
+  msw,
+}) => {
+  msw.use(
+    rest.get(baseUrl("stocktakings/current"), mockStocktakingCurrentAllChecked)
+  );
+  await page.goto("/stocktaking");
+  const completeButton = page.getByRole("button", { name: "棚卸し完了" });
+  await expect(completeButton).toBeEnabled();
+  await completeButton.click();
+  await expect(page).toHaveURL("/");
+  await expect(page.getByRole("button").nth(0)).toHaveText("メニュー");
 });

@@ -138,6 +138,7 @@ export default function StocktakingLocationContainer({ location }: TProps) {
           <DisableBackDialog
             open={isCompleteDialogOpen}
             altCallback={() => setIsCompleteDialogOpen(false)}
+            data-testId="disabled-back-button"
           >
             <DialogTitle>確認</DialogTitle>
             <DialogContent>確認を完了して一覧に戻りますか？</DialogContent>
