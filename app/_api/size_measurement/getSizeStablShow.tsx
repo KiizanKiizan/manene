@@ -1,4 +1,4 @@
-import getNoCacheData from '../getNoCacheData';
+import fetchData from '../fetchData';
 
 type TParams = { itemId: number };
 export type TGetSizeMeasurementIndexResponse = {
@@ -6,7 +6,7 @@ export type TGetSizeMeasurementIndexResponse = {
 };
 
 export default async function getSizeStablShow(params: TParams) {
-  return await getNoCacheData<TGetSizeMeasurementIndexResponse, TParams>({
+  return fetchData<TGetSizeMeasurementIndexResponse, TParams>({
     path: `items/${params.itemId}/size_stable_count`,
     params: params,
   });
