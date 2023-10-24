@@ -1,4 +1,4 @@
-import { useGetRequest } from '../useGetRequest';
+import fetchData from '../fetchData';
 
 type Tparams = { waist: number };
 export type TuseSizeCalcIndexResponse = {
@@ -6,9 +6,9 @@ export type TuseSizeCalcIndexResponse = {
 };
 
 export default function useSizeCalcIndex(params: Tparams) {
-  const { data, error, isLoading } = useGetRequest<TuseSizeCalcIndexResponse>({
+  const data = fetchData<TuseSizeCalcIndexResponse>({
     path: 'size_calc',
     params,
   });
-  return { data, error, isLoading };
+  return data;
 }
