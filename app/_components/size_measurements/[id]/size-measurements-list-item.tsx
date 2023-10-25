@@ -1,7 +1,6 @@
-// ListItem
 'use client';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { Box, ListItem, Typography, useTheme } from '@mui/material';
+import { Box, ListItem, Typography } from '@mui/material';
 import { LiaHandPointRight } from 'react-icons/lia';
 
 export type TOptionDetail = {
@@ -23,7 +22,6 @@ export default function SizeMeasurementsListItem({
   isSelected,
   onClickSelect,
 }: TProps) {
-  const theme = useTheme();
   return (
     <ListItem
       divider
@@ -39,29 +37,31 @@ export default function SizeMeasurementsListItem({
         onClick={() => onClickSelect(optionDetail.id)}
       />
       <Typography
+        color="primary.main"
         style={{
-          color: theme.palette.primary.main,
           fontSize: '1.2rem',
           fontWeight: '500',
         }}>
         {optionDetail.partName}
       </Typography>
       <Typography
-        style={{ fontSize: '1.2rem', color: theme.palette.secondary.main }}>
+        color="secondary.main"
+        style={{ fontSize: '1.2rem' }}>
         {optionDetail.preMeasurement}cm
       </Typography>
-      <ArrowRightIcon style={{ color: theme.palette.secondary.main }} />
+      <ArrowRightIcon htmlColor="secondary.main" />
       <Box>
         <Typography
           style={{
-            color: theme.palette.primary.main,
             fontSize: '0.8rem',
             fontWeight: '300',
-          }}>
+          }}
+          color="primary.main">
           {optionDetail.actionMessage}
         </Typography>
         <Typography
-          style={{ fontSize: '1.2rem', color: theme.palette.secondary.main }}>
+          color="secondary.main"
+          style={{ fontSize: '1.2rem' }}>
           {optionDetail.newMeasurement ?? ''}cm
         </Typography>
       </Box>
