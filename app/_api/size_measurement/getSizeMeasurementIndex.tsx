@@ -15,13 +15,13 @@ export type TMeasurementInput = {
 };
 
 type TParams = { itemId: number };
-export type TgetSizeMeasurementIndex = {
+export type TGetSizeMeasurementIndexResponse = {
   itemId: number;
   input: TMeasurementInput;
 };
 
 export default async function getSizeMeasurementIndex(params: TParams) {
-  return await getNoCacheData<TgetSizeMeasurementIndex, TParams>({
+  return await getNoCacheData<TGetSizeMeasurementIndexResponse, TParams>({
     path: 'size_measurement',
     params: params,
   });
