@@ -21,7 +21,7 @@ export type TGetSizeMeasurementIndexResponse = {
 };
 
 export default async function getSizeMeasurementIndex(params: TParams) {
-  return await getNoCacheData<TGetSizeMeasurementIndexResponse, TParams>({
+  return getNoCacheData<TGetSizeMeasurementIndexResponse, TParams>({
     path: 'size_measurement',
     params: params,
   });
