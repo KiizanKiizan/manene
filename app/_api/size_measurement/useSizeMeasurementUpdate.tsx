@@ -1,6 +1,6 @@
 import { usePatchRequest } from '../usePatchRequest';
 
-export type TParams = {
+export type TSizeMeasurementUpdateParams = {
   id: number;
   bust?: number;
   lengthTop?: number;
@@ -18,7 +18,9 @@ export type TParams = {
 };
 
 export default function useSizeMeasurementUpdate(id: number) {
-  const { mutate, error, isLoading } = usePatchRequest<Omit<TParams, 'id'>>({
+  const { mutate, error, isLoading } = usePatchRequest<
+    Omit<TSizeMeasurementUpdateParams, 'id'>
+  >({
     path: `size_measurement/${id}`,
   });
   return { mutate, error, isLoading };
