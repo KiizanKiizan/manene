@@ -1,0 +1,27 @@
+import { usePatchRequest } from '../usePatchRequest';
+
+export type TSizeMeasurementUpdateParams = {
+  id: number;
+  bust?: number;
+  lengthTop?: number;
+  roundNeck?: number;
+  sleeveLength?: number;
+  waist?: number;
+  minWaist?: number;
+  maxWaist?: number;
+  hip?: number;
+  roundLeg?: number;
+  bottomsLength?: number;
+  hemWidth?: number;
+  size: string;
+  rank: string;
+};
+
+export default function useSizeMeasurementUpdate(id: number) {
+  const { mutate, error, isLoading } = usePatchRequest<
+    Omit<TSizeMeasurementUpdateParams, 'id'>
+  >({
+    path: `size_measurement/${id}`,
+  });
+  return { mutate, error, isLoading };
+}
