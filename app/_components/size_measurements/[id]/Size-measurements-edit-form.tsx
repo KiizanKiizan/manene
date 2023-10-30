@@ -50,6 +50,14 @@ export default function SizeMeasurementsEditForm({
     (option) => option.id === selectedPartdId
   );
 
+  const isFormValid = () => {
+    return (
+      size &&
+      rank &&
+      optionDetails.some((option) => option.id === selectedPartdId)
+    );
+  };
+
   const selectedPartName = selectedOptionDetail
     ? selectedOptionDetail.partName
     : "";
@@ -241,7 +249,7 @@ export default function SizeMeasurementsEditForm({
           </Button>
           <Button
             onClick={onClickUpdate}
-            disabled={isLoading}
+            disabled={!isFormValid() || isLoading}
             variant="contained"
             size="large"
             sx={{
