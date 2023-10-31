@@ -243,7 +243,7 @@ export default function SizeMeasurementsEditForm({
                 color: "white",
               },
             }}>
-            スッキプ
+            スキップ
           </Button>
           <Button
             onClick={onClickUpdate}
