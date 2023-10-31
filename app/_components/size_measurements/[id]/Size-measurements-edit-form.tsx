@@ -46,24 +46,22 @@ export default function SizeMeasurementsEditForm({
   onClickUpdate,
   onClickSkip,
 }: TProps) {
-  const selectedOptionDetail = optionDetails.find(
-    (option) => option.id === selectedPartdId
-  );
-
   const isFormValid = () => {
     return (
       size &&
       rank &&
-      optionDetails.some((option) => option.id === selectedPartdId)
+      optionDetails.every(
+        (optionDetail) => optionDetail.newMeasurement !== undefined
+      )
     );
   };
 
-  const selectedPartName = selectedOptionDetail
-    ? selectedOptionDetail.partName
-    : "";
+  const selectedPartName =
+    optionDetails.find((option) => option.id === selectedPartdId)?.partName ??
+    "";
   return (
     <>
-      <Box sx={{ p: "1.2rem", display: "grid", gap: 4 }}>
+      <Box sx={{ p: "1.2rem", display: "grid", gap: 1 }}>
         <Box
           color="secondary.main"
           sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -274,6 +272,3 @@ export default function SizeMeasurementsEditForm({
     </>
   );
 }
-
-//全てが入力されていないと確定ボタンを押せないようにする。
-//ウエストの箇所を動的にする
