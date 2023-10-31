@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 
 import {
   Box,
@@ -26,7 +27,7 @@ type TProps = {
   ) => void;
   onChangeSize: (e: SelectChangeEvent<string>) => void;
   onChangeRank: (e: SelectChangeEvent<string>) => void;
-  onClickEnter: (e: KeyboardEvent) => void;
+  onClickEnter: (e: React.KeyboardEvent) => void;
   onClickSelect: (id: number) => void;
   onClickUpdate: () => void;
   onClickSkip: () => void;
@@ -76,7 +77,7 @@ export default function SizeMeasurementsEditForm({
             id="standard-basic"
             variant="standard"
             onChange={onChangeMeasurement}
-            onKeyDown={(e) => onClickEnter}
+            onKeyDown={(e: React.KeyboardEvent) => onClickEnter(e)}
           />
         </Box>
         <Box
