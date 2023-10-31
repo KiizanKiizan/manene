@@ -18,6 +18,7 @@ export default function SizeMeasurementsList({
       {optionDetails.map((optionDetail: TOptionDetail) => {
         return (
           <SizeMeasurementsListItem
+            key={optionDetail.id}
             optionDetail={optionDetail}
             isSelected={optionDetail.id === selectedPartId}
             onClickSelect={onClickSelect}
