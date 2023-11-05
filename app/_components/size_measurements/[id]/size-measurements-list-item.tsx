@@ -24,43 +24,48 @@ export default function SizeMeasurementsListItem({
 }: TProps) {
   const rightGray = "#EBEBEB";
   return (
-    <ListItem
-      divider
-      sx={{
-        display: "flex",
-        width: "100%",
-        height: "3rem",
-      }}
-    >
-      <Box>
+    <ListItem sx={{ display: "flex", width: "100%", height: "4rem" }} divider>
+      <Box display="flex" justifyContent="center">
         <LiaHandPointRight
           size={27}
           color={isSelected ? "red" : rightGray}
           onClick={() => onClickSelect(optionDetail.id)}
         />
       </Box>
-      <Typography color="primary.main" variant="h6" marginLeft={3}>
+      <Typography
+        variant="subtitle1"
+        color="primary.main"
+        textAlign="center"
+        width={500}
+      >
         {optionDetail.partName}
       </Typography>
-      <Typography color="secondary.dark" variant="subtitle1" marginLeft={3}>
+      <Typography variant="subtitle1" color="secondary.dark">
         {optionDetail.preMeasurement}cm
       </Typography>
-      <Box marginLeft={3}>
+      <Box marginLeft={1} width={3}>
         <ArrowRightIcon />
       </Box>
       <Box display="flex" alignItems="center" marginLeft={3} width="100%">
-        <Box width="70%">
+        <Box width={100}>
           <Typography variant="body2" color="primary.main">
             {optionDetail.actionMessage}
           </Typography>
-          <Box display="flex" color="secondary.dark">
-            <Typography variant="subtitle1" sx={{ width: "40%" }}>
+          <Box display="flex">
+            <Typography
+              variant="subtitle1"
+              color="secondary.dark"
+              textAlign="right"
+              width={30}
+            >
               {optionDetail.newMeasurement ?? ""}
             </Typography>
-            <Typography variant="subtitle1">cm</Typography>
+            <Typography variant="subtitle1" color="secondary.dark" width={30}>
+              cm
+            </Typography>
           </Box>
         </Box>
-        <Box width="30%">
+        <Box width={30}>
           {optionDetail.newMeasurement && (
             <Typography variant="subtitle1">
               {optionDetail.newMeasurement - optionDetail.preMeasurement}

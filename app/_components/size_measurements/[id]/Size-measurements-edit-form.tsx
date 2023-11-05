@@ -20,7 +20,7 @@ type TProps = {
   rank: string;
   optionDetails: TOptionDetail[];
   needPartsForSizeCalc: number[];
-  selectedPartdId: number;
+  selectedPartId: number;
   isLoading: boolean;
   onChangeMeasurement: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -37,7 +37,7 @@ export default function SizeMeasurementsEditForm({
   size,
   rank,
   optionDetails,
-  selectedPartdId,
+  selectedPartId,
   isLoading,
   onChangeMeasurement,
   onChangeSize,
@@ -47,228 +47,110 @@ export default function SizeMeasurementsEditForm({
   onClickUpdate,
   onClickSkip,
 }: TProps) {
-  const isFormValid = () => {
-    return (
-      size &&
-      rank &&
-      optionDetails.every(
-        (optionDetail) => optionDetail.newMeasurement !== undefined
-      )
+  const isFormValid =
+    size &&
+    rank &&
+    optionDetails.every(
+      (optionDetail) => optionDetail.newMeasurement !== undefined
     );
-  };
 
   const selectedPartName =
-    optionDetails.find((option) => option.id === selectedPartdId)?.partName ??
+    optionDetails.find((option) => option.id === selectedPartId)?.partName ??
     "";
+
   return (
     <>
-      <Box sx={{ p: "1.2rem", display: "grid", gap: 1 }}>
-        <Box
-          color="secondary.main"
-          sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography
-            variant="h6"
-            style={{ fontWeight: "300" }}>
-            <span style={{ fontWeight: "500" }}>{selectedPartName}</span>
-            の測定
+      <Box
+        paddingTop={5}
+        paddingBottom={1}
+        display="flex"
+        justifyContent="space-around"
+        color="secondary.main"
+      >
+        <Box display="flex">
+          <Typography variant="h6" color="secondary.dark">
+            {selectedPartName}
           </Typography>
-
-          <TextField
-            id="standard-basic"
-            variant="standard"
-            onChange={onChangeMeasurement}
-            onKeyDown={(e: React.KeyboardEvent) => onClickEnter(e)}
-          />
+          <Typography variant="h6">の測定</Typography>
         </Box>
+        <TextField
+          variant="standard"
+          onChange={onChangeMeasurement}
+          onKeyDown={onClickEnter}
+        />
+      </Box>
+      <Box display="flex" justifyContent="center">
         <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-start",
-            borderBottom: "1px solid #bdbdbd",
-            alignItems: "center",
-          }}>
-          <Typography
-            variant="h6"
-            color="primary.main"
-            sx={{ mr: "1.5rem", fontWeight: "500" }}>
+          height={60}
+          display="flex"
+          alignItems="center"
+          borderBottom={0.2}
+          width="90%"
+        >
+          <Typography variant="h6" marginLeft={1} color="primary.main">
             サイズ
           </Typography>
-          <FormControl
-            variant="filled"
-            sx={{
-              m: 1,
-              minWidth: 120,
-              bgcolor: "white",
-              "& .MuiFilledInput-underline:before": {
-                display: "none",
-              },
-              "& .MuiFilledInput-underline:after": {
-                display: "none",
-              },
-              "& .MuiFilledInput-underline:hover:not(.Mui-disabled):before": {
-                display: "none",
-              },
-              "& .MuiFilledInput-root": {
-                backgroundColor: "white",
-              },
-            }}>
-            <Select
-              value={size}
-              onChange={onChangeSize}
-              sx={{
-                "&:focus": {
-                  backgroundColor: "white",
-                },
-                color: "red",
-                "& .MuiSelect-icon": {
-                  color: "red",
-                },
-              }}>
-              <MenuItem
-                value="S"
-                color="secondary.main">
-                S
-              </MenuItem>
-              <MenuItem
-                value="M"
-                color="secondary.main">
-                M
-              </MenuItem>
-              <MenuItem
-                value="L"
-                color="secondary.main">
-                L
-              </MenuItem>
-              <MenuItem
-                value="XL"
-                color="secondary.main">
-                XL
-              </MenuItem>
-            </Select>
-          </FormControl>
+          <Box width={60} marginLeft={3}>
+            <FormControl fullWidth>
+              <Select
+                value={size}
+                onChange={onChangeSize}
+                variant="standard"
+                disableUnderline
+                sx={{ "& svg": { color: "warning.dark" } }}
+              >
+                <MenuItem value="S">S</MenuItem>
+                <MenuItem value="M">M</MenuItem>
+                <MenuItem value="L">L</MenuItem>
+                <MenuItem value="XL">XL</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         </Box>
-        <SizeMeasurementsList
-          optionDetails={optionDetails}
-          selectedPartId={selectedPartdId}
-          onClickSelect={onClickSelect}
-        />
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}>
-          <Typography
-            variant="h6"
-            color="primary.main"
-            sx={{ mr: "1.5rem", fontWeight: "500" }}>
-            ランク
-          </Typography>
-          <FormControl
-            variant="filled"
-            sx={{
-              m: 1,
-              minWidth: 120,
-              bgcolor: "white",
-              "& .MuiFilledInput-underline:before": {
-                display: "none",
-              },
-              "& .MuiFilledInput-underline:after": {
-                display: "none",
-              },
-              "& .MuiFilledInput-underline:hover:not(.Mui-disabled):before": {
-                display: "none",
-              },
-              "& .MuiFilledInput-root": {
-                backgroundColor: "white",
-              },
-            }}>
+      </Box>
+      <SizeMeasurementsList
+        optionDetails={optionDetails}
+        selectedPartId={selectedPartId}
+        onClickSelect={onClickSelect}
+      />
+      <Box
+        height={60}
+        display="flex"
+        justifyContent="flex-start"
+        alignItems="center"
+      >
+        <Typography variant="h6" marginLeft={4} color="primary.main">
+          ランク
+        </Typography>
+        <Box width={60} marginLeft={3}>
+          <FormControl fullWidth>
             <Select
               value={rank}
               onChange={onChangeRank}
-              sx={{
-                "&:focus": {
-                  backgroundColor: "white",
-                },
-                color: "red",
-                "& .MuiSelect-icon": {
-                  color: "red",
-                },
-              }}>
-              <MenuItem
-                value="S"
-                sx={{
-                  "&.Mui-selected": { backgroundColor: "white" },
-                  backgroundColor: "white",
-                }}>
-                S
-              </MenuItem>
-              <MenuItem
-                value="A"
-                sx={{
-                  "&.Mui-selected": { backgroundColor: "white" },
-                  backgroundColor: "white",
-                }}>
-                A
-              </MenuItem>
-              <MenuItem
-                value="B"
-                sx={{
-                  "&.Mui-selected": { backgroundColor: "white" },
-                  backgroundColor: "white",
-                }}>
-                B
-              </MenuItem>
+              variant="standard"
+              disableUnderline
+              sx={{ "& svg": { color: "warning.dark" } }}
+            >
+              <MenuItem value="S">S</MenuItem>
+              <MenuItem value="A">A</MenuItem>
+              <MenuItem value="B">B</MenuItem>
             </Select>
           </FormControl>
         </Box>
-
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            onClick={onClickSkip}
-            variant="contained"
-            size="large"
-            sx={{
-              width: "10rem",
-              padding: "13px 27px",
-              fontSize: "1.3rem",
-              marginRight: "1rem",
-              backgroundColor: "white",
-              color: "#bdbdbd",
-              "&:hover": {
-                backgroundColor: "#f0f0f0",
-                color: "808080",
-              },
-              "&:active": {
-                backgroundColor: "#1976d2",
-                color: "white",
-              },
-            }}>
-            スキップ
-          </Button>
-          <Button
-            onClick={onClickUpdate}
-            disabled={!isFormValid() || isLoading}
-            variant="contained"
-            size="large"
-            sx={{
-              width: "10rem",
-              padding: "13px 27px",
-              fontSize: "1.3rem",
-              backgroundColor: "white",
-              color: "#bdbdbd",
-              "&:hover": {
-                backgroundColor: "#f0f0f0",
-                color: "808080",
-              },
-              "&:active": {
-                backgroundColor: "#1976d2",
-                color: "white",
-              },
-            }}>
-            確定
-          </Button>
-        </Box>
+      </Box>
+      <Box display="flex" justifyContent="space-around" padding={2} height={60}>
+        <Button variant="outlined" sx={{ width: "45%" }} onClick={onClickSkip}>
+          スキップ
+        </Button>
+        <Button
+          variant="contained"
+          sx={{ width: "45%" }}
+          fullWidth
+          disabled={!isFormValid || isLoading}
+          onClick={onClickUpdate}
+        >
+          確定
+        </Button>
       </Box>
     </>
   );
