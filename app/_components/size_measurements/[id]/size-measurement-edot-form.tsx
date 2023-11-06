@@ -71,7 +71,7 @@ export default function SizeMeasurementsEditForm({
           <Typography variant="h6" color="secondary.dark">
             {selectedPartName}
           </Typography>
-          <Typography variant="h6">の測定</Typography>
+          <Typography variant="h6">の計測</Typography>
         </Box>
         <TextField
           variant="standard"
