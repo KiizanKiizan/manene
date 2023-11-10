@@ -31,7 +31,7 @@
     "eslint-config-next": "13.4.8",
     "eslint-plugin-react": "^7.33.1",
     "html5-qrcode": "^2.3.8",
-    "next": "13.4.8",
+    "next": "13.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.1.6"
