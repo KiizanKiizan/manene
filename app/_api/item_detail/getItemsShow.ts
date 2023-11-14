@@ -1,79 +1,8 @@
-import getNoCacheData from "../getNoCacheData";
-
-type TParams = { id: number };
-export type TGetItemsShowResponse = {
-  id: number;
-  usedCount: number;
-  itemCode: string;
-  isMarriage: boolean;
-  isElasticBand: boolean;
-  itemStatus: {
-    status: number;
-    name: string;
-  };
-  size: string | null;
-  dropSize: {
-    id: number;
-    name: string;
-  };
-  regDate: string | null;
-  priceTaxIn: number;
-  priceRefTaxIn: number;
-  shoulder: number | null;
-  bust: number | null;
-  waist: number | null;
-  minWaist: number | null;
-  maxWaist: number | null;
-  hip: number | null;
-  lengthArm: number | null;
-  lengthTop: number | null;
-  lengthWaist: number | null;
-  lengthLeg: number | null;
-  roundNeck: number | null;
-  roundLeg: number | null;
-  roundCalf: number | null;
-  itemImageUrl: string;
-  itemOriginalImageUrl: string;
-  leeapSize: string;
-  tStockingOrderId: number;
-  originalSize: number;
-  rank: string;
-  mCateSmall: {
-    id: number;
-    name: string;
-  };
-  mBrand: {
-    id: number;
-    name: string;
-  };
-  mColor: {
-    id: number;
-    name: string;
-  };
-  mSubColor: {
-    id: number;
-    name: string;
-  } | null;
-  mPattern: {
-    id: number;
-    name: string;
-  };
-  mLogo: {
-    id: number;
-    name: string;
-  };
-  tAdmin: {
-    id: number;
-    name: string;
-  };
-  mLocation: {
-    id: number;
-    name: string;
-  } | null;
-};
+import getNoCacheData from '../getNoCacheData';
+import { TItemsShowResponse, TParams } from '../items/itemsShowResponse';
 
 export default async function getItemsShow(params: TParams) {
-  return await getNoCacheData<TGetItemsShowResponse>({
+  return await getNoCacheData<TItemsShowResponse>({
     path: `items/${params.id}`,
   });
 }
