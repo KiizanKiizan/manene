@@ -32,31 +32,33 @@ type TFormData = TSizePartsParams & {
 };
 
 const partName = {
-  1: "胸", // BUST
-  2: "着丈", // LENGTH_TOP
-  3: "首", // ROUND_NECK
-  5: "ウエスト", // WAIST
-  12: "最小ウエスト", // MIN_WAIST
-  6: "最大ウエスト", // MAX_WAIST
-  7: "ヒップ", // HIP
-  8: "もも", // ROUND_LEG
-  13: "総丈", // OUTSEAM
-  14: "裄丈", // SLEEVE_LENGTH
-  15: "裾幅", // HEM_WIDTH
+  0: "肩",
+  1: "胸",
+  2: "着丈",
+  3: "首",
+  5: "ウエスト",
+  12: "最小ウエスト",
+  6: "最大ウエスト",
+  7: "ヒップ",
+  8: "もも",
+  13: "総丈",
+  14: "裄丈",
+  15: "裾幅",
 };
 
 const partKeyName = {
-  1: "bust", // BUST
-  2: "lengthTop", // LENGTH_TOP
-  3: "roundNeck", // ROUND_NECK
-  5: "waist", // WAIST
-  12: "minWaist", // MIN_WAIST
-  6: "maxWaist", // MAX_WAIST
-  7: "hip", // HIP
-  8: "roundLeg", // ROUND_LEG
-  13: "outseam", // OUTSEAM
-  14: "sleeveLength", // SLEEVE_LENGTH
-  15: "hemWidth", // HEM_WIDTH
+  0: "shoulder",
+  1: "bust",
+  2: "lengthTop",
+  3: "roundNeck",
+  5: "waist",
+  12: "minWaist",
+  6: "maxWaist",
+  7: "hip",
+  8: "roundLeg",
+  13: "outseam",
+  14: "sleeveLength",
+  15: "hemWidth",
 };
 
 export default function SizeMeasurementEditContainer({
@@ -82,6 +84,7 @@ export default function SizeMeasurementEditContainer({
 
   const initialFormData: TFormData = {
     newMeasurement: {
+      shoulder: undefined,
       bust: undefined,
       lengthTop: undefined,
       roundNeck: undefined,
@@ -95,6 +98,7 @@ export default function SizeMeasurementEditContainer({
       minWaist: undefined,
     },
     actionMessage: {
+      shoulder: undefined,
       bust: undefined,
       lengthTop: undefined,
       roundNeck: undefined,
@@ -161,6 +165,7 @@ export default function SizeMeasurementEditContainer({
       {
         size: size,
         rank: rank,
+        shoulder: formData.newMeasurement.shoulder,
         bust: formData.newMeasurement.bust,
         lengthTop: formData.newMeasurement.lengthTop,
         roundNeck: formData.newMeasurement.roundNeck,

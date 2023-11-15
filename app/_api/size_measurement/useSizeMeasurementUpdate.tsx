@@ -1,6 +1,7 @@
 import { usePatchRequest } from "../usePatchRequest";
 
 export type TSizePartsParams = {
+  shoulder?: number;
   bust?: number;
   lengthTop?: number;
   roundNeck?: number;
