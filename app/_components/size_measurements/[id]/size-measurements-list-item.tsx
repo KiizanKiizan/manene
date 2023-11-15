@@ -8,7 +8,7 @@ export type TOptionDetail = {
   partName: string;
   preMeasurement: number;
   newMeasurement?: number;
-  actionMessage: string;
+  actionMessage?: string;
 };
 
 type TProps = {
