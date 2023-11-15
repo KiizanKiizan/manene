@@ -1,6 +1,6 @@
-import getNoCacheData from '../getNoCacheData';
+import getNoCacheData from "../getNoCacheData";
 
-export type TMeasurment = {
+export type TMeasurement = {
   part: number;
   value: number;
 };
@@ -8,21 +8,22 @@ export type TMeasurment = {
 export type TMeasurementInput = {
   mCateSmallId: number;
   size: string;
-  measurements: TMeasurment[];
+  measurements: TMeasurement[];
   needPartsForSizeCalc: number[];
   isSizeStable: boolean;
   rank: string;
 };
 
 type TParams = { itemId: number };
-export type TGetSizeMeasurementIndexResponse = {
+
+export type TSizeMeasurementIndexResponse = {
   itemId: number;
   input: TMeasurementInput;
 };
 
 export default async function getSizeMeasurementIndex(params: TParams) {
-  return getNoCacheData<TGetSizeMeasurementIndexResponse, TParams>({
-    path: 'size_measurement',
+  return getNoCacheData<TSizeMeasurementIndexResponse, TParams>({
+    path: "size_measurement",
     params: params,
   });
 }
