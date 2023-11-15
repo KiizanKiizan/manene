@@ -1,6 +1,4 @@
 "use client";
-import React from "react";
-
 import {
   Box,
   Button,
@@ -11,20 +9,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ChangeEvent } from "react";
+import React from "react";
 import SizeMeasurementsList from "./size-measurements-list";
 import { TOptionDetail } from "./size-measurements-list-item";
 
 type TProps = {
   size: string;
   rank: string;
+  measurement: number | undefined;
   optionDetails: TOptionDetail[];
-  needPartsForSizeCalc: number[];
   selectedPartId: number;
   isLoading: boolean;
-  onChangeMeasurement: (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  onChangeMeasurement: (measurement: string) => void;
   onChangeSize: (e: SelectChangeEvent<string>) => void;
   onChangeRank: (e: SelectChangeEvent<string>) => void;
   onClickEnter: (e: React.KeyboardEvent) => void;
@@ -36,6 +32,7 @@ type TProps = {
 export default function SizeMeasurementsEditForm({
   size,
   rank,
+  measurement,
   optionDetails,
   selectedPartId,
   isLoading,
@@ -75,7 +72,8 @@ export default function SizeMeasurementsEditForm({
         </Box>
         <TextField
           variant="standard"
-          onChange={onChangeMeasurement}
+          value={measurement ?? ""}
+          onChange={(e) => onChangeMeasurement(e.target.value)}
           onKeyDown={onClickEnter}
         />
       </Box>
