@@ -9,6 +9,7 @@ type TProps = {
 
 export default function ItemDetailCardContainer({ itemInfo }: TProps) {
   const partSize = [
+    { partName: "肩", partSize: itemInfo.shoulder },
     { partName: "身幅", partSize: itemInfo.bust },
     { partName: "ウエスト", partSize: itemInfo.waist },
     { partName: "ヒップ", partSize: itemInfo.hip },
