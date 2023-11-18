@@ -16,7 +16,7 @@ import { TOptionDetail } from "./size-measurements-list-item";
 type TProps = {
   size: string;
   rank: string;
-  measurement: number | undefined;
+  measurement: string | undefined;
   optionDetails: TOptionDetail[];
   selectedPartId: number;
   isLoading: boolean;
@@ -72,6 +72,7 @@ export default function SizeMeasurementsEditForm({
         </Box>
         <TextField
           variant="standard"
+          type="number"
           value={measurement ?? ""}
           onChange={(e) => onChangeMeasurement(e.target.value)}
           onKeyDown={onClickEnter}
