@@ -15,6 +15,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import React, { useReducer, useState } from "react";
 import DisableBackDialog from "../../common/dialog/disable-back-dialog";
@@ -116,6 +117,16 @@ export default function SizeMeasurementEditContainer({
       hemWidth: undefined,
       minWaist: undefined,
     },
+  };
+
+  const moveToNextPart = () => {
+    const index = measurementData.input.measurements.findIndex(
+      (data) => data.part === selectedPartId
+    );
+    const nextIndex =
+      index === measurementData.input.measurements.length - 1 ? 0 : index + 1;
+    setMeasurement(undefined);
+    setSelectedPartId(measurementData.input.measurements[nextIndex].part);
   };
 
   const isWithinOneError = (
@@ -273,6 +284,30 @@ export default function SizeMeasurementEditContainer({
 
   const formReducer = (formData: TFormData, action: FormAction) => {
     const inputResult = getInputResult(action.field, action.value);
+
+    if (
+      measurementData.input.needPartsForSizeCalc.includes(selectedPartId) &&
+      inputResult.newMeasurement
+    ) {
+      fetchSizeCalcIndex({
+        item_id: measurementData.itemId,
+        cate_small_id: measurementData.input.mCateSmallId,
+        waist: inputResult.newMeasurement,
+      })
+        .then((res: TSizeCalcIndexResponse) => {
+          setSize(res.size);
+        })
+        .catch((error: AxiosError) => {
+          alert(
+            `自動サイズ計測に失敗しました。 ${
+              (error.response?.data as { message: string })?.message
+            }`
+          );
+        });
+    }
+
+    moveToNextPart();
+
     switch (action.type) {
       case "SET_VALUE":
         return {
@@ -300,16 +335,6 @@ export default function SizeMeasurementEditContainer({
     setMeasurement(measurement);
   };
 
-  const moveToNextPart = () => {
-    const index = measurementData.input.measurements.findIndex(
-      (data) => data.part === selectedPartId
-    );
-    const nextIndex =
-      index === measurementData.input.measurements.length - 1 ? 0 : index + 1;
-    setMeasurement(undefined);
-    setSelectedPartId(measurementData.input.measurements[nextIndex].part);
-  };
-
   const handleClickUpdate = () => {
     mutate(
       {
@@ -331,12 +356,25 @@ export default function SizeMeasurementEditContainer({
       {
         onSuccess() {
           setIsItemDetailCardOpen(true);
-          fetchSizeStableShow({ itemId: measurementData.itemId }).then(
-            (res: TSizeStableShowResponse) => {
+          fetchSizeStableShow({ itemId: measurementData.itemId })
+            .then((res: TSizeStableShowResponse) => {
               if (res.isSizeStableAfterMeasurement) {
                 setIsSizeStableAlertDialogOpen(true);
               }
-            }
+            })
+            .catch((error: AxiosError) => {
+              alert(
+                `エラー: ${
+                  (error.response?.data as { message: string })?.message
+                }`
+              );
+            });
+        },
+        onError(error: AxiosError) {
+          alert(
+            `アイテムサイズの更新に失敗しました。 ${
+              (error.response?.data as { message: string })?.message
+            }`
           );
         },
       }
@@ -353,19 +391,6 @@ export default function SizeMeasurementEditContainer({
           ] as keyof TSizePartsParams
         )
       ) {
-        if (
-          measurementData.input.needPartsForSizeCalc.includes(selectedPartId) &&
-          formData.newMeasurement.waist
-        ) {
-          fetchSizeCalcIndex({
-            item_id: measurementData.itemId,
-            cate_small_id: measurementData.input.mCateSmallId,
-            waist: formData.newMeasurement.waist,
-          }).then((res: TSizeCalcIndexResponse) => {
-            setSize(res.size);
-          });
-        }
-
         dispatch({
           type: "SET_VALUE",
           field: partKeyName[
@@ -374,7 +399,6 @@ export default function SizeMeasurementEditContainer({
           value: measurement,
         });
       }
-      moveToNextPart();
     }
   };
 
@@ -392,7 +416,6 @@ export default function SizeMeasurementEditContainer({
       ] as keyof TSizePartsParams,
       value: preMeasurement,
     });
-    moveToNextPart();
   };
 
   const handleClickSelect = (id: number) => {
