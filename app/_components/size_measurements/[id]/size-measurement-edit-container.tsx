@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import React, { useReducer, useState } from "react";
 import DisableBackDialog from "../../common/dialog/disable-back-dialog";
 import ItemDetailFetcher from "../../item-location/item-detail-fetcher";
-import SizeMeasurementsEditForm from "./size-measurement-edot-form";
+import SizeMeasurementsEditForm from "./size-measurement-edit-form";
 
 type TProps = {
   measurementData: TSizeMeasurementIndexResponse;
