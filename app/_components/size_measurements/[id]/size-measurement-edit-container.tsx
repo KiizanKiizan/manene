@@ -1,18 +1,23 @@
 "use client";
-import fetchSizeStableShow from "@/app/_api/size_measurement/fetchSizeStableShow";
+import fetchSizeCalcIndex, {
+  TSizeCalcIndexResponse,
+} from "@/app/_api/size_measurement/fetchSizeCalcIndex";
+import fetchSizeStableShow, {
+  TSizeStableShowResponse,
+} from "@/app/_api/size_measurement/fetchSizeStableShow";
 import { TSizeMeasurementIndexResponse } from "@/app/_api/size_measurement/getSizeMeasurementIndex";
 import useSizeMeasurementUpdate, {
   TSizePartsParams,
 } from "@/app/_api/size_measurement/useSizeMeasurementUpdate";
 import {
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useReducer, useState } from "react";
+import DisableBackDialog from "../../common/dialog/disable-back-dialog";
 import ItemDetailFetcher from "../../item-location/item-detail-fetcher";
 import SizeMeasurementsEditForm from "./size-measurement-edot-form";
 
@@ -23,7 +28,7 @@ type TProps = {
 type FormAction = {
   type: "SET_VALUE";
   field: keyof TSizePartsParams;
-  value: number;
+  value: string | number;
 };
 
 type TFormData = TSizePartsParams & {
@@ -33,7 +38,7 @@ type TFormData = TSizePartsParams & {
 
 const partName = {
   0: "肩",
-  1: "胸",
+  1: "身幅",
   2: "着丈",
   3: "首",
   5: "ウエスト",
@@ -67,7 +72,7 @@ export default function SizeMeasurementEditContainer({
   const router = useRouter();
   const [size, setSize] = useState<string>(measurementData.input.size);
   const [rank, setRank] = useState<string>(measurementData.input.rank);
-  const [measurement, setMeasurement] = useState<number>();
+  const [measurement, setMeasurement] = useState<string>();
   const [selectedPartId, setSelectedPartId] = useState<number>(
     measurementData.input.measurements[0].part
   );
@@ -113,41 +118,186 @@ export default function SizeMeasurementEditContainer({
     },
   };
 
-  const getActionMessage = (
+  const isWithinOneError = (
+    preMeasurement: number,
+    newMeasurement: number
+  ): boolean => {
+    return (
+      newMeasurement !== preMeasurement &&
+      preMeasurement >= newMeasurement - 1 &&
+      preMeasurement <= newMeasurement + 1
+    );
+  };
+
+  const getPreMeasurement = (fieldName: string): number | undefined => {
+    return measurementData.input.measurements.find(
+      (data) => partKeyName[data.part as keyof typeof partKeyName] === fieldName
+    )?.value;
+  };
+
+  const doubleTruncatedValue = (
+    fieldName: string,
+    value: string
+  ): { newMeasurement: number | undefined; actionMessage: string } => {
+    const newMeasurement = parseInt(value) ? parseInt(value) * 2 : undefined;
+    const preMeasurement = getPreMeasurement(fieldName);
+
+    if (newMeasurement === undefined || preMeasurement === undefined) {
+      return {
+        newMeasurement: undefined,
+        actionMessage: "",
+      };
+    }
+    if (isWithinOneError(preMeasurement, newMeasurement)) {
+      return {
+        newMeasurement: preMeasurement,
+        actionMessage: "誤差切捨",
+      };
+    } else {
+      return {
+        newMeasurement: newMeasurement,
+        actionMessage: "切捨→×2",
+      };
+    }
+  };
+
+  const truncateDoubledValue = (fieldName: string, value: string) => {
+    const newMeasurement = parseFloat(value)
+      ? Math.floor(parseFloat(value) * 2)
+      : undefined;
+    const preMeasurement = getPreMeasurement(fieldName);
+
+    if (newMeasurement === undefined || preMeasurement === undefined) {
+      return {
+        newMeasurement: undefined,
+        actionMessage: "",
+      };
+    }
+
+    if (isWithinOneError(preMeasurement, newMeasurement)) {
+      return {
+        newMeasurement: preMeasurement,
+        actionMessage: "誤差切捨",
+      };
+    } else {
+      return {
+        newMeasurement: newMeasurement,
+        actionMessage: "×2→切捨",
+      };
+    }
+  };
+
+  const truncateValue = (fieldName: string, value: string) => {
+    const newMeasurement = parseInt(value) ? parseInt(value) : undefined;
+    const preMeasurement = getPreMeasurement(fieldName);
+
+    if (newMeasurement === undefined || preMeasurement === undefined) {
+      return {
+        newMeasurement: undefined,
+        actionMessage: "",
+      };
+    }
+
+    if (newMeasurement === preMeasurement) {
+      return {
+        newMeasurement: preMeasurement,
+        actionMessage: "",
+      };
+    } else if (isWithinOneError(preMeasurement, newMeasurement)) {
+      return {
+        newMeasurement: preMeasurement,
+        actionMessage: "誤差切捨",
+      };
+    } else {
+      return {
+        newMeasurement: newMeasurement,
+        actionMessage: "",
+      };
+    }
+  };
+
+  const getInputResult = (
     fieldName: keyof TSizePartsParams,
-    value: number
-  ) => {
-    return "スキップ";
+    value: string | number
+  ): { newMeasurement: number | undefined; actionMessage: string } => {
+    let inputResult;
+    if (typeof value === "number") {
+      inputResult = { newMeasurement: value, actionMessage: "スキップ" };
+    } else {
+      switch (fieldName) {
+        case "shoulder":
+          inputResult = truncateValue(fieldName, value);
+          break;
+        case "bust":
+          inputResult = truncateValue(fieldName, value);
+          break;
+        case "lengthTop":
+          inputResult = truncateValue(fieldName, value);
+          break;
+        case "roundNeck":
+          inputResult = truncateValue(fieldName, value);
+          break;
+        case "waist":
+          inputResult = doubleTruncatedValue(fieldName, value);
+          break;
+        case "minWaist":
+          inputResult = doubleTruncatedValue(fieldName, value);
+          break;
+        case "maxWaist":
+          inputResult = doubleTruncatedValue(fieldName, value);
+          break;
+        case "hip":
+          inputResult = truncateDoubledValue(fieldName, value);
+          break;
+        case "roundLeg":
+          inputResult = truncateDoubledValue(fieldName, value);
+          break;
+        case "outseam":
+          inputResult = truncateValue(fieldName, value);
+          break;
+        case "sleeveLength":
+          inputResult = truncateValue(fieldName, value);
+          break;
+        case "hemWidth":
+          inputResult = truncateValue(fieldName, value);
+          break;
+        default:
+          inputResult = {
+            newMeasurement: undefined,
+            actionMessage: "",
+          };
+      }
+    }
+    return inputResult;
   };
 
   const formReducer = (formData: TFormData, action: FormAction) => {
-    const actionMessage = getActionMessage(action.field, action.value);
+    const inputResult = getInputResult(action.field, action.value);
     switch (action.type) {
       case "SET_VALUE":
         return {
           ...formData,
           newMeasurement: {
             ...formData.newMeasurement,
-            [action.field]: action.value,
+            [action.field]: inputResult.newMeasurement,
           },
           actionMessage: {
             ...formData.actionMessage,
-            [action.field]: actionMessage,
+            [action.field]: inputResult.actionMessage,
           },
         };
       default:
         throw new Error("存在しないactionです");
     }
   };
+  const [formData, dispatch] = useReducer(formReducer, initialFormData);
 
   const isParams = (name: string): name is keyof TSizePartsParams => {
     return name in initialFormData.newMeasurement;
   };
 
   const handleChangeMeasurement = (measurement: string) => {
-    parseInt(measurement)
-      ? setMeasurement(parseInt(measurement))
-      : setMeasurement(undefined);
+    setMeasurement(measurement);
   };
 
   const moveToNextPart = () => {
@@ -182,7 +332,7 @@ export default function SizeMeasurementEditContainer({
         onSuccess() {
           setIsItemDetailCardOpen(true);
           fetchSizeStableShow({ itemId: measurementData.itemId }).then(
-            (res) => {
+            (res: TSizeStableShowResponse) => {
               if (res.isSizeStableAfterMeasurement) {
                 setIsSizeStableAlertDialogOpen(true);
               }
@@ -195,16 +345,27 @@ export default function SizeMeasurementEditContainer({
 
   const handleClickEnter = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      if (measurement !== undefined) {
+      if (
+        measurement !== undefined &&
+        isParams(
+          partKeyName[
+            selectedPartId as keyof typeof partKeyName
+          ] as keyof TSizePartsParams
+        )
+      ) {
         if (
-          !isParams(
-            partKeyName[
-              selectedPartId as keyof typeof partKeyName
-            ] as keyof TSizePartsParams
-          )
+          measurementData.input.needPartsForSizeCalc.includes(selectedPartId) &&
+          formData.newMeasurement.waist
         ) {
-          throw new Error("存在しない部位です");
+          fetchSizeCalcIndex({
+            item_id: measurementData.itemId,
+            cate_small_id: measurementData.input.mCateSmallId,
+            waist: formData.newMeasurement.waist,
+          }).then((res: TSizeCalcIndexResponse) => {
+            setSize(res.size);
+          });
         }
+
         dispatch({
           type: "SET_VALUE",
           field: partKeyName[
@@ -218,19 +379,26 @@ export default function SizeMeasurementEditContainer({
   };
 
   const handleClickSkip = () => {
+    const preMeasurement = measurementData.input.measurements.find(
+      (data) => data.part === selectedPartId
+    )?.value;
+
+    if (preMeasurement === undefined) return;
+
     dispatch({
       type: "SET_VALUE",
       field: partKeyName[
         selectedPartId as keyof typeof partKeyName
       ] as keyof TSizePartsParams,
-      value: measurementData.input.measurements.find(
-        (data) => data.part === selectedPartId
-      )?.value as number,
+      value: preMeasurement,
     });
     moveToNextPart();
   };
 
-  const [formData, dispatch] = useReducer(formReducer, initialFormData);
+  const handleClickSelect = (id: number) => {
+    setMeasurement(undefined);
+    setSelectedPartId(id);
+  };
 
   const optionDetails = measurementData.input.measurements.map((data) => {
     const partKey = partKeyName[data.part as keyof typeof partKeyName];
@@ -244,9 +412,18 @@ export default function SizeMeasurementEditContainer({
     };
   });
 
+  const changedParts: string[] = optionDetails
+    .filter((data) => {
+      return data.preMeasurement !== data.newMeasurement;
+    })
+    .map((part) => part.partName);
+
   return (
     <>
-      <Dialog open={isSizeStableConfirmDialogOpen}>
+      <DisableBackDialog
+        open={isSizeStableConfirmDialogOpen}
+        onClose={() => setIsSizeStableConfirmDialogOpen(false)}
+      >
         <DialogTitle>サイズ確定済み</DialogTitle>
         <DialogContent>サイズ計測を開始しますか？</DialogContent>
         <DialogActions>
@@ -257,16 +434,8 @@ export default function SizeMeasurementEditContainer({
             OK
           </Button>
         </DialogActions>
-      </Dialog>
-      <Dialog open={isSizeStableAlertDialogOpen}>
-        <DialogTitle>サイズが確定しました</DialogTitle>
-        <DialogContent>アイテムの最大計測回数を超えました。</DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsSizeStableAlertDialogOpen(false)}>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
+      </DisableBackDialog>
+
       <SizeMeasurementsEditForm
         size={size}
         rank={rank}
@@ -278,16 +447,33 @@ export default function SizeMeasurementEditContainer({
         onChangeSize={(e) => setSize(e.target.value)}
         onChangeRank={(e) => setRank(e.target.value)}
         onClickEnter={handleClickEnter}
-        onClickSelect={(id: number) => setSelectedPartId(id)}
+        onClickSelect={handleClickSelect}
         onClickUpdate={handleClickUpdate}
         onClickSkip={handleClickSkip}
       />
       {isItemDetailCardOpen && (
         <ItemDetailFetcher
           itemId={measurementData.itemId}
+          withButton
+          changedParts={changedParts}
+          isSizeChanged={measurementData.input.size !== size}
+          isRankChanged={measurementData.input.rank !== rank}
           onClickClose={() => setIsItemDetailCardOpen(false)}
         />
       )}
+      <DisableBackDialog
+        open={isSizeStableAlertDialogOpen}
+        onClose={() => setIsSizeStableAlertDialogOpen(false)}
+        zIndex={1000}
+      >
+        <DialogTitle>サイズが確定しました</DialogTitle>
+        <DialogContent>アイテムの最大計測回数を超えました。</DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsSizeStableAlertDialogOpen(false)}>
+            OK
+          </Button>
+        </DialogActions>
+      </DisableBackDialog>
     </>
   );
 }
