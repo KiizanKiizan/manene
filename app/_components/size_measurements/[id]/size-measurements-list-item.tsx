@@ -67,7 +67,14 @@ export default function SizeMeasurementsListItem({
         </Box>
         <Box width={30}>
           {optionDetail.newMeasurement && (
-            <Typography variant="subtitle1">
+            <Typography
+              variant="subtitle1"
+              color={
+                optionDetail.newMeasurement - optionDetail.preMeasurement >= 0
+                  ? undefined
+                  : "warning.dark"
+              }
+            >
               {optionDetail.newMeasurement - optionDetail.preMeasurement}
             </Typography>
           )}
