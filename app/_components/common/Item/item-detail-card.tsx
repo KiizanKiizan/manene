@@ -2,6 +2,7 @@
 
 import {
   Box,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -9,6 +10,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
 import ExpandableImage from "../Image/expandable-image";
 
 type TProps = {
@@ -16,6 +18,10 @@ type TProps = {
   partSizes: { partName: string; partSize: number }[];
   wearSize: string;
   itemDetails: { label: string; value: number | string }[];
+  withButton?: boolean;
+  changedParts?: string[];
+  isSizeChanged?: boolean;
+  isRankChanged?: boolean;
 };
 
 export default function ItemDetailCard({
@@ -23,7 +29,12 @@ export default function ItemDetailCard({
   partSizes,
   wearSize,
   itemDetails,
+  withButton = false,
+  changedParts,
+  isSizeChanged,
+  isRankChanged,
 }: TProps) {
+  const router = useRouter();
   return (
     <Box padding={"7%"} data-testid="item-detail-card">
       <Box
@@ -41,7 +52,13 @@ export default function ItemDetailCard({
             }}
           />
         </Box>
-        <Box sx={{ border: "1px solid", padding: 0, height: "180px" }}>
+        <Box
+          sx={{
+            border: "1px solid",
+            padding: 0,
+            height: "180px",
+          }}
+        >
           <TableContainer sx={{ padding: 0, height: "100%" }}>
             <Table aria-label="simple table">
               <TableHead
@@ -79,7 +96,11 @@ export default function ItemDetailCard({
                   {partSizes.slice(0, 3).map((partSize) => {
                     return (
                       <TableCell key={partSize.partName} align="center">
-                        {partSize.partSize}
+                        {changedParts?.includes(partSize.partName) ? (
+                          <Box color="warning.dark">{partSize.partSize}</Box>
+                        ) : (
+                          partSize.partSize
+                        )}
                       </TableCell>
                     );
                   })}
@@ -122,7 +143,11 @@ export default function ItemDetailCard({
                   {partSizes.slice(3, 6).map((partSize) => {
                     return (
                       <TableCell key={partSize.partName} align="center">
-                        {partSize.partSize}
+                        {changedParts?.includes(partSize.partName) ? (
+                          <Box color="warning.dark">{partSize.partSize}</Box>
+                        ) : (
+                          partSize.partSize
+                        )}
                       </TableCell>
                     );
                   })}
@@ -159,14 +184,27 @@ export default function ItemDetailCard({
                     },
                   }}
                 >
-                  <TableCell align="center">{wearSize}</TableCell>
+                  <TableCell align="center">
+                    {isSizeChanged ? (
+                      <Box color="warning.dark">{wearSize}</Box>
+                    ) : (
+                      wearSize
+                    )}
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
         </Box>
       </Box>
-      <Box sx={{ border: "1px solid" }}>
+      <Box
+        sx={{
+          border: "1px solid",
+        }}
+        maxHeight={withButton ? "58vh" : "65vh"}
+        marginTop={2}
+        overflow="auto"
+      >
         <TableContainer sx={{ padding: 0 }}>
           {itemDetails.map((row) => {
             return (
@@ -189,7 +227,13 @@ export default function ItemDetailCard({
                   <TableRow
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell align="center">{row.value}</TableCell>
+                    <TableCell align="center">
+                      {row.label === "ランク・使用回数" && isRankChanged ? (
+                        <Box color="warning.dark">{row.value}</Box>
+                      ) : (
+                        row.value
+                      )}
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -197,6 +241,29 @@ export default function ItemDetailCard({
           })}
         </TableContainer>
       </Box>
+      {withButton && (
+        <Box
+          display="flex"
+          marginTop={2}
+          height={45}
+          justifyContent="space-between"
+        >
+          <Button
+            variant="outlined"
+            sx={{ width: "48%", fontSize: "0.8rem" }}
+            onClick={() => router.push("/")}
+          >
+            終了
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ width: "48%", fontSize: "0.8rem" }}
+            onClick={() => router.push("/size_measurements")}
+          >
+            続けて計測する
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 }

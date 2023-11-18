@@ -5,19 +5,29 @@ import ItemDetailCard from "./item-detail-card";
 
 type TProps = {
   itemInfo: TItemsShowResponse;
+  withButton?: boolean;
+  changedParts?: string[];
+  isSizeChanged?: boolean;
+  isRankChanged?: boolean;
 };
 
-export default function ItemDetailCardContainer({ itemInfo }: TProps) {
+export default function ItemDetailCardContainer({
+  itemInfo,
+  withButton,
+  changedParts,
+  isSizeChanged,
+  isRankChanged,
+}: TProps) {
   const partSize = [
     { partName: "肩", partSize: itemInfo.shoulder },
     { partName: "身幅", partSize: itemInfo.bust },
+    { partName: "着丈", partSize: itemInfo.lengthTop },
+    { partName: "首", partSize: itemInfo.roundNeck },
     { partName: "ウエスト", partSize: itemInfo.waist },
     { partName: "ヒップ", partSize: itemInfo.hip },
-    { partName: "裄丈", partSize: itemInfo.sleeveLength },
-    { partName: "着丈", partSize: itemInfo.lengthTop },
-    { partName: "総丈", partSize: itemInfo.outseam },
-    { partName: "首", partSize: itemInfo.roundNeck },
     { partName: "もも", partSize: itemInfo.roundLeg },
+    { partName: "総丈", partSize: itemInfo.outseam },
+    { partName: "裄丈", partSize: itemInfo.sleeveLength },
     { partName: "裾幅", partSize: itemInfo.hemWidth },
   ].filter((v) => {
     return v.partSize !== null;
@@ -66,6 +76,10 @@ export default function ItemDetailCardContainer({ itemInfo }: TProps) {
       partSizes={partSize}
       wearSize={itemInfo.size ?? "なし"}
       itemDetails={itemDetails}
+      withButton={withButton}
+      changedParts={changedParts}
+      isSizeChanged={isSizeChanged}
+      isRankChanged={isRankChanged}
     />
   );
 }
