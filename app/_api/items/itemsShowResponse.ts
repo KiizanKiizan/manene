@@ -16,6 +16,7 @@ export type TItemsShowResponse = {
   regDate: string | null;
   priceTaxIn: number;
   priceRefTaxIn: number;
+  shoulder: number | null;
   bust: number | null;
   waist: number | null;
   minWaist: number | null;
