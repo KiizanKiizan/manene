@@ -37,7 +37,7 @@ export default function ItemDetailFetcher({
   return (
     <>
       <DisableBackDialog open onClose={onClickClose}>
-        <DialogContent sx={{ padding: 0 }}>
+        <DialogContent sx={{ paddingX: 0 }}>
           <ItemDetailCardContainer
             itemInfo={data}
             isSizeChanged={isSizeChanged}
