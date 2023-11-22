@@ -2,7 +2,6 @@
 
 import {
   Box,
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -10,7 +9,6 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import ExpandableImage from "../Image/expandable-image";
 
 type TProps = {
@@ -29,12 +27,11 @@ export default function ItemDetailCard({
   partSizes,
   wearSize,
   itemDetails,
-  withButton = false,
   changedParts,
   isSizeChanged,
   isRankChanged,
+  withButton,
 }: TProps) {
-  const router = useRouter();
   return (
     <Box padding={"7%"} data-testid="item-detail-card">
       <Box
@@ -241,29 +238,6 @@ export default function ItemDetailCard({
           })}
         </TableContainer>
       </Box>
-      {withButton && (
-        <Box
-          display="flex"
-          marginTop={2}
-          height={45}
-          justifyContent="space-between"
-        >
-          <Button
-            variant="outlined"
-            sx={{ width: "48%", fontSize: "0.8rem" }}
-            onClick={() => router.push("/")}
-          >
-            終了
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ width: "48%", fontSize: "0.8rem" }}
-            onClick={() => router.push("/size_measurements")}
-          >
-            続けて計測する
-          </Button>
-        </Box>
-      )}
     </Box>
   );
 }

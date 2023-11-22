@@ -1,5 +1,6 @@
 import useItemsShow from "@/app/_api/item-location/useItemsShow";
-import { DialogContent } from "@mui/material";
+import { Box, Button, DialogContent } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import ItemDetailCardContainer from "../common/Item/item-detail-card-container";
 import DisableBackDialog from "../common/dialog/disable-back-dialog";
@@ -16,12 +17,13 @@ type TProps = {
 
 export default function ItemDetailFetcher({
   itemId,
-  withButton,
+  withButton = false,
   changedParts,
   isSizeChanged,
   isRankChanged,
   onClickClose,
 }: TProps) {
+  const router = useRouter();
   const { data, error, isLoading } = useItemsShow({ id: itemId });
 
   useEffect(() => {
@@ -43,6 +45,24 @@ export default function ItemDetailFetcher({
             isRankChanged={isRankChanged}
             changedParts={changedParts}
           />
+          {withButton && (
+            <Box display="flex" height={45} justifyContent="space-between">
+              <Button
+                variant="outlined"
+                sx={{ width: "48%", fontSize: "0.8rem" }}
+                onClick={() => router.push("/")}
+              >
+                終了
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ width: "48%", fontSize: "0.8rem" }}
+                onClick={() => router.push("/size_measurements")}
+              >
+                続けて計測する
+              </Button>
+            </Box>
+          )}
         </DialogContent>
       </DisableBackDialog>
     </>
