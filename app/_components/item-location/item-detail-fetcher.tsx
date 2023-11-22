@@ -37,16 +37,21 @@ export default function ItemDetailFetcher({
   return (
     <>
       <DisableBackDialog open onClose={onClickClose}>
-        <DialogContent>
+        <DialogContent sx={{ padding: 0 }}>
           <ItemDetailCardContainer
             itemInfo={data}
-            withButton={withButton}
             isSizeChanged={isSizeChanged}
             isRankChanged={isRankChanged}
             changedParts={changedParts}
           />
           {withButton && (
-            <Box display="flex" height={45} justifyContent="space-between">
+            <Box
+              display="flex"
+              paddingX={3}
+              paddingBottom={3}
+              height={45}
+              justifyContent="space-between"
+            >
               <Button
                 variant="outlined"
                 sx={{ width: "48%", fontSize: "0.8rem" }}

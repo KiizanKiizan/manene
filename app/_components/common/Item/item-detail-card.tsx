@@ -16,7 +16,6 @@ type TProps = {
   partSizes: { partName: string; partSize: number }[];
   wearSize: string;
   itemDetails: { label: string; value: number | string }[];
-  withButton?: boolean;
   changedParts?: string[];
   isSizeChanged?: boolean;
   isRankChanged?: boolean;
@@ -30,10 +29,9 @@ export default function ItemDetailCard({
   changedParts,
   isSizeChanged,
   isRankChanged,
-  withButton,
 }: TProps) {
   return (
-    <Box padding={"7%"} data-testid="item-detail-card">
+    <Box padding={"7%"} data-testid="item-detail-card" height="100%">
       <Box
         sx={{
           display: "flex",
@@ -198,7 +196,7 @@ export default function ItemDetailCard({
         sx={{
           border: "1px solid",
         }}
-        maxHeight={withButton ? "58vh" : "65vh"}
+        maxHeight="55vh"
         marginTop={2}
         overflow="auto"
       >

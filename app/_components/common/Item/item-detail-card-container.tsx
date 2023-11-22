@@ -5,7 +5,6 @@ import ItemDetailCard from "./item-detail-card";
 
 type TProps = {
   itemInfo: TItemsShowResponse;
-  withButton?: boolean;
   changedParts?: string[];
   isSizeChanged?: boolean;
   isRankChanged?: boolean;
@@ -13,7 +12,6 @@ type TProps = {
 
 export default function ItemDetailCardContainer({
   itemInfo,
-  withButton,
   changedParts,
   isSizeChanged,
   isRankChanged,
@@ -76,7 +74,6 @@ export default function ItemDetailCardContainer({
       partSizes={partSize}
       wearSize={itemInfo.size ?? "なし"}
       itemDetails={itemDetails}
-      withButton={withButton}
       changedParts={changedParts}
       isSizeChanged={isSizeChanged}
       isRankChanged={isRankChanged}

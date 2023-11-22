@@ -34,9 +34,11 @@ export default function DisableBackDialog({
       onClose={onClose}
       fullWidth
       fullScreen={fullScreen}
-      sx={{ zIndex: zIndex }}
+      sx={{
+        zIndex: zIndex,
+      }}
     >
-      {children}
+      <div style={{ overflow: "hidden" }}>{children}</div>
     </Dialog>
   );
 }
