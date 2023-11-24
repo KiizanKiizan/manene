@@ -3,7 +3,7 @@ import { TSizePartsParams } from "../size_measurement/useSizeMeasurementUpdate";
 import { usePostRequest } from "../usePostRequest";
 
 export type TCreateOrUpdateParams = {
-  id: number;
+  id?: number;
   sizeAttributes: {
     tAdminId?: number;
     size?: string;
