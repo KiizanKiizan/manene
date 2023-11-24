@@ -1,13 +1,18 @@
-import fetchData from '../fetchData';
+import fetchData from "../fetchData";
 
-type Tparams = { waist: number };
-export type TuseSizeCalcIndexResponse = {
+type TParams = {
+  item_id: number;
+  cate_small_id: number;
+  waist: number;
+};
+
+export type TSizeCalcIndexResponse = {
   size: string;
 };
 
-export default function fetchSizeCalcIndex(params: Tparams) {
-  const data = fetchData<TuseSizeCalcIndexResponse>({
-    path: 'size_calc',
+export default function fetchSizeCalcIndex(params: TParams) {
+  const data = fetchData<TSizeCalcIndexResponse>({
+    path: "size_calc",
     params,
   });
   return data;

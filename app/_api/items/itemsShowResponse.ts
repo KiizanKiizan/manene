@@ -22,13 +22,12 @@ export type TItemsShowResponse = {
   minWaist: number | null;
   maxWaist: number | null;
   hip: number | null;
-  lengthArm: number | null;
   lengthTop: number | null;
-  lengthWaist: number | null;
-  lengthLeg: number | null;
   roundNeck: number | null;
   roundLeg: number | null;
-  roundCalf: number | null;
+  outseam: number | null;
+  sleeveLength: number | null;
+  hemWidth: number | null;
   itemImageUrl: string;
   itemOriginalImageUrl: string;
   leeapSize: string;

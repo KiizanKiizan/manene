@@ -16,6 +16,9 @@ type TProps = {
   partSizes: { partName: string; partSize: number }[];
   wearSize: string;
   itemDetails: { label: string; value: number | string }[];
+  changedParts?: string[];
+  isSizeChanged?: boolean;
+  isRankChanged?: boolean;
 };
 
 export default function ItemDetailCard({
@@ -23,9 +26,12 @@ export default function ItemDetailCard({
   partSizes,
   wearSize,
   itemDetails,
+  changedParts,
+  isSizeChanged,
+  isRankChanged,
 }: TProps) {
   return (
-    <Box padding={"7%"} data-testid="item-detail-card">
+    <Box padding={"7%"} data-testid="item-detail-card" height="100%">
       <Box
         sx={{
           display: "flex",
@@ -41,7 +47,13 @@ export default function ItemDetailCard({
             }}
           />
         </Box>
-        <Box sx={{ border: "1px solid", padding: 0, height: "180px" }}>
+        <Box
+          sx={{
+            border: "1px solid",
+            padding: 0,
+            height: "180px",
+          }}
+        >
           <TableContainer sx={{ padding: 0, height: "100%" }}>
             <Table aria-label="simple table">
               <TableHead
@@ -79,7 +91,11 @@ export default function ItemDetailCard({
                   {partSizes.slice(0, 3).map((partSize) => {
                     return (
                       <TableCell key={partSize.partName} align="center">
-                        {partSize.partSize}
+                        {changedParts?.includes(partSize.partName) ? (
+                          <Box color="warning.dark">{partSize.partSize}</Box>
+                        ) : (
+                          partSize.partSize
+                        )}
                       </TableCell>
                     );
                   })}
@@ -122,7 +138,11 @@ export default function ItemDetailCard({
                   {partSizes.slice(3, 6).map((partSize) => {
                     return (
                       <TableCell key={partSize.partName} align="center">
-                        {partSize.partSize}
+                        {changedParts?.includes(partSize.partName) ? (
+                          <Box color="warning.dark">{partSize.partSize}</Box>
+                        ) : (
+                          partSize.partSize
+                        )}
                       </TableCell>
                     );
                   })}
@@ -159,14 +179,27 @@ export default function ItemDetailCard({
                     },
                   }}
                 >
-                  <TableCell align="center">{wearSize}</TableCell>
+                  <TableCell align="center">
+                    {isSizeChanged ? (
+                      <Box color="warning.dark">{wearSize}</Box>
+                    ) : (
+                      wearSize
+                    )}
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
         </Box>
       </Box>
-      <Box sx={{ border: "1px solid" }}>
+      <Box
+        sx={{
+          border: "1px solid",
+        }}
+        maxHeight="55vh"
+        marginTop={2}
+        overflow="auto"
+      >
         <TableContainer sx={{ padding: 0 }}>
           {itemDetails.map((row) => {
             return (
@@ -189,7 +222,13 @@ export default function ItemDetailCard({
                   <TableRow
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell align="center">{row.value}</TableCell>
+                    <TableCell align="center">
+                      {row.label === "ランク・使用回数" && isRankChanged ? (
+                        <Box color="warning.dark">{row.value}</Box>
+                      ) : (
+                        row.value
+                      )}
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
