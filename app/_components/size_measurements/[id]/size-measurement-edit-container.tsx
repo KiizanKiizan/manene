@@ -40,7 +40,10 @@ export default function SizeMeasurementEditContainer({
     handleClickEnter,
     handleClickSkip,
     handleClickSelect,
-  } = useSizeMeasurementHandler({ measurementData: measurementData });
+  } = useSizeMeasurementHandler({
+    measurementInputData: measurementData.input,
+    itemId: measurementData.itemId,
+  });
   const [isSizeStableConfirmDialogOpen, setIsSizeStableConfirmDialogOpen] =
     useState<boolean>(measurementData.input.isSizeStable);
   const [isSizeStableAlertDialogOpen, setIsSizeStableAlertDialogOpen] =

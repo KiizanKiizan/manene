@@ -1,7 +1,7 @@
 import fetchSizeCalcIndex, {
   TSizeCalcIndexResponse,
 } from "@/app/_api/size_measurement/fetchSizeCalcIndex";
-import { TSizeMeasurementIndexResponse } from "@/app/_api/size_measurement/getSizeMeasurementIndex";
+import { TMeasurementInput } from "@/app/_api/size_measurement/getSizeMeasurementIndex";
 import { TSizePartsParams } from "@/app/_api/size_measurement/useSizeMeasurementUpdate";
 import { SelectChangeEvent } from "@mui/material";
 import { AxiosError } from "axios";
@@ -19,7 +19,8 @@ type TFormData = TSizePartsParams & {
 };
 
 type TArgs = {
-  measurementData: TSizeMeasurementIndexResponse;
+  measurementInputData: TMeasurementInput;
+  itemId?: number;
 };
 
 export const partName = {
@@ -52,12 +53,15 @@ export const partKeyName = {
   15: "hemWidth",
 };
 
-export default function useSizeMeasurementHandler({ measurementData }: TArgs) {
-  const [size, setSize] = useState<string>(measurementData.input.size);
-  const [rank, setRank] = useState<string>(measurementData.input.rank);
+export default function useSizeMeasurementHandler({
+  measurementInputData,
+  itemId,
+}: TArgs) {
+  const [size, setSize] = useState<string>(measurementInputData.size);
+  const [rank, setRank] = useState<string>(measurementInputData.rank);
   const [measurement, setMeasurement] = useState<string>();
   const [selectedPartId, setSelectedPartId] = useState<number>(
-    measurementData.input.measurements[0].part
+    measurementInputData.measurements[0].part
   );
   const initialFormData: TFormData = {
     newMeasurement: {
@@ -91,13 +95,13 @@ export default function useSizeMeasurementHandler({ measurementData }: TArgs) {
   };
 
   const moveToNextPart = () => {
-    const index = measurementData.input.measurements.findIndex(
+    const index = measurementInputData.measurements.findIndex(
       (data) => data.part === selectedPartId
     );
     const nextIndex =
-      index === measurementData.input.measurements.length - 1 ? 0 : index + 1;
+      index === measurementInputData.measurements.length - 1 ? 0 : index + 1;
     setMeasurement(undefined);
-    setSelectedPartId(measurementData.input.measurements[nextIndex].part);
+    setSelectedPartId(measurementInputData.measurements[nextIndex].part);
   };
 
   const isWithinOneError = (
@@ -112,7 +116,7 @@ export default function useSizeMeasurementHandler({ measurementData }: TArgs) {
   };
 
   const getPreMeasurement = (fieldName: string): number | undefined => {
-    return measurementData.input.measurements.find(
+    return measurementInputData.measurements.find(
       (data) => partKeyName[data.part as keyof typeof partKeyName] === fieldName
     )?.value;
   };
@@ -257,12 +261,13 @@ export default function useSizeMeasurementHandler({ measurementData }: TArgs) {
     const inputResult = getInputResult(action.field, action.value);
 
     if (
-      measurementData.input.needPartsForSizeCalc.includes(selectedPartId) &&
-      inputResult.newMeasurement
+      measurementInputData.needPartsForSizeCalc.includes(selectedPartId) &&
+      inputResult.newMeasurement &&
+      itemId
     ) {
       fetchSizeCalcIndex({
-        item_id: measurementData.itemId,
-        cate_small_id: measurementData.input.mCateSmallId,
+        item_id: itemId,
+        cate_small_id: measurementInputData.mCateSmallId,
         waist: inputResult.newMeasurement,
       })
         .then((res: TSizeCalcIndexResponse) => {
@@ -335,7 +340,7 @@ export default function useSizeMeasurementHandler({ measurementData }: TArgs) {
   };
 
   const handleClickSkip = () => {
-    const preMeasurement = measurementData.input.measurements.find(
+    const preMeasurement = measurementInputData.measurements.find(
       (data) => data.part === selectedPartId
     )?.value;
 
@@ -355,7 +360,7 @@ export default function useSizeMeasurementHandler({ measurementData }: TArgs) {
     setSelectedPartId(id);
   };
 
-  const optionDetails = measurementData.input.measurements.map((data) => {
+  const optionDetails = measurementInputData.measurements.map((data) => {
     const partKey = partKeyName[data.part as keyof typeof partKeyName];
     return {
       id: data.part,
