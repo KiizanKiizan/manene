@@ -2,12 +2,12 @@ import getNoCacheData from "../getNoCacheData";
 
 export type TMeasurement = {
   part: number;
-  value: number;
+  value: number | null;
 };
 
 export type TMeasurementInput = {
   mCateSmallId: number;
-  size: string;
+  size: string | null;
   measurements: TMeasurement[];
   needPartsForSizeCalc: number[];
   isSizeStable: boolean;
