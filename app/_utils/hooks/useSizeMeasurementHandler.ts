@@ -57,7 +57,7 @@ export default function useSizeMeasurementHandler({
   measurementInputData,
   itemId,
 }: TArgs) {
-  const [size, setSize] = useState<string>(measurementInputData.size);
+  const [size, setSize] = useState<string | null>(measurementInputData.size);
   const [rank, setRank] = useState<string>(measurementInputData.rank);
   const [measurement, setMeasurement] = useState<string>();
   const [selectedPartId, setSelectedPartId] = useState<number>(
@@ -115,7 +115,7 @@ export default function useSizeMeasurementHandler({
     );
   };
 
-  const getPreMeasurement = (fieldName: string): number | undefined => {
+  const getPreMeasurement = (fieldName: string): number | undefined | null => {
     return measurementInputData.measurements.find(
       (data) => partKeyName[data.part as keyof typeof partKeyName] === fieldName
     )?.value;
@@ -134,7 +134,10 @@ export default function useSizeMeasurementHandler({
         actionMessage: "",
       };
     }
-    if (isWithinOneError(preMeasurement, newMeasurement)) {
+    if (
+      preMeasurement !== null &&
+      isWithinOneError(preMeasurement, newMeasurement)
+    ) {
       return {
         newMeasurement: preMeasurement,
         actionMessage: "誤差切捨",
@@ -160,7 +163,10 @@ export default function useSizeMeasurementHandler({
       };
     }
 
-    if (isWithinOneError(preMeasurement, newMeasurement)) {
+    if (
+      preMeasurement !== null &&
+      isWithinOneError(preMeasurement, newMeasurement)
+    ) {
       return {
         newMeasurement: preMeasurement,
         actionMessage: "誤差切捨",
@@ -176,7 +182,6 @@ export default function useSizeMeasurementHandler({
   const truncateValue = (fieldName: string, value: string) => {
     const newMeasurement = parseInt(value) ? parseInt(value) : undefined;
     const preMeasurement = getPreMeasurement(fieldName);
-
     if (newMeasurement === undefined || preMeasurement === undefined) {
       return {
         newMeasurement: undefined,
@@ -189,7 +194,10 @@ export default function useSizeMeasurementHandler({
         newMeasurement: preMeasurement,
         actionMessage: "",
       };
-    } else if (isWithinOneError(preMeasurement, newMeasurement)) {
+    } else if (
+      preMeasurement !== null &&
+      isWithinOneError(preMeasurement, newMeasurement)
+    ) {
       return {
         newMeasurement: preMeasurement,
         actionMessage: "誤差切捨",
@@ -344,7 +352,7 @@ export default function useSizeMeasurementHandler({
       (data) => data.part === selectedPartId
     )?.value;
 
-    if (preMeasurement === undefined) return;
+    if (preMeasurement === undefined || preMeasurement === null) return;
 
     dispatch({
       type: "SET_VALUE",

@@ -56,49 +56,50 @@ export default function SizeMeasurementEditContainer({
   );
 
   const handleClickUpdate = () => {
-    mutate(
-      {
-        size: size,
-        rank: rank,
-        shoulder: formData.newMeasurement.shoulder,
-        bust: formData.newMeasurement.bust,
-        lengthTop: formData.newMeasurement.lengthTop,
-        roundNeck: formData.newMeasurement.roundNeck,
-        waist: formData.newMeasurement.waist,
-        maxWaist: formData.newMeasurement.maxWaist,
-        minWaist: formData.newMeasurement.minWaist,
-        hip: formData.newMeasurement.hip,
-        roundLeg: formData.newMeasurement.roundLeg,
-        outseam: formData.newMeasurement.outseam,
-        sleeveLength: formData.newMeasurement.sleeveLength,
-        hemWidth: formData.newMeasurement.hemWidth,
-      },
-      {
-        onSuccess() {
-          setIsItemDetailCardOpen(true);
-          fetchSizeStableShow({ itemId: measurementData.itemId })
-            .then((res: TSizeStableShowResponse) => {
-              if (res.isSizeStableAfterMeasurement) {
-                setIsSizeStableAlertDialogOpen(true);
-              }
-            })
-            .catch((error: AxiosError) => {
-              alert(
-                `エラー: ${
-                  (error.response?.data as { message: string })?.message
-                }`
-              );
-            });
+    size !== null &&
+      mutate(
+        {
+          size: size,
+          rank: rank,
+          shoulder: formData.newMeasurement.shoulder,
+          bust: formData.newMeasurement.bust,
+          lengthTop: formData.newMeasurement.lengthTop,
+          roundNeck: formData.newMeasurement.roundNeck,
+          waist: formData.newMeasurement.waist,
+          maxWaist: formData.newMeasurement.maxWaist,
+          minWaist: formData.newMeasurement.minWaist,
+          hip: formData.newMeasurement.hip,
+          roundLeg: formData.newMeasurement.roundLeg,
+          outseam: formData.newMeasurement.outseam,
+          sleeveLength: formData.newMeasurement.sleeveLength,
+          hemWidth: formData.newMeasurement.hemWidth,
         },
-        onError(error: AxiosError) {
-          alert(
-            `アイテムサイズの更新に失敗しました。 ${
-              (error.response?.data as { message: string })?.message
-            }`
-          );
-        },
-      }
-    );
+        {
+          onSuccess() {
+            setIsItemDetailCardOpen(true);
+            fetchSizeStableShow({ itemId: measurementData.itemId })
+              .then((res: TSizeStableShowResponse) => {
+                if (res.isSizeStableAfterMeasurement) {
+                  setIsSizeStableAlertDialogOpen(true);
+                }
+              })
+              .catch((error: AxiosError) => {
+                alert(
+                  `エラー: ${
+                    (error.response?.data as { message: string })?.message
+                  }`
+                );
+              });
+          },
+          onError(error: AxiosError) {
+            alert(
+              `アイテムサイズの更新に失敗しました。 ${
+                (error.response?.data as { message: string })?.message
+              }`
+            );
+          },
+        }
+      );
   };
 
   return (
@@ -120,7 +121,7 @@ export default function SizeMeasurementEditContainer({
       </DisableBackDialog>
 
       <SizeMeasurementsEditForm
-        size={size}
+        size={size ?? ""}
         rank={rank}
         measurement={measurement}
         optionDetails={optionDetails}
@@ -131,7 +132,7 @@ export default function SizeMeasurementEditContainer({
         onChangeRank={handleChangeRank}
         onClickEnter={handleClickEnter}
         onClickSelect={handleClickSelect}
-        onClickUpdate={handleClickUpdate}
+        onClickConfirm={handleClickUpdate}
         onClickSkip={handleClickSkip}
       />
       {isItemDetailCardOpen && (
