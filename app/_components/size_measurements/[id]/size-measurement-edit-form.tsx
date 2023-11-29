@@ -137,7 +137,7 @@ export default function SizeMeasurementsEditForm({
           </FormControl>
         </Box>
       </Box>
-      <Box display="flex" justifyContent="space-around" padding={2} height={0}>
+      <Box display="flex" justifyContent="space-around" padding={2} height={50}>
         {!optionDetails.every((option) => option.preMeasurement === null) && (
           <Button
             variant="outlined"
