@@ -1,5 +1,5 @@
 "use client";
-import { Dialog } from "@mui/material";
+import { Dialog, DialogProps } from "@mui/material";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 
@@ -7,16 +7,20 @@ type TProps = {
   open: boolean;
   onClose: () => void;
   fullScreen?: boolean;
+  fullWidth?: boolean;
   zIndex?: number;
   children: React.ReactNode;
+  PaperProps?: DialogProps["PaperProps"];
 };
 
 export default function DisableBackDialog({
   open,
   onClose,
   fullScreen = false,
+  fullWidth = true,
   zIndex = 10,
   children,
+  PaperProps,
 }: TProps) {
   const pathname = usePathname();
   useEffect(() => {
@@ -32,8 +36,9 @@ export default function DisableBackDialog({
     <Dialog
       open={open}
       onClose={onClose}
-      fullWidth
       fullScreen={fullScreen}
+      PaperProps={PaperProps}
+      fullWidth={fullWidth}
       sx={{
         zIndex: zIndex,
       }}
