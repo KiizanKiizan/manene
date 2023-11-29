@@ -5,8 +5,8 @@ import { usePostRequest } from "../usePostRequest";
 export type TCreateOrUpdateParams = {
   id?: number;
   sizeAttributes: {
-    tAdminId?: number;
-    size?: string;
+    tAdminId: number;
+    size: string;
     tStockingOrderId: number;
     originalSize: number;
   } & TSizePartsParams;
