@@ -14,15 +14,20 @@ export type TMeasurementInput = {
   rank: string;
 };
 
-type TParams = { itemId: number };
-
 export type TSizeMeasurementIndexResponse = {
   itemId: number;
   input: TMeasurementInput;
 };
 
-export default async function getSizeMeasurementIndex(params: TParams) {
-  return getNoCacheData<TSizeMeasurementIndexResponse, TParams>({
+export type TSizeMeasurementIndexParams = { itemId: number };
+
+export default async function getSizeMeasurementIndex(
+  params: TSizeMeasurementIndexParams
+) {
+  return getNoCacheData<
+    TSizeMeasurementIndexResponse,
+    TSizeMeasurementIndexParams
+  >({
     path: "size_measurement",
     params: params,
   });
