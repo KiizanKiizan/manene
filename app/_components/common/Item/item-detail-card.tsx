@@ -10,10 +10,11 @@ import {
   TableRow,
 } from "@mui/material";
 import ExpandableImage from "../Image/expandable-image";
+import ItemSizeDetailCard, { TPartSize } from "./item-size-detail-card";
 
 type TProps = {
   itemImageUrl: string;
-  partSizes: { partName: string; partSize: number }[];
+  partSizes: TPartSize[];
   wearSize: string;
   itemDetails: { label: string; value: number | string }[];
   changedParts?: string[];
@@ -47,150 +48,12 @@ export default function ItemDetailCard({
             }}
           />
         </Box>
-        <Box
-          sx={{
-            border: "1px solid",
-            padding: 0,
-            height: "180px",
-          }}
-        >
-          <TableContainer sx={{ padding: 0, height: "100%" }}>
-            <Table aria-label="simple table">
-              <TableHead
-                sx={{
-                  bgcolor: "primary.main",
-                }}
-              >
-                <TableRow sx={{ color: "white" }}>
-                  {partSizes.slice(0, 3).map((partSize) => {
-                    return (
-                      <TableCell
-                        key={partSize.partName}
-                        sx={{
-                          color: "white",
-                          paddingY: 0,
-                          fontSize: "0.7rem",
-                        }}
-                        align="center"
-                      >
-                        {partSize.partName}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": {
-                      border: 0,
-                      paddingY: "5px",
-                    },
-                  }}
-                >
-                  {partSizes.slice(0, 3).map((partSize) => {
-                    return (
-                      <TableCell key={partSize.partName} align="center">
-                        {changedParts?.includes(partSize.partName) ? (
-                          <Box color="warning.dark">{partSize.partSize}</Box>
-                        ) : (
-                          partSize.partSize
-                        )}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              </TableBody>
-            </Table>
-            <Table aria-label="simple table">
-              <TableHead
-                sx={{
-                  bgcolor: "primary.main",
-                }}
-              >
-                <TableRow>
-                  {partSizes.slice(3, 6).map((partSize) => {
-                    return (
-                      <TableCell
-                        key={partSize.partName}
-                        sx={{
-                          color: "white",
-                          paddingY: 0,
-                          fontSize: "0.7rem",
-                        }}
-                        align="center"
-                      >
-                        {partSize.partName}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": {
-                      border: 0,
-                      paddingY: "5px",
-                    },
-                  }}
-                >
-                  {partSizes.slice(3, 6).map((partSize) => {
-                    return (
-                      <TableCell key={partSize.partName} align="center">
-                        {changedParts?.includes(partSize.partName) ? (
-                          <Box color="warning.dark">{partSize.partSize}</Box>
-                        ) : (
-                          partSize.partSize
-                        )}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              </TableBody>
-            </Table>
-            <Table aria-label="simple table" sx={{ height: "100%" }}>
-              <TableHead
-                sx={{
-                  bgcolor: "primary.main",
-                }}
-              >
-                <TableRow>
-                  <TableCell
-                    sx={{ color: "white", paddingY: 0, fontSize: "0.7rem" }}
-                    align="center"
-                  >
-                    サイズ
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": {
-                      border: 0,
-                      paddingY: "5px",
-                    },
-                  }}
-                >
-                  <TableCell align="center">
-                    {isSizeChanged ? (
-                      <Box color="warning.dark">{wearSize}</Box>
-                    ) : (
-                      wearSize
-                    )}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
+        <ItemSizeDetailCard
+          partSizes={partSizes}
+          wearSize={wearSize}
+          changedParts={changedParts}
+          isSizeChanged={isSizeChanged}
+        />
       </Box>
       <Box
         sx={{
