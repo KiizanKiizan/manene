@@ -6,7 +6,7 @@ import { LiaHandPointRight } from "react-icons/lia";
 export type TOptionDetail = {
   id: number;
   partName: string;
-  preMeasurement: number;
+  preMeasurement: number | null;
   newMeasurement?: number;
   actionMessage?: string;
 };
@@ -40,12 +40,16 @@ export default function SizeMeasurementsListItem({
       >
         {optionDetail.partName}
       </Typography>
-      <Typography variant="subtitle1" color="secondary.dark">
-        {optionDetail.preMeasurement}cm
-      </Typography>
-      <Box marginLeft={1} width={3}>
-        <ArrowRightIcon />
-      </Box>
+      {optionDetail.preMeasurement !== null && (
+        <>
+          <Typography variant="subtitle1" color="secondary.dark">
+            {optionDetail.preMeasurement}cm
+          </Typography>
+          <Box marginLeft={1} width={3}>
+            <ArrowRightIcon />
+          </Box>
+        </>
+      )}
       <Box display="flex" alignItems="center" marginLeft={3} width="100%">
         <Box width={100}>
           <Typography variant="body2" color="primary.main">
@@ -66,18 +70,19 @@ export default function SizeMeasurementsListItem({
           </Box>
         </Box>
         <Box width={30}>
-          {optionDetail.newMeasurement && (
-            <Typography
-              variant="subtitle1"
-              color={
-                optionDetail.newMeasurement - optionDetail.preMeasurement >= 0
-                  ? undefined
-                  : "warning.dark"
-              }
-            >
-              {optionDetail.newMeasurement - optionDetail.preMeasurement}
-            </Typography>
-          )}
+          {optionDetail.newMeasurement &&
+            optionDetail.preMeasurement !== null && (
+              <Typography
+                variant="subtitle1"
+                color={
+                  optionDetail.newMeasurement - optionDetail.preMeasurement >= 0
+                    ? undefined
+                    : "warning.dark"
+                }
+              >
+                {optionDetail.newMeasurement - optionDetail.preMeasurement}
+              </Typography>
+            )}
         </Box>
       </Box>
     </ListItem>

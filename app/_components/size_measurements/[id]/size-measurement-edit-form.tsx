@@ -25,7 +25,7 @@ type TProps = {
   onChangeRank: (e: SelectChangeEvent<string>) => void;
   onClickEnter: (e: React.KeyboardEvent) => void;
   onClickSelect: (id: number) => void;
-  onClickUpdate: () => void;
+  onClickConfirm: () => void;
   onClickSkip: () => void;
 };
 
@@ -41,7 +41,7 @@ export default function SizeMeasurementsEditForm({
   onChangeRank,
   onClickEnter,
   onClickSelect,
-  onClickUpdate,
+  onClickConfirm,
   onClickSkip,
 }: TProps) {
   const isFormValid =
@@ -137,16 +137,23 @@ export default function SizeMeasurementsEditForm({
           </FormControl>
         </Box>
       </Box>
-      <Box display="flex" justifyContent="space-around" padding={2} height={60}>
-        <Button variant="outlined" sx={{ width: "45%" }} onClick={onClickSkip}>
-          スキップ
-        </Button>
+      <Box display="flex" justifyContent="space-around" padding={2} height={50}>
+        {!optionDetails.every((option) => option.preMeasurement === null) && (
+          <Button
+            variant="outlined"
+            sx={{ width: "45%" }}
+            onClick={onClickSkip}
+          >
+            スキップ
+          </Button>
+        )}
+
         <Button
           variant="contained"
           sx={{ width: "45%" }}
           fullWidth
           disabled={!isFormValid || isLoading}
-          onClick={onClickUpdate}
+          onClick={onClickConfirm}
         >
           確定
         </Button>
