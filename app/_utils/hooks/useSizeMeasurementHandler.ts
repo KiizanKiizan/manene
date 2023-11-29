@@ -7,11 +7,15 @@ import { SelectChangeEvent } from "@mui/material";
 import { AxiosError } from "axios";
 import React, { useReducer, useState } from "react";
 
-type FormAction = {
-  type: "SET_VALUE";
-  field: keyof TSizePartsParams;
-  value: string | number;
-};
+type FormAction =
+  | {
+      type: "SET_VALUE";
+      field: keyof TSizePartsParams;
+      value: string | number;
+    }
+  | {
+      type: "RESET_VALUE";
+    };
 
 type TFormData = TSizePartsParams & {
   newMeasurement: Record<keyof TSizePartsParams, number | undefined>;
@@ -21,6 +25,7 @@ type TFormData = TSizePartsParams & {
 type TArgs = {
   measurementInputData: TMeasurementInput;
   itemId?: number;
+  arrivalSize?: string;
 };
 
 export const partName = {
@@ -56,8 +61,11 @@ export const partKeyName = {
 export default function useSizeMeasurementHandler({
   measurementInputData,
   itemId,
+  arrivalSize,
 }: TArgs) {
-  const [size, setSize] = useState<string | null>(measurementInputData.size);
+  const [size, setSize] = useState<string>(
+    measurementInputData.size ?? (arrivalSize as string)
+  );
   const [rank, setRank] = useState<string>(measurementInputData.rank);
   const [measurement, setMeasurement] = useState<string>();
   const [selectedPartId, setSelectedPartId] = useState<number>(
@@ -266,6 +274,8 @@ export default function useSizeMeasurementHandler({
   };
 
   const formReducer = (formData: TFormData, action: FormAction) => {
+    if (action.type === "RESET_VALUE") return initialFormData;
+
     const inputResult = getInputResult(action.field, action.value);
 
     if (
@@ -380,6 +390,13 @@ export default function useSizeMeasurementHandler({
     };
   });
 
+  const resetFromData = () => {
+    dispatch({
+      type: "RESET_VALUE",
+    });
+    setSelectedPartId(measurementInputData.measurements[0].part);
+  };
+
   const changedParts: string[] = optionDetails
     .filter((data) => {
       return data.preMeasurement !== data.newMeasurement;
@@ -394,6 +411,7 @@ export default function useSizeMeasurementHandler({
     selectedPartId,
     optionDetails,
     changedParts,
+    resetFromData,
     handleChangeMeasurement,
     handleChangeRank,
     handleChangeSize,
