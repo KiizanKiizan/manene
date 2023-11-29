@@ -48,7 +48,6 @@ export default function ItemInfoContainer({
     measurement,
     selectedPartId,
     optionDetails,
-    resetFromData,
     handleChangeMeasurement,
     handleChangeRank,
     handleChangeSize,
@@ -271,7 +270,6 @@ export default function ItemInfoContainer({
           open={isSizeMeasurementDialogOpen}
           onClose={() => {
             setIsSizeMeasurementDialogOpen(false);
-            resetFromData();
           }}
           fullWidth={false}
           PaperProps={{

@@ -7,15 +7,11 @@ import { SelectChangeEvent } from "@mui/material";
 import { AxiosError } from "axios";
 import React, { useReducer, useState } from "react";
 
-type FormAction =
-  | {
-      type: "SET_VALUE";
-      field: keyof TSizePartsParams;
-      value: string | number;
-    }
-  | {
-      type: "RESET_VALUE";
-    };
+type FormAction = {
+  type: "SET_VALUE";
+  field: keyof TSizePartsParams;
+  value: string | number;
+};
 
 type TFormData = TSizePartsParams & {
   newMeasurement: Record<keyof TSizePartsParams, number | undefined>;
@@ -274,8 +270,6 @@ export default function useSizeMeasurementHandler({
   };
 
   const formReducer = (formData: TFormData, action: FormAction) => {
-    if (action.type === "RESET_VALUE") return initialFormData;
-
     const inputResult = getInputResult(action.field, action.value);
 
     if (
@@ -390,13 +384,6 @@ export default function useSizeMeasurementHandler({
     };
   });
 
-  const resetFromData = () => {
-    dispatch({
-      type: "RESET_VALUE",
-    });
-    setSelectedPartId(measurementInputData.measurements[0].part);
-  };
-
   const changedParts: string[] = optionDetails
     .filter((data) => {
       return data.preMeasurement !== data.newMeasurement;
@@ -411,7 +398,6 @@ export default function useSizeMeasurementHandler({
     selectedPartId,
     optionDetails,
     changedParts,
-    resetFromData,
     handleChangeMeasurement,
     handleChangeRank,
     handleChangeSize,
