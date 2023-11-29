@@ -10,7 +10,6 @@ type TProps = {
   itemData: TItemData[];
   itemImagePath: string;
   adminOptions: TOption[];
-  arrivalSize: string;
   onCloseItemInfo: () => void;
   itemId: number;
   adminId: number;
@@ -21,7 +20,6 @@ export default function SizeMeasurementFetcher({
   itemData,
   itemImagePath,
   adminOptions,
-  arrivalSize,
   onCloseItemInfo,
   itemId,
   adminId,
@@ -41,7 +39,7 @@ export default function SizeMeasurementFetcher({
       itemData={itemData}
       itemImagePath={itemImagePath}
       adminOptions={adminOptions}
-      arrivalSize={arrivalSize}
+      arrivalSize={data.input.size as string}
       stockingOrderId={stockingOrderId}
       onCloseItemInfo={onCloseItemInfo}
       itemId={data.itemId}
