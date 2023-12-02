@@ -1,7 +1,5 @@
 "use client";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import "long-press-event";
-
 import {
   Box,
   Card,
@@ -9,7 +7,8 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
+import "long-press-event";
+import { useEffect, useRef } from "react";
 import { TCardInfo } from "./registered-item-card-list";
 
 type TProps = TCardInfo & {
@@ -27,15 +26,20 @@ export default function RegisteredItemCard({
   onClick,
   onLongPress,
 }: TProps) {
+  const cardActionAreaRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     // 長押しイベント
-    const cardActionArea = document.getElementById(
-      `card-action-area-${cardId}`
-    );
+    const cardActionArea = cardActionAreaRef.current;
+
     if (cardActionArea) {
       cardActionArea.addEventListener("long-press", () => {
         onLongPress(cardId);
       });
+      return () =>
+        cardActionArea.removeEventListener("long-press", () =>
+          onLongPress(cardId)
+        );
     }
   }, [cardId, onLongPress]);
   return (
@@ -48,10 +52,7 @@ export default function RegisteredItemCard({
         borderWidth: 1,
       }}
     >
-      <CardActionArea
-        onClick={() => onClick(cardId)}
-        id={`card-action-area-${cardId}`}
-      >
+      <CardActionArea onClick={() => onClick(cardId)} ref={cardActionAreaRef}>
         <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
           <Box
             gridColumn="span 4"
