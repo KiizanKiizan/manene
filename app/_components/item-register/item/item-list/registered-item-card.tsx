@@ -31,15 +31,12 @@ export default function RegisteredItemCard({
   useEffect(() => {
     // 長押しイベント
     const cardActionArea = cardActionAreaRef.current;
+    const handleLongPress = () => onLongPress(cardId);
 
     if (cardActionArea) {
-      cardActionArea.addEventListener("long-press", () => {
-        onLongPress(cardId);
-      });
+      cardActionArea.addEventListener("long-press", handleLongPress);
       return () =>
-        cardActionArea.removeEventListener("long-press", () =>
-          onLongPress(cardId)
-        );
+        cardActionArea.removeEventListener("long-press", handleLongPress);
     }
   }, [cardId, onLongPress]);
   return (
