@@ -83,10 +83,7 @@ export default function ItemDuplicationDialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClickCancel}>キャンセル</Button>
-        <Button
-          onClick={onClickAdd}
-          disabled={!selectedCreateNum || selectedCreateNum <= 0}
-        >
+        <Button onClick={onClickAdd} disabled={!!selectedCreateNum}>
           追加
         </Button>
       </DialogActions>

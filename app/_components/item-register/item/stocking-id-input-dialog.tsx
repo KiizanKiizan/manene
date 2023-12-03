@@ -62,7 +62,7 @@ export default function StockingIdInputDialog({
         <Button
           onClick={onClickAdd}
           disabled={
-            stockingDateCode === undefined || stockingSequence === undefined
+            stockingDateCode !== undefined && stockingSequence !== undefined
           }
         >
           追加
