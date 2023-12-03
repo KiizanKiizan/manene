@@ -53,8 +53,8 @@ export default function ItemDuplicationDialog({
             <Typography>作成数：</Typography>
             <TextField
               value={selectedCreateNum}
-              variant="standard"
               onChange={onChangeSelectedCreateNum}
+              variant="standard"
               type="number"
               size="small"
               sx={{ width: "40px" }}
@@ -83,7 +83,9 @@ export default function ItemDuplicationDialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClickCancel}>キャンセル</Button>
-        <Button onClick={onClickAdd}>追加</Button>
+        <Button onClick={onClickAdd} disabled={!!selectedCreateNum}>
+          追加
+        </Button>
       </DialogActions>
     </DisableBackDialog>
   );

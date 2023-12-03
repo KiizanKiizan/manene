@@ -19,9 +19,11 @@ type TProps = {
 
 function SizeSelectionButton({
   size,
+  isDisabled,
   onClickSize,
 }: {
   size: string;
+  isDisabled: boolean;
   onClickSize: (size: string) => void;
 }) {
   return (
@@ -30,6 +32,7 @@ function SizeSelectionButton({
       fullWidth
       sx={{ height: "100%", fontSize: "60px" }}
       onClick={() => onClickSize(size)}
+      disabled={isDisabled}
     >
       {size}
     </Button>
@@ -68,16 +71,34 @@ export default function SizeSelectionDialog({
         <Box paddingX={1} marginTop={1}>
           <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
             <Box gridColumn="span 6" padding={1} height="14vh">
-              <SizeSelectionButton size="S" onClickSize={onClickSize} />
+              <SizeSelectionButton
+                size="S"
+                onClickSize={onClickSize}
+                isDisabled={!(arrivedSmallNum - registeredSmallNum > 0)}
+              />
             </Box>
             <Box gridColumn="span 6" padding={1} height="14vh">
-              <SizeSelectionButton size="M" onClickSize={onClickSize} />
+              <SizeSelectionButton
+                size="M"
+                onClickSize={onClickSize}
+                isDisabled={!(arrivedMediumNum - registeredMediumNum > 0)}
+              />
             </Box>
             <Box gridColumn="span 6" padding={1} height="14vh">
-              <SizeSelectionButton size="L" onClickSize={onClickSize} />
+              <SizeSelectionButton
+                size="L"
+                onClickSize={onClickSize}
+                isDisabled={!(arrivedLargeNum - registeredLargeNum > 0)}
+              />
             </Box>
             <Box gridColumn="span 6" padding={1} height="14vh">
-              <SizeSelectionButton size="XL" onClickSize={onClickSize} />
+              <SizeSelectionButton
+                size="XL"
+                onClickSize={onClickSize}
+                isDisabled={
+                  !(arrivedExtraLargeNum - registeredExtraLargeNum > 0)
+                }
+              />
             </Box>
           </Box>
         </Box>
