@@ -1,17 +1,11 @@
 "use client";
 import useSizeMeasurementInputsIndex from "@/app/_api/item_register/form/useSizeMeasurementInputsIndex";
-import { TOption } from "@/app/_api/judge_throw_away/getJudgeThrowAwayOptions";
 import LoadingDialog from "@/app/_components/common/dialog/loading-dialog";
 import ItemInfoContainer from "./item-info-container";
-import { TItemData } from "./item-info-list";
+import { TSizeMeasurementFetcherProps } from "./size-measurement-fetcher";
 
-type TProps = {
-  stockingOrderId: number;
-  itemData: TItemData[];
-  itemImagePath: string;
-  adminOptions: TOption[];
+type TProps = TSizeMeasurementFetcherProps & {
   arrivalSize: string;
-  onCloseItemInfo: () => void;
 };
 
 export default function SizeMeasurementInputsFetcher({

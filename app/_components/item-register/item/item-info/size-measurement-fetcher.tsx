@@ -5,12 +5,15 @@ import LoadingDialog from "@/app/_components/common/dialog/loading-dialog";
 import ItemInfoContainer from "./item-info-container";
 import { TItemData } from "./item-info-list";
 
-type TProps = {
+export type TSizeMeasurementFetcherProps = {
   stockingOrderId: number;
   itemData: TItemData[];
   itemImagePath: string;
   adminOptions: TOption[];
   onCloseItemInfo: () => void;
+};
+
+type TProps = TSizeMeasurementFetcherProps & {
   itemId: number;
   adminId: number;
 };
