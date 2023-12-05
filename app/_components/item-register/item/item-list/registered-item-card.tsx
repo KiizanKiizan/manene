@@ -20,8 +20,8 @@ export default function RegisteredItemCard({
   cardId,
   itemImage,
   adminName,
-  registeredContent,
-  registeredSize,
+  registeredContentMessage,
+  registeredSizeMessage,
   isRegistered,
   onClick,
   onLongPress,
@@ -69,11 +69,11 @@ export default function RegisteredItemCard({
           <Box gridColumn="span 7">
             <Box>
               <Typography color="primary">登録内容</Typography>
-              <Typography marginLeft={2}>{registeredContent}</Typography>
+              <Typography marginLeft={2}>{registeredContentMessage}</Typography>
             </Box>
             <Box>
               <Typography color="primary">サイズ</Typography>
-              <Typography marginLeft={2}>{registeredSize}</Typography>
+              <Typography marginLeft={2}>{registeredSizeMessage}</Typography>
             </Box>
             <Box>
               <Typography color="primary">登録者</Typography>

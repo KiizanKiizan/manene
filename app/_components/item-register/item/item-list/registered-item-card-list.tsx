@@ -5,8 +5,8 @@ export type TCardInfo = {
   cardId: number;
   itemImage: string;
   adminName: string;
-  registeredContent: string;
-  registeredSize: string;
+  registeredContentMessage: string;
+  registeredSizeMessage: string;
   isRegistered: boolean;
 };
 
@@ -30,8 +30,8 @@ export default function RegisteredItemCardList({
             cardId={card.cardId}
             itemImage={card.itemImage}
             adminName={card.adminName}
-            registeredContent={card.registeredContent}
-            registeredSize={card.registeredSize}
+            registeredContentMessage={card.registeredContentMessage}
+            registeredSizeMessage={card.registeredSizeMessage}
             isRegistered={card.isRegistered}
             onClick={onClick}
             onLongPress={onLongPress}
