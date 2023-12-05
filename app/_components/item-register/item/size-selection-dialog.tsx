@@ -13,7 +13,6 @@ type TProps = {
   registeredLargeNum: number;
   registeredExtraLargeNum: number;
   onClickSize: (size: string) => void;
-  isOpen: boolean;
   onClose: () => void;
 };
 
@@ -50,11 +49,10 @@ export default function SizeSelectionDialog({
   registeredLargeNum,
   registeredExtraLargeNum,
   onClickSize,
-  isOpen,
   onClose,
 }: TProps) {
   return (
-    <DisableBackDialog open={isOpen} onClose={onClose}>
+    <DisableBackDialog open onClose={onClose}>
       <DialogTitle>入荷サイズ選択</DialogTitle>
       <DialogContent sx={{ padding: 0 }}>
         <StockStatusTable

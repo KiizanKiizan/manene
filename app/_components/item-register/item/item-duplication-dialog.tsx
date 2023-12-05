@@ -16,32 +16,28 @@ import { ChangeEvent } from "react";
 import DisableBackDialog from "../../common/dialog/disable-back-dialog";
 
 type TProps = {
-  isOpen: boolean;
   adminOption: TOption[];
-  selectedCreateNum?: number;
+  selectedCreateNum: number;
   selectedAdminId: number;
   onChangeSelectedCreateNum: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   onChangeAdminId: (e: SelectChangeEvent<number>) => void;
   onClose: () => void;
-  onClickCancel: () => void;
   onClickAdd: () => void;
 };
 
 export default function ItemDuplicationDialog({
-  isOpen,
   adminOption,
   selectedCreateNum,
   selectedAdminId,
   onChangeSelectedCreateNum,
   onChangeAdminId,
   onClose,
-  onClickCancel,
   onClickAdd,
 }: TProps) {
   return (
-    <DisableBackDialog open={isOpen} onClose={onClose}>
+    <DisableBackDialog open onClose={onClose}>
       <DialogTitle>一斉作成</DialogTitle>
       <DialogContent>
         <Box>
@@ -82,7 +78,7 @@ export default function ItemDuplicationDialog({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClickCancel}>キャンセル</Button>
+        <Button onClick={onClose}>キャンセル</Button>
         <Button
           onClick={onClickAdd}
           disabled={!selectedCreateNum || selectedCreateNum <= 0}
