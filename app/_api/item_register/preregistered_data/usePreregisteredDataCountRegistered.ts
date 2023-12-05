@@ -4,7 +4,7 @@ type TParams = {
   id: number;
 };
 
-type TPreregisteredDataCountRegisteredResponse = {
+export type TPreregisteredDataCountRegisteredResponse = {
   stockingId: string;
   arrivedSmallNum: number;
   arrivedMediumNum: number;
