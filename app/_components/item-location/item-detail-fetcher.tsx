@@ -2,9 +2,9 @@ import useItemsShow from "@/app/_api/item-location/useItemsShow";
 import { Box, Button, DialogContent } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import ItemDetailCardContainer from "../common/Item/item-detail-card-container";
 import DisableBackDialog from "../common/dialog/disable-back-dialog";
 import LoadingDialog from "../common/dialog/loading-dialog";
-import ItemDetailCardContainer from "../common/item/item-detail-card-container";
 
 type TProps = {
   itemId: number;

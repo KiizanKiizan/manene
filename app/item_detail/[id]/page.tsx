@@ -1,4 +1,4 @@
-import ItemDetailCardContainer from "@/app/_components/common/item/item-detail-card-container";
+import ItemDetailCardContainer from "@/app/_components/common/Item/item-detail-card-container";
 import getItemsShow from "../../_api/item_detail/getItemsShow";
 
 type TProps = {

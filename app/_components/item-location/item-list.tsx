@@ -1,6 +1,6 @@
 import { TItemLocationsItemScanResponse as itemInfo } from "@/app/_api/item-location/useItemLocationsItemScan";
 import { Box } from "@mui/material";
-import ItemMiniCard from "../common/item/item-mini-card";
+import ItemMiniCard from "../common/Item/item-mini-card";
 
 type TProps = {
   selectedItems: itemInfo[];

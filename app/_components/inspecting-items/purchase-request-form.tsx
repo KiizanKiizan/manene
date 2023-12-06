@@ -17,9 +17,9 @@ import {
 import { AxiosError } from "axios";
 import Image from "next/image";
 import React from "react";
+import ItemCard from "../common/Item/item-card";
+import ItemInfoCard from "../common/Item/item-info-card";
 import LoadingDialog from "../common/dialog/loading-dialog";
-import ItemCard from "../common/item/item-card";
-import ItemInfoCard from "../common/item/item-info-card";
 import Header from "../common/pages/header";
 import SectionHeader from "../common/pages/section-header";
 type TProps = {

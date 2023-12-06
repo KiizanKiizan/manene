@@ -1,6 +1,6 @@
 import ItemSizeDetailCard, {
   TPartSize,
-} from "@/app/_components/common/item/item-size-detail-card";
+} from "@/app/_components/common/Item/item-size-detail-card";
 import { Box, Button, List, ListItem, Typography } from "@mui/material";
 import ItemInfoListItem from "./item-info-list-item";
 
