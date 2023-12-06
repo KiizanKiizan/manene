@@ -3,6 +3,10 @@ import { TPreregisteredDataCountRegisteredResponse } from "@/app/_api/item_regis
 import { TPreregisteredDataResponse } from "@/app/_api/item_register/preregistered_data/usePreregisteredDataShow";
 import { TMeasurement } from "@/app/_api/items/itemsShowResponse";
 import { DROP_SIZE } from "@/app/_constants/drop-size";
+import {
+  getRegisteredContentMessage,
+  getRegisteredSizeMessage,
+} from "@/app/_service/item-register/getItemCardMessages";
 import { SelectChangeEvent } from "@mui/material";
 import { ChangeEvent, useReducer, useState } from "react";
 import ItemDuplicationDialog from "../item-duplication-dialog";
@@ -10,7 +14,8 @@ import SizeMeasurementSwitcher from "../item-info/size-measurement-switcher";
 import SizeSelectionDialog from "../size-selection-dialog";
 import RegisteredItemCardList, { TCardInfo } from "./registered-item-card-list";
 
-type TCardsState = {
+export type TCardsState = {
+  stockingOrderId: number;
   itemImage: string;
   itemId?: number;
   cateSmallId: number;
@@ -70,55 +75,6 @@ export default function RegisteredItemCardContainer({
   const [selectedAdminId, setSelectedAdminId] = useState<number>(2);
   const [selectedCreateNum, setSelectedCreateNum] = useState<number>(1);
 
-  // const getCateSmallName = (cateSmallId: number): string => {
-  //   return (
-  //     formOption.categorySmalls.find((cateSmall) => {
-  //       return cateSmall.value === cateSmallId;
-  //     })?.name ?? ""
-  //   );
-  // };
-
-  // const getBrandName = (brandId: number): string => {
-  //   return (
-  //     formOption.brands.find((brand) => {
-  //       return brand.value === brandId;
-  //     })?.name ?? ""
-  //   );
-  // };
-
-  // const getColorName = (colorId: number): string => {
-  //   return (
-  //     formOption.colors.find((color) => {
-  //       return color.value === colorId;
-  //     })?.name ?? ""
-  //   );
-  // };
-
-  // const getSubColorName = (subColorId?: number): string => {
-  //   if (subColorId === undefined) return "";
-  //   return (
-  //     formOption.colors.find((color) => {
-  //       return color.value === subColorId;
-  //     })?.name ?? ""
-  //   );
-  // };
-
-  // const getPatternName = (patternId: number): string => {
-  //   return (
-  //     formOption.patterns.find((pattern) => {
-  //       return pattern.value === patternId;
-  //     })?.name ?? ""
-  //   );
-  // };
-
-  // const getLogoName = (logoId: number): string => {
-  //   return (
-  //     formOption.logos.find((logo) => {
-  //       return logo.value === logoId;
-  //     })?.name ?? ""
-  //   );
-  // };
-
   // const initialRegisteredContentMessage = getRegisteredContentMessage({
   //   cateSmall: getCateSmallName(
   //     preregisteredData.tPreregisteredItem.mCateSmallId
@@ -152,6 +108,7 @@ export default function RegisteredItemCardContainer({
 
   const initialCardsState = [
     {
+      stockingOrderId: preregisteredData.tStockingOrderId,
       itemImage: preregisteredData.tPreregisteredItem.itemImageUrl,
       itemId: undefined,
       cateSmallId: preregisteredData.tPreregisteredItem.mCateSmallId,
@@ -261,8 +218,104 @@ export default function RegisteredItemCardContainer({
   // };
 
   const cardInfo: TCardInfo[] = cardsState.map((card, index) => {
-    return { ...card, cardId: index };
+    const adminName: string =
+      formOption.admins.find((admin) => {
+        return admin.value === card.adminId;
+      })?.name ?? "";
+
+    const getCateSmallName = (cateSmallId: number): string => {
+      return (
+        formOption.categorySmalls.find((cateSmall) => {
+          return cateSmall.value === cateSmallId;
+        })?.name ?? ""
+      );
+    };
+
+    const getBrandName = (brandId: number): string => {
+      return (
+        formOption.brands.find((brand) => {
+          return brand.value === brandId;
+        })?.name ?? ""
+      );
+    };
+
+    const getColorName = (colorId: number): string => {
+      return (
+        formOption.colors.find((color) => {
+          return color.value === colorId;
+        })?.name ?? ""
+      );
+    };
+
+    const getSubColorName = (subColorId?: number): string => {
+      if (subColorId === undefined) return "";
+      return (
+        formOption.colors.find((color) => {
+          return color.value === subColorId;
+        })?.name ?? ""
+      );
+    };
+
+    const getPatternName = (patternId: number): string => {
+      return (
+        formOption.patterns.find((pattern) => {
+          return pattern.value === patternId;
+        })?.name ?? ""
+      );
+    };
+
+    const getLogoName = (logoId: number): string => {
+      return (
+        formOption.logos.find((logo) => {
+          return logo.value === logoId;
+        })?.name ?? ""
+      );
+    };
+
+    const registeredContentMessage = getRegisteredContentMessage({
+      itemId: card.itemId,
+      cateSmall: getCateSmallName(card.cateSmallId),
+      brand: getBrandName(card.brandId),
+      color: getColorName(card.colorId),
+      subColor: getSubColorName(card.subColorId),
+      pattern: getPatternName(card.patternId),
+      logo: getLogoName(card.logoId),
+      originalSize: card.originalSize,
+    });
+
+    const registeredSizeMessage = getRegisteredSizeMessage({
+      shoulder: card.shoulder,
+      bust: card.bust,
+      waist: card.waist,
+      minWaist: card.minWaist,
+      maxWaist: card.maxWaist,
+      lengthTop: card.lengthTop,
+      roundNeck: card.roundNeck,
+      hip: card.hip,
+      roundLeg: card.roundLeg,
+      outseam: card.outseam,
+      sleeveLength: card.sleeveLength,
+      hemWidth: card.hemWidth,
+      size: card.size,
+      originalSize: card.originalSize,
+      dropSize: card.dropSizeId,
+    });
+
+    return {
+      cardId: index,
+      itemImage: card.itemImage,
+      adminName: adminName,
+      registeredContentMessage: registeredContentMessage,
+      registeredSizeMessage: registeredSizeMessage,
+      isRegistered: card.isRegistered,
+    };
   });
+
+  const selectedCardState: TCardsState | undefined = cardsState.find(
+    (cardState, index) => {
+      if (index === selectedCardId) return cardState;
+    }
+  );
 
   return (
     <>
@@ -287,8 +340,13 @@ export default function RegisteredItemCardContainer({
             onClose={() => setSelectedRegisterSize(undefined)}
             onClickAdd={}
           />
-        ) : selectedCardId ? (
-          <SizeMeasurementSwitcher />
+        ) : selectedCardId && selectedCardState ? (
+          <SizeMeasurementSwitcher
+            cardState={selectedCardState}
+            arrivalSize={selectedRegisterSize}
+            formOption={formOption}
+            onClose={() => setSelectedRegisterSize(undefined)}
+          />
         ) : (
           <RegisteredItemCardList
             cardInfo={cardInfo}
