@@ -1,7 +1,7 @@
 import { TChartItem } from "@/app/_api/before-inspections/useBeforeInspectionsCreate";
 import { List } from "@mui/material";
-import ItemCard from "../common/Item/item-card";
-import ItemInfoCard from "../common/Item/item-info-card";
+import ItemCard from "../common/item/item-card";
+import ItemInfoCard from "../common/item/item-info-card";
 
 type TProps = {
   chartItems: TChartItem[];
