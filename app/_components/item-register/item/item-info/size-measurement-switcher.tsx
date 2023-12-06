@@ -1,5 +1,8 @@
 import { TFormOptionIndexResponse } from "@/app/_api/item_register/form/getFormOptionIndex";
-import { TCardsState } from "../item-list/registered-item-card-container";
+import {
+  TCardsState,
+  TUpdateActionValue,
+} from "../item-list/registered-item-card-container";
 import SizeMeasurementFetcher from "./size-measurement-fetcher";
 import SizeMeasurementInputsFetcher from "./size-measurement-inputs-fetcher";
 
@@ -8,57 +11,43 @@ type TProps = {
   arrivalSize: string;
   formOption: TFormOptionIndexResponse;
   onClose: () => void;
+  onUpdateCardState: (args: TUpdateActionValue) => void;
 };
 export default function SizeMeasurementSwitcher({
   cardState,
   arrivalSize,
   formOption,
   onClose,
+  onUpdateCardState,
 }: TProps) {
   const itemData = [
     {
       name: "小カテ",
-      value:
-        formOption.categorySmalls.find(
-          (categorySmall) => categorySmall.value === cardState.cateSmallId
-        )?.name ?? "",
+      value: cardState.cateSmall,
     },
     {
       name: "ブランド",
-      value:
-        formOption.brands.find((brand) => brand.value === cardState.brandId)
-          ?.name ?? "",
+      value: cardState.brand,
     },
     {
       name: "カラー",
-      value:
-        formOption.colors.find((color) => color.value === cardState.colorId)
-          ?.name ?? "",
+      value: cardState.color,
     },
     {
       name: "サブカラー",
-      value:
-        formOption.colors.find((color) => color.value === cardState.subColorId)
-          ?.name ?? "",
+      value: cardState.subColor,
     },
     {
       name: "柄",
-      value:
-        formOption.patterns.find(
-          (pattern) => pattern.value === cardState.patternId
-        )?.name ?? "",
+      value: cardState.pattern,
     },
     {
       name: "ロゴ",
-      value:
-        formOption.logos.find((logo) => logo.value === cardState.logoId)
-          ?.name ?? "",
+      value: cardState.logo,
     },
     {
       name: "Dropサイズ",
-      value:
-        formOption.dropSizes.find((drop) => drop.value === cardState.dropSizeId)
-          ?.name ?? "",
+      value: cardState.dropSize,
     },
   ];
 
@@ -71,6 +60,7 @@ export default function SizeMeasurementSwitcher({
           itemImagePath={cardState.itemImage}
           adminOptions={formOption.admins}
           onCloseItemInfo={onClose}
+          onUpdateCardState={onUpdateCardState}
           itemId={0}
           adminId={0}
         />
@@ -81,6 +71,7 @@ export default function SizeMeasurementSwitcher({
           itemImagePath={cardState.itemImage}
           adminOptions={formOption.admins}
           onCloseItemInfo={onClose}
+          onUpdateCardState={onUpdateCardState}
           arrivalSize={arrivalSize}
         />
       )}

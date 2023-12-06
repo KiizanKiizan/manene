@@ -1,5 +1,4 @@
 import { TMeasurement } from "@/app/_api/items/itemsShowResponse";
-import { DROP_SIZE } from "@/app/_constants/drop-size";
 
 export const getRegisteredContentMessage = ({
   itemId,
@@ -46,7 +45,7 @@ export const getRegisteredSizeMessage = ({
 }: TMeasurement & {
   size?: string;
   originalSize: string;
-  dropSize: keyof typeof DROP_SIZE;
+  dropSize: string;
 }): string => {
   const partSize = [
     {
@@ -71,7 +70,5 @@ export const getRegisteredSizeMessage = ({
   const resultString = partSize.reduce((acc, item) => {
     return acc + `/${item.partName}${item.partSize}`;
   }, "");
-  return `${size ?? originalSize}/ドロップサイズ${
-    DROP_SIZE[dropSize]
-  }${resultString}`;
+  return `${size ?? originalSize}/ドロップサイズ${dropSize}${resultString}`;
 };

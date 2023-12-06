@@ -9,6 +9,7 @@ import Header from "@/app/_components/common/pages/header";
 import SizeMeasurementsEditForm from "@/app/_components/size_measurements/[id]/size-measurement-edit-form";
 import { ORIGINAL_SIZE } from "@/app/_constants/original-size";
 
+import { TItemsShowResponse } from "@/app/_api/items/itemsShowResponse";
 import useSizeMeasurementHandler, {
   partKeyName,
 } from "@/app/_utils/hooks/useSizeMeasurementHandler";
@@ -16,6 +17,10 @@ import { Box, DialogContent, Typography } from "@mui/material";
 import { AxiosError } from "axios";
 import Image from "next/image";
 import { useState } from "react";
+import {
+  TCardsState,
+  TUpdateActionValue,
+} from "../item-list/registered-item-card-container";
 import AdminList from "./admin-list";
 import ItemInfoList, { TItemData } from "./item-info-list";
 
@@ -27,6 +32,8 @@ type TProps = {
   arrivalSize: string;
   stockingOrderId: number;
   onCloseItemInfo: () => void;
+  handleCreateCardState: (args: TCardsState) => void;
+  onUpdateCardState: (args: TUpdateActionValue) => void;
   itemId?: number;
   adminId?: number;
 };
@@ -39,6 +46,8 @@ export default function ItemInfoContainer({
   arrivalSize,
   stockingOrderId,
   onCloseItemInfo,
+  handleCreateCardState,
+  onUpdateCardState,
   itemId,
   adminId,
 }: TProps) {
@@ -99,9 +108,26 @@ export default function ItemInfoContainer({
           },
         },
         {
-          onSuccess() {
+          onSuccess(response) {
+            const itemData: TItemsShowResponse = response.data;
+            onUpdateCardState({
+              itemId: itemData.id,
+              adminId: itemData.tAdmin.id,
+              size: itemData.size ?? "",
+              shoulder: itemData.shoulder,
+              bust: itemData.bust,
+              waist: itemData.waist,
+              minWaist: itemData.minWaist,
+              maxWaist: itemData.maxWaist,
+              hip: itemData.hip,
+              lengthTop: itemData.lengthTop,
+              roundNeck: itemData.roundNeck,
+              roundLeg: itemData.roundLeg,
+              outseam: itemData.outseam,
+              sleeveLength: itemData.sleeveLength,
+              hemWidth: itemData.hemWidth,
+            });
             onCloseItemInfo();
-            // ここでアイテムカードにレスポンスをセットする処理を書く
           },
           onError(error: AxiosError) {
             alert(
@@ -140,9 +166,26 @@ export default function ItemInfoContainer({
           },
         },
         {
-          onSuccess() {
+          onSuccess(response) {
+            const itemData: TItemsShowResponse = response.data;
+            handleCreateCardState({
+              stockingOrderId: itemData.tStockingOrderId,
+  itemImage: itemData.itemImageUrl,
+  itemId?: itemData.id,
+  cateSmall: itemData.mCateSmall.name,
+  brand: itemData.mBrand.name,
+  color: itemData.mColor.name,
+  subColor: itemData.mSubColor ? itemData.mSubColor.name : "",
+  pattern: itemData.mPattern.name,
+  logo: itemData.mLogo.name,
+  originalSize: itemData.originalSize.
+  dropSize: keyof typeof DROP_SIZE;
+  size?: string;
+  adminId?: number;
+  isRegistered: boolean;
+            });
+
             onCloseItemInfo();
-            // ここでアイテムカードにレスポンスをセットする処理を書く
           },
           onError(error: AxiosError) {
             alert(

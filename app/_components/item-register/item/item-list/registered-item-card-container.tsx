@@ -7,6 +7,14 @@ import {
   getRegisteredContentMessage,
   getRegisteredSizeMessage,
 } from "@/app/_service/item-register/getItemCardMessages";
+import {
+  getBrandName,
+  getCateSmallName,
+  getColorName,
+  getLogoName,
+  getPatternName,
+  getSubColorName,
+} from "@/app/_utils/functions/getItemOptionName";
 import { SelectChangeEvent } from "@mui/material";
 import { ChangeEvent, useReducer, useState } from "react";
 import ItemDuplicationDialog from "../item-duplication-dialog";
@@ -18,21 +26,20 @@ export type TCardsState = {
   stockingOrderId: number;
   itemImage: string;
   itemId?: number;
-  cateSmallId: number;
-  brandId: number;
-  colorId: number;
-  subColorId?: number;
-  patternId: number;
-  logoId: number;
+  cateSmall: string;
+  brand: string;
+  color: string;
+  subColor?: string;
+  pattern: string;
+  logo: string;
   originalSize: string;
-  dropSizeId: keyof typeof DROP_SIZE;
+  dropSize: string;
   size?: string;
   adminId?: number;
   isRegistered: boolean;
 } & TMeasurement;
 
-type TUpdateAction = {
-  cardId: number;
+export type TUpdateActionValue = {
   itemId: number;
   adminId: number;
   size: string;
@@ -40,7 +47,7 @@ type TUpdateAction = {
 
 type TCardsAction =
   | {
-      type: "ADD_CARD";
+      type: "CREATE_CARD";
       value: TCardsState;
     }
   | {
@@ -49,7 +56,7 @@ type TCardsAction =
     }
   | {
       type: "UPDATE_CARD";
-      value: TUpdateAction;
+      value: TUpdateActionValue;
     }
   | {
       type: "Duplicate_CARD";
@@ -75,50 +82,37 @@ export default function RegisteredItemCardContainer({
   const [selectedAdminId, setSelectedAdminId] = useState<number>(2);
   const [selectedCreateNum, setSelectedCreateNum] = useState<number>(1);
 
-  // const initialRegisteredContentMessage = getRegisteredContentMessage({
-  //   cateSmall: getCateSmallName(
-  //     preregisteredData.tPreregisteredItem.mCateSmallId
-  //   ),
-  //   brand: getBrandName(preregisteredData.tPreregisteredItem.mBrandId),
-  //   color: getColorName(preregisteredData.tPreregisteredItem.mColorId),
-  //   subColor: getSubColorName(preregisteredData.tPreregisteredItem.mSubColorId),
-  //   pattern: getPatternName(preregisteredData.tPreregisteredItem.mPatternId),
-  //   logo: getLogoName(preregisteredData.tPreregisteredItem.mLogoId),
-  //   originalSize: selectedRegisterSize as string, // 後で修正必要
-  // });
-
-  // const initialRegisteredSizeMessage = getRegisteredSizeMessage({
-  //   shoulder: null,
-  //   bust: null,
-  //   waist: null,
-  //   minWaist: null,
-  //   maxWaist: null,
-  //   lengthTop: null,
-  //   roundNeck: null,
-  //   hip: null,
-  //   roundLeg: null,
-  //   outseam: null,
-  //   sleeveLength: null,
-  //   hemWidth: null,
-  //   size: undefined,
-  //   originalSize: selectedRegisterSize as string, // 後で修正必要
-  //   dropSize: preregisteredData.tPreregisteredItem
-  //     .dropSize as keyof typeof DROP_SIZE,
-  // });
-
   const initialCardsState = [
     {
       stockingOrderId: preregisteredData.tStockingOrderId,
       itemImage: preregisteredData.tPreregisteredItem.itemImageUrl,
       itemId: undefined,
-      cateSmallId: preregisteredData.tPreregisteredItem.mCateSmallId,
-      brandId: preregisteredData.tPreregisteredItem.mBrandId,
-      colorId: preregisteredData.tPreregisteredItem.mColorId,
-      subColorId: preregisteredData.tPreregisteredItem.mSubColorId,
-      patternId: preregisteredData.tPreregisteredItem.mPatternId,
-      logoId: preregisteredData.tPreregisteredItem.mLogoId,
+      cateSmall: getCateSmallName(
+        formOption.categorySmalls,
+        preregisteredData.tPreregisteredItem.mCateSmallId
+      ),
+      brand: getBrandName(
+        formOption.brands,
+        preregisteredData.tPreregisteredItem.mBrandId
+      ),
+      color: getColorName(
+        formOption.colors,
+        preregisteredData.tPreregisteredItem.mColorId
+      ),
+      subColor: getSubColorName(
+        formOption.colors,
+        preregisteredData.tPreregisteredItem.mSubColorId
+      ),
+      pattern: getPatternName(
+        formOption.patterns,
+        preregisteredData.tPreregisteredItem.mPatternId
+      ),
+      logo: getLogoName(
+        formOption.logos,
+        preregisteredData.tPreregisteredItem.mLogoId
+      ),
       originalSize: selectedRegisterSize as string, // 後で修正必要
-      dropSizeId: preregisteredData.tPreregisteredItem.dropSize,
+      dropSize: DROP_SIZE[preregisteredData.tPreregisteredItem.dropSize],
       size: undefined,
       adminId: undefined,
       isRegistered: false,
@@ -142,10 +136,12 @@ export default function RegisteredItemCardContainer({
     action: TCardsAction
   ) => {
     switch (action.type) {
+      case "CREATE_CARD":
+        return [...cardsState, action.value];
       case "UPDATE_CARD":
         // cardsStateの中のaction.value番目の要素のみを更新する
         return cardsState.map((cardState, index) => {
-          if (index === action.value.cardId) {
+          if (index === selectedCardId) {
             return {
               ...cardState,
               itemId: action.value.itemId,
@@ -179,18 +175,34 @@ export default function RegisteredItemCardContainer({
     initialCardsState
   );
 
-  // const cardInfo: TCardInfo[] = cardsState.map(
-  //   (cardState: Omit<TCardInfo, "cardId">, index: number) => {
-  //     return {
-  //       cardId: index,
-  //       itemImage: cardsState.itemImage,
-  //       adminName: cardsState.adminName,
-  //       registeredContent: cardsState.registeredContent,
-  //       registeredSize: cardsState.registeredSize,
-  //       isRegistered: cardsState.isRegistered,
-  //     };
-  //   }
-  // );
+  const handleCreateCardState = (args: TCardsState) => {
+    dispatch({
+      type: "CREATE_CARD",
+      value: args,
+    });
+  };
+  const handleUpdateCardState = (args: TUpdateActionValue) => {
+    dispatch({
+      type: "UPDATE_CARD",
+      value: {
+        itemId: args.itemId,
+        adminId: args.adminId,
+        size: args.size,
+        shoulder: args.shoulder,
+        bust: args.bust,
+        waist: args.waist,
+        minWaist: args.minWaist,
+        maxWaist: args.maxWaist,
+        lengthTop: args.lengthTop,
+        roundNeck: args.roundNeck,
+        hip: args.hip,
+        roundLeg: args.roundLeg,
+        outseam: args.outseam,
+        sleeveLength: args.sleeveLength,
+        hemWidth: args.hemWidth,
+      },
+    });
+  };
 
   const haveAlreadyRegisteredItem = (): boolean => {
     switch (selectedRegisterSize) {
@@ -223,63 +235,14 @@ export default function RegisteredItemCardContainer({
         return admin.value === card.adminId;
       })?.name ?? "";
 
-    const getCateSmallName = (cateSmallId: number): string => {
-      return (
-        formOption.categorySmalls.find((cateSmall) => {
-          return cateSmall.value === cateSmallId;
-        })?.name ?? ""
-      );
-    };
-
-    const getBrandName = (brandId: number): string => {
-      return (
-        formOption.brands.find((brand) => {
-          return brand.value === brandId;
-        })?.name ?? ""
-      );
-    };
-
-    const getColorName = (colorId: number): string => {
-      return (
-        formOption.colors.find((color) => {
-          return color.value === colorId;
-        })?.name ?? ""
-      );
-    };
-
-    const getSubColorName = (subColorId?: number): string => {
-      if (subColorId === undefined) return "";
-      return (
-        formOption.colors.find((color) => {
-          return color.value === subColorId;
-        })?.name ?? ""
-      );
-    };
-
-    const getPatternName = (patternId: number): string => {
-      return (
-        formOption.patterns.find((pattern) => {
-          return pattern.value === patternId;
-        })?.name ?? ""
-      );
-    };
-
-    const getLogoName = (logoId: number): string => {
-      return (
-        formOption.logos.find((logo) => {
-          return logo.value === logoId;
-        })?.name ?? ""
-      );
-    };
-
     const registeredContentMessage = getRegisteredContentMessage({
       itemId: card.itemId,
-      cateSmall: getCateSmallName(card.cateSmallId),
-      brand: getBrandName(card.brandId),
-      color: getColorName(card.colorId),
-      subColor: getSubColorName(card.subColorId),
-      pattern: getPatternName(card.patternId),
-      logo: getLogoName(card.logoId),
+      cateSmall: card.cateSmall,
+      brand: card.brand,
+      color: card.color,
+      subColor: card.subColor,
+      pattern: card.pattern,
+      logo: card.logo,
       originalSize: card.originalSize,
     });
 
@@ -298,7 +261,7 @@ export default function RegisteredItemCardContainer({
       hemWidth: card.hemWidth,
       size: card.size,
       originalSize: card.originalSize,
-      dropSize: card.dropSizeId,
+      dropSize: card.dropSize,
     });
 
     return {
@@ -346,6 +309,7 @@ export default function RegisteredItemCardContainer({
             arrivalSize={selectedRegisterSize}
             formOption={formOption}
             onClose={() => setSelectedRegisterSize(undefined)}
+            onUpdateCardState={handleUpdateCardState}
           />
         ) : (
           <RegisteredItemCardList
