@@ -10,11 +10,11 @@ import {
 import { Alert, Box, SelectChangeEvent, Typography } from "@mui/material";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
-import ItemCard from "../common/Item/item-card";
-import ItemInfoCard from "../common/Item/item-info-card";
 import QrCodeReader from "../common/barcode/qr-code-reader";
 import ChartCard from "../common/card/chart-card";
 import DisableBackDialog from "../common/dialog/disable-back-dialog";
+import ItemCard from "../common/item/item-card";
+import ItemInfoCard from "../common/item/item-info-card";
 import Header from "../common/pages/header";
 import InspectingItemsSender from "./inspecting-items-sender";
 import PurchaseRequestForm from "./purchase-request-form";

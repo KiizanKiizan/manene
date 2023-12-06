@@ -1,8 +1,8 @@
 "use client";
 import { TItemsJudgeThrowAwayResponse as TProps } from "@/app/_api/judge_throw_away/useItemsJudgeThrowAway";
 import { Box, Typography } from "@mui/material";
-import ItemCard from "../common/Item/item-card";
-import ItemInfoCard from "../common/Item/item-info-card";
+import ItemCard from "../common/item/item-card";
+import ItemInfoCard from "../common/item/item-info-card";
 
 const JUDGEMENT = {
   0: "修繕",
