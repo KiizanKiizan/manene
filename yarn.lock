@@ -2543,6 +2543,11 @@ log-update@^4.0.0:
     slice-ansi "^4.0.0"
     wrap-ansi "^6.2.0"
 
+long-press-event@^2.4.6:
+  version "2.4.6"
+  resolved "https://registry.yarnpkg.com/long-press-event/-/long-press-event-2.4.6.tgz#bbd81cf931aa62928f43c00ce1b4b396bbd5219f"
+  integrity sha512-59zL3M+uD7Q2DTuxJ2UkbVV3+0D9PrcI7zgem1AXRinH6g8mb7iN9vOKCqiVriW15S4L9OmKOr/d8q9qAaeCGQ==
+
 loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
