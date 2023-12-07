@@ -52,17 +52,17 @@ export const getRegisteredSizeMessage = ({
       partName: "肩",
       partSize: shoulder,
     },
-    { partName: "身幅", bust },
-    { partName: "着丈", lengthTop },
-    { partName: "首", roundNeck },
-    { partName: "ウエスト", waist },
-    { partName: "ウエスト最小", minWaist },
-    { partName: "ウエスト最大", maxWaist },
-    { partName: "ヒップ", hip },
-    { partName: "もも", roundLeg },
-    { partName: "総丈", outseam },
-    { partName: "裄丈", sleeveLength },
-    { partName: "裾幅", hemWidth },
+    { partName: "身幅", partSize: bust },
+    { partName: "着丈", partSize: lengthTop },
+    { partName: "首", partSize: roundNeck },
+    { partName: "ウエスト", partSize: waist },
+    { partName: "ウエスト最小", partSize: minWaist },
+    { partName: "ウエスト最大", partSize: maxWaist },
+    { partName: "ヒップ", partSize: hip },
+    { partName: "もも", partSize: roundLeg },
+    { partName: "総丈", partSize: outseam },
+    { partName: "裄丈", partSize: sleeveLength },
+    { partName: "裾幅", partSize: hemWidth },
   ].filter((v) => {
     return v.partSize !== null;
   }) as { partName: string; partSize: number }[];
@@ -70,5 +70,6 @@ export const getRegisteredSizeMessage = ({
   const resultString = partSize.reduce((acc, item) => {
     return acc + `/${item.partName}${item.partSize}`;
   }, "");
+
   return `${size ?? originalSize}/ドロップサイズ${dropSize}${resultString}`;
 };
