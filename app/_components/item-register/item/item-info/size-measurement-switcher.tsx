@@ -35,7 +35,7 @@ export default function SizeMeasurementSwitcher({
     },
     {
       name: "サブカラー",
-      value: cardState.subColor,
+      value: cardState.subColor ?? "無し",
     },
     {
       name: "柄",
