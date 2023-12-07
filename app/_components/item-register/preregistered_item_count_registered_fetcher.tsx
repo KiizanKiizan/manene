@@ -23,14 +23,10 @@ export default function PreregisteredItemCountRegisteredFetcher({
   }
 
   return (
-    <RegisteredItemCardList
-      cardInfo={[]}
-      onClick={function (cardId: number): void {
-        throw new Error("Function not implemented.");
-      }}
-      onLongPress={function (cardId: number): void {
-        throw new Error("Function not implemented.");
-      }}
+    <RegisteredItemCardContainer
+      formOption={formOption}
+      preregisteredData={preregisteredData}
+      countRegisteredData={data}
     />
   );
 }
