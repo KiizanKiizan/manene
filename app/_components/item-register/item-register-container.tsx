@@ -48,7 +48,10 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
           onChangeStockingSequence={(
             e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
           ) => setStockingSequence(e.target.value)}
-          onClickAdd={() => setIsClickAdd(true)}
+          onClickAdd={() => {
+            setIsStockingIdInputDialogOpen(false);
+            setIsClickAdd(true);
+          }}
         ></StockingIdInputDialog>
       </Box>
     </>
