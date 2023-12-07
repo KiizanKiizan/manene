@@ -10,6 +10,7 @@ import SizeMeasurementsEditForm from "@/app/_components/size_measurements/[id]/s
 import { ORIGINAL_SIZE } from "@/app/_constants/original-size";
 
 import { TItemsShowResponse } from "@/app/_api/items/itemsShowResponse";
+import { DROP_SIZE } from "@/app/_constants/drop-size";
 import useSizeMeasurementHandler, {
   partKeyName,
 } from "@/app/_utils/hooks/useSizeMeasurementHandler";
@@ -109,23 +110,23 @@ export default function ItemInfoContainer({
         },
         {
           onSuccess(response) {
-            const itemData: TItemsShowResponse = response.data;
+            const item: TItemsShowResponse = response.data;
             onUpdateCardState({
-              itemId: itemData.id,
-              adminId: itemData.tAdmin.id,
-              size: itemData.size ?? "",
-              shoulder: itemData.shoulder,
-              bust: itemData.bust,
-              waist: itemData.waist,
-              minWaist: itemData.minWaist,
-              maxWaist: itemData.maxWaist,
-              hip: itemData.hip,
-              lengthTop: itemData.lengthTop,
-              roundNeck: itemData.roundNeck,
-              roundLeg: itemData.roundLeg,
-              outseam: itemData.outseam,
-              sleeveLength: itemData.sleeveLength,
-              hemWidth: itemData.hemWidth,
+              itemId: item.id,
+              adminId: item.tAdmin.id,
+              size: item.size ?? "",
+              shoulder: item.shoulder,
+              bust: item.bust,
+              waist: item.waist,
+              minWaist: item.minWaist,
+              maxWaist: item.maxWaist,
+              hip: item.hip,
+              lengthTop: item.lengthTop,
+              roundNeck: item.roundNeck,
+              roundLeg: item.roundLeg,
+              outseam: item.outseam,
+              sleeveLength: item.sleeveLength,
+              hemWidth: item.hemWidth,
             });
             onCloseItemInfo();
           },
@@ -167,22 +168,34 @@ export default function ItemInfoContainer({
         },
         {
           onSuccess(response) {
-            const itemData: TItemsShowResponse = response.data;
+            const item: TItemsShowResponse = response.data;
             handleCreateCardState({
-              stockingOrderId: itemData.tStockingOrderId,
-  itemImage: itemData.itemImageUrl,
-  itemId?: itemData.id,
-  cateSmall: itemData.mCateSmall.name,
-  brand: itemData.mBrand.name,
-  color: itemData.mColor.name,
-  subColor: itemData.mSubColor ? itemData.mSubColor.name : "",
-  pattern: itemData.mPattern.name,
-  logo: itemData.mLogo.name,
-  originalSize: itemData.originalSize.
-  dropSize: keyof typeof DROP_SIZE;
-  size?: string;
-  adminId?: number;
-  isRegistered: boolean;
+              stockingOrderId: item.tStockingOrderId,
+              itemImage: item.itemImageUrl,
+              itemId: item.id,
+              cateSmall: item.mCateSmall.name,
+              brand: item.mBrand.name,
+              color: item.mColor.name,
+              subColor: item.mSubColor ? item.mSubColor.name : "",
+              pattern: item.mPattern.name,
+              logo: item.mLogo.name,
+              originalSize: arrivalSize,
+              dropSize: DROP_SIZE[item.dropSize.id as keyof typeof DROP_SIZE],
+              size: item.size ?? arrivalSize,
+              adminId: item.tAdmin.id,
+              isRegistered: true,
+              shoulder: item.shoulder,
+              bust: item.bust,
+              waist: item.waist,
+              minWaist: item.minWaist,
+              maxWaist: item.maxWaist,
+              hip: item.hip,
+              lengthTop: item.lengthTop,
+              roundNeck: item.roundNeck,
+              roundLeg: item.roundLeg,
+              outseam: item.outseam,
+              sleeveLength: item.sleeveLength,
+              hemWidth: item.hemWidth,
             });
 
             onCloseItemInfo();
