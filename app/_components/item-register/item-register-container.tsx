@@ -21,7 +21,7 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
       {isClickAdd && stockingDateCode && stockingSequence && (
         <PreregisteredItemFetcher
           formOption={formOption}
-          stockingOrderId={stockingDateCode + stockingSequence}
+          stockingOrderId={stockingDateCode + "-" + stockingSequence}
         />
       )}
       <Box>
