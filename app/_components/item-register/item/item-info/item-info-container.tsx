@@ -33,7 +33,7 @@ type TProps = {
   arrivalSize: string;
   stockingOrderId: number;
   onCloseItemInfo: () => void;
-  handleCreateCardState: (args: TCardsState) => void;
+  onCreateCardState: (args: TCardsState) => void;
   onUpdateCardState: (args: TUpdateActionValue) => void;
   itemId?: number;
   adminId?: number;
@@ -47,7 +47,7 @@ export default function ItemInfoContainer({
   arrivalSize,
   stockingOrderId,
   onCloseItemInfo,
-  handleCreateCardState,
+  onCreateCardState,
   onUpdateCardState,
   itemId,
   adminId,
@@ -169,7 +169,7 @@ export default function ItemInfoContainer({
         {
           onSuccess(response) {
             const item: TItemsShowResponse = response.data;
-            handleCreateCardState({
+            onCreateCardState({
               stockingOrderId: item.tStockingOrderId,
               itemImage: item.itemImageUrl,
               itemId: item.id,

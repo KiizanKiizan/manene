@@ -2,7 +2,10 @@
 import useSizeMeasurementIndex from "@/app/_api/item_register/form/useSizeMeasurementIndex";
 import { TOption } from "@/app/_api/judge_throw_away/getJudgeThrowAwayOptions";
 import LoadingDialog from "@/app/_components/common/dialog/loading-dialog";
-import { TUpdateActionValue } from "../item-list/registered-item-card-container";
+import {
+  TCardsState,
+  TUpdateActionValue,
+} from "../item-list/registered-item-card-container";
 import ItemInfoContainer from "./item-info-container";
 import { TItemData } from "./item-info-list";
 
@@ -12,6 +15,7 @@ export type TSizeMeasurementFetcherProps = {
   itemImagePath: string;
   adminOptions: TOption[];
   onCloseItemInfo: () => void;
+  onCreateCardState: (args: TCardsState) => void;
   onUpdateCardState: (args: TUpdateActionValue) => void;
 };
 
@@ -26,6 +30,7 @@ export default function SizeMeasurementFetcher({
   itemImagePath,
   adminOptions,
   onCloseItemInfo,
+  onCreateCardState,
   onUpdateCardState,
   itemId,
   adminId,
@@ -48,6 +53,7 @@ export default function SizeMeasurementFetcher({
       arrivalSize={data.input.size as string}
       stockingOrderId={stockingOrderId}
       onCloseItemInfo={onCloseItemInfo}
+      onCreateCardState={onCreateCardState}
       onUpdateCardState={onUpdateCardState}
       itemId={data.itemId}
       adminId={adminId}

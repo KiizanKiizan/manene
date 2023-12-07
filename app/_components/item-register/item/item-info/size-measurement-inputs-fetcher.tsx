@@ -14,6 +14,7 @@ export default function SizeMeasurementInputsFetcher({
   itemImagePath,
   adminOptions,
   onCloseItemInfo,
+  onCreateCardState,
   onUpdateCardState,
   arrivalSize,
 }: TProps) {
@@ -34,6 +35,7 @@ export default function SizeMeasurementInputsFetcher({
       adminOptions={adminOptions}
       stockingOrderId={stockingOrderId}
       onCloseItemInfo={onCloseItemInfo}
+      onCreateCardState={onCreateCardState}
       onUpdateCardState={onUpdateCardState}
       arrivalSize={arrivalSize}
     />

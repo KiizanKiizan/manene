@@ -11,6 +11,7 @@ type TProps = {
   arrivalSize: string;
   formOption: TFormOptionIndexResponse;
   onClose: () => void;
+  onCreateCardState: (args: TCardsState) => void;
   onUpdateCardState: (args: TUpdateActionValue) => void;
 };
 export default function SizeMeasurementSwitcher({
@@ -18,6 +19,7 @@ export default function SizeMeasurementSwitcher({
   arrivalSize,
   formOption,
   onClose,
+  onCreateCardState,
   onUpdateCardState,
 }: TProps) {
   const itemData = [
@@ -60,6 +62,7 @@ export default function SizeMeasurementSwitcher({
           itemImagePath={cardState.itemImage}
           adminOptions={formOption.admins}
           onCloseItemInfo={onClose}
+          onCreateCardState={onCreateCardState}
           onUpdateCardState={onUpdateCardState}
           itemId={0}
           adminId={0}
@@ -71,6 +74,7 @@ export default function SizeMeasurementSwitcher({
           itemImagePath={cardState.itemImage}
           adminOptions={formOption.admins}
           onCloseItemInfo={onClose}
+          onCreateCardState={onCreateCardState}
           onUpdateCardState={onUpdateCardState}
           arrivalSize={arrivalSize}
         />

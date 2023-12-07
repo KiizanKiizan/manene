@@ -181,6 +181,7 @@ export default function RegisteredItemCardContainer({
       value: args,
     });
   };
+
   const handleUpdateCardState = (args: TUpdateActionValue) => {
     dispatch({
       type: "UPDATE_CARD",
@@ -309,6 +310,7 @@ export default function RegisteredItemCardContainer({
             arrivalSize={selectedRegisterSize}
             formOption={formOption}
             onClose={() => setSelectedRegisterSize(undefined)}
+            onCreateCardState={handleCreateCardState}
             onUpdateCardState={handleUpdateCardState}
           />
         ) : (
