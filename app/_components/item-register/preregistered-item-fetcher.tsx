@@ -15,10 +15,13 @@ export default function PreregisteredItemFetcher({
   const { data, isLoading, error } = usePreregisteredDataShow({
     id: stockingOrderId,
   });
-  if (isLoading || !data) return <LoadingDialog isOpen />;
+
   if (error) {
-    alert((error.response?.data as { message: string })?.message);
+    `予期せぬエラーが発生しました。 ${
+      (error.response?.data as { message: string })?.message
+    }`;
   }
+  if (isLoading || !data) return <LoadingDialog isOpen />;
 
   return (
     <PreregisteredItemCountRegisteredFetcher

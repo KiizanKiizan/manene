@@ -2,7 +2,7 @@ import { TFormOptionIndexResponse } from "@/app/_api/item_register/form/getFormO
 import usePreregisteredDataCountRegistered from "@/app/_api/item_register/preregistered_data/usePreregisteredDataCountRegistered";
 import { TPreregisteredDataResponse } from "@/app/_api/item_register/preregistered_data/usePreregisteredDataShow";
 import LoadingDialog from "../common/dialog/loading-dialog";
-import RegisteredItemCardList from "./item/item-list/registered-item-card-list";
+import RegisteredItemCardContainer from "./item/item-list/registered-item-card-container";
 
 type TProps = {
   formOption: TFormOptionIndexResponse;
@@ -17,10 +17,12 @@ export default function PreregisteredItemCountRegisteredFetcher({
     id: preregisteredData.tStockingOrderId,
   });
 
-  if (isLoading || !data) return <LoadingDialog isOpen />;
   if (error) {
-    alert((error.response?.data as { message: string })?.message);
+    `予期せぬエラーが発生しました ${
+      (error.response?.data as { message: string })?.message
+    }`;
   }
+  if (isLoading || !data) return <LoadingDialog isOpen />;
 
   return (
     <RegisteredItemCardContainer
