@@ -1,5 +1,5 @@
 import { DROP_SIZE } from "@/app/_constants/drop-size";
-import { useGetRequest } from "../../useGetRequest";
+import fetchData from "../../fetchData";
 
 type TParams = {
   id: string;
@@ -27,11 +27,10 @@ export type TPreregisteredDataResponse = {
   extraLargeRefItemId?: number; //使った
 };
 
-export default function usePreregisteredDataShow(params: TParams) {
-  const { data, error, isLoading } = useGetRequest<
-    TPreregisteredDataResponse,
-    TParams
-  >({ path: `/preregistered_data/${params.id}` });
+export default function fetchPreregisteredDataShow(params: TParams) {
+  const data = fetchData<TPreregisteredDataResponse, TParams>({
+    path: `/preregistered_data/${params.id}`,
+  });
 
-  return { data, error, isLoading };
+  return data;
 }
