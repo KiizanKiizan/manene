@@ -274,6 +274,13 @@ export default function ItemInfoContainer({
     return v.partSize !== null && v.partSize !== undefined;
   }) as { partName: string; partSize: number }[];
 
+  useEffect(() => {
+    addEventListener("popstate", onCloseItemInfo);
+    return () => {
+      removeEventListener("popstate", onCloseItemInfo);
+    };
+  }, [onCloseItemInfo]);
+
   return (
     <>
       <LoadingDialog isOpen={isCreateLoading || isUpdateLoading} />
