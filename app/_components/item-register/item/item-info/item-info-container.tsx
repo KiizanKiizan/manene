@@ -10,18 +10,14 @@ import SizeMeasurementsEditForm from "@/app/_components/size_measurements/[id]/s
 import { ORIGINAL_SIZE } from "@/app/_constants/original-size";
 
 import { TItemsShowResponse } from "@/app/_api/items/itemsShowResponse";
-import { DROP_SIZE } from "@/app/_constants/drop-size";
 import useSizeMeasurementHandler, {
   partKeyName,
 } from "@/app/_utils/hooks/useSizeMeasurementHandler";
 import { Box, DialogContent, Typography } from "@mui/material";
 import { AxiosError } from "axios";
 import Image from "next/image";
-import { useState } from "react";
-import {
-  TCardsState,
-  TUpdateActionValue,
-} from "../item-list/registered-item-card-container";
+import { useEffect, useState } from "react";
+import { TCreateOrUpdateActionValue } from "../../item-register-container";
 import AdminList from "./admin-list";
 import ItemInfoList, { TItemData } from "./item-info-list";
 
@@ -33,8 +29,7 @@ type TProps = {
   arrivalSize: string;
   stockingOrderId: number;
   onCloseItemInfo: () => void;
-  onCreateCardState: (args: TCardsState) => void;
-  onUpdateCardState: (args: TUpdateActionValue) => void;
+  onCreateOrUpdateCardState: (args: TCreateOrUpdateActionValue) => void;
   itemId?: number;
   adminId?: number;
 };
@@ -47,8 +42,7 @@ export default function ItemInfoContainer({
   arrivalSize,
   stockingOrderId,
   onCloseItemInfo,
-  onCreateCardState,
-  onUpdateCardState,
+  onCreateOrUpdateCardState,
   itemId,
   adminId,
 }: TProps) {
@@ -111,7 +105,7 @@ export default function ItemInfoContainer({
         {
           onSuccess(response) {
             const item: TItemsShowResponse = response.data;
-            onUpdateCardState({
+            onCreateOrUpdateCardState({
               itemId: item.id,
               adminId: item.tAdmin.id,
               size: item.size ?? "",
@@ -128,7 +122,6 @@ export default function ItemInfoContainer({
               sleeveLength: item.sleeveLength,
               hemWidth: item.hemWidth,
             });
-            onCloseItemInfo();
           },
           onError(error: AxiosError) {
             alert(
@@ -169,21 +162,10 @@ export default function ItemInfoContainer({
         {
           onSuccess(response) {
             const item: TItemsShowResponse = response.data;
-            onCreateCardState({
-              stockingOrderId: item.tStockingOrderId,
-              itemImage: item.itemImageUrl,
+            onCreateOrUpdateCardState({
               itemId: item.id,
-              cateSmall: item.mCateSmall.name,
-              brand: item.mBrand.name,
-              color: item.mColor.name,
-              subColor: item.mSubColor ? item.mSubColor.name : "",
-              pattern: item.mPattern.name,
-              logo: item.mLogo.name,
-              originalSize: arrivalSize,
-              dropSize: DROP_SIZE[item.dropSize.id as keyof typeof DROP_SIZE],
-              size: item.size ?? arrivalSize,
               adminId: item.tAdmin.id,
-              isRegistered: true,
+              size: item.size ?? "",
               shoulder: item.shoulder,
               bust: item.bust,
               waist: item.waist,
@@ -197,8 +179,6 @@ export default function ItemInfoContainer({
               sleeveLength: item.sleeveLength,
               hemWidth: item.hemWidth,
             });
-
-            onCloseItemInfo();
           },
           onError(error: AxiosError) {
             alert(

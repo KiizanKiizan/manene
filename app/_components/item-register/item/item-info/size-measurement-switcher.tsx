@@ -1,8 +1,8 @@
 import { TFormOptionIndexResponse } from "@/app/_api/item_register/form/getFormOptionIndex";
 import {
   TCardsState,
-  TUpdateActionValue,
-} from "../item-list/registered-item-card-container";
+  TCreateOrUpdateActionValue,
+} from "../../item-register-container";
 import SizeMeasurementFetcher from "./size-measurement-fetcher";
 import SizeMeasurementInputsFetcher from "./size-measurement-inputs-fetcher";
 
@@ -11,16 +11,14 @@ type TProps = {
   arrivalSize: string;
   formOption: TFormOptionIndexResponse;
   onClose: () => void;
-  onCreateCardState: (args: TCardsState) => void;
-  onUpdateCardState: (args: TUpdateActionValue) => void;
+  onCreateOrUpdateCardState: (args: TCreateOrUpdateActionValue) => void;
 };
 export default function SizeMeasurementSwitcher({
   cardState,
   arrivalSize,
   formOption,
   onClose,
-  onCreateCardState,
-  onUpdateCardState,
+  onCreateOrUpdateCardState,
 }: TProps) {
   const itemData = [
     {
@@ -55,17 +53,16 @@ export default function SizeMeasurementSwitcher({
 
   return (
     <>
-      {cardState.isRegistered ? (
+      {cardState.isRegistered && cardState.itemId && cardState.adminId ? (
         <SizeMeasurementFetcher
           stockingOrderId={cardState.stockingOrderId}
           itemData={itemData}
           itemImagePath={cardState.itemImage}
           adminOptions={formOption.admins}
           onCloseItemInfo={onClose}
-          onCreateCardState={onCreateCardState}
-          onUpdateCardState={onUpdateCardState}
-          itemId={0}
-          adminId={0}
+          onCreateOrUpdateCardState={onCreateOrUpdateCardState}
+          itemId={cardState.itemId}
+          adminId={cardState.adminId}
         />
       ) : (
         <SizeMeasurementInputsFetcher
@@ -74,8 +71,7 @@ export default function SizeMeasurementSwitcher({
           itemImagePath={cardState.itemImage}
           adminOptions={formOption.admins}
           onCloseItemInfo={onClose}
-          onCreateCardState={onCreateCardState}
-          onUpdateCardState={onUpdateCardState}
+          onCreateOrUpdateCardState={onCreateOrUpdateCardState}
           arrivalSize={arrivalSize}
         />
       )}
