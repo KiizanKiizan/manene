@@ -41,9 +41,10 @@ export default function DisableBackDialog({
       fullWidth={fullWidth}
       sx={{
         zIndex: zIndex,
+        maxHeight: "100vh",
       }}
     >
-      <div style={{ overflow: "hidden" }}>{children}</div>
+      <div style={{ overflow: "auto" }}>{children}</div>
     </Dialog>
   );
 }
