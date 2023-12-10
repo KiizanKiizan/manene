@@ -1,3 +1,4 @@
+import { TMeasurement } from "@/app/_api/items/itemsShowResponse";
 import fetchSizeCalcIndex, {
   TSizeCalcIndexResponse,
 } from "@/app/_api/size_measurement/fetchSizeCalcIndex";
@@ -22,6 +23,7 @@ type TArgs = {
   measurementInputData: TMeasurementInput;
   itemId?: number;
   arrivalSize?: string;
+  copiedItemMeasurementData?: TMeasurement;
 };
 
 export const partName = {
@@ -58,6 +60,7 @@ export default function useSizeMeasurementHandler({
   measurementInputData,
   itemId,
   arrivalSize,
+  copiedItemMeasurementData,
 }: TArgs) {
   const [size, setSize] = useState<string>(
     measurementInputData.size ?? (arrivalSize as string)
@@ -67,6 +70,7 @@ export default function useSizeMeasurementHandler({
   const [selectedPartId, setSelectedPartId] = useState<number>(
     measurementInputData.measurements[0].part
   );
+
   const initialFormData: TFormData = {
     newMeasurement: {
       shoulder: undefined,
@@ -74,13 +78,13 @@ export default function useSizeMeasurementHandler({
       lengthTop: undefined,
       roundNeck: undefined,
       waist: undefined,
+      minWaist: undefined,
       maxWaist: undefined,
       hip: undefined,
       roundLeg: undefined,
       outseam: undefined,
       sleeveLength: undefined,
       hemWidth: undefined,
-      minWaist: undefined,
     },
     actionMessage: {
       shoulder: undefined,
@@ -88,13 +92,13 @@ export default function useSizeMeasurementHandler({
       lengthTop: undefined,
       roundNeck: undefined,
       waist: undefined,
+      minWaist: undefined,
       maxWaist: undefined,
       hip: undefined,
       roundLeg: undefined,
       outseam: undefined,
       sleeveLength: undefined,
       hemWidth: undefined,
-      minWaist: undefined,
     },
   };
 
@@ -352,9 +356,15 @@ export default function useSizeMeasurementHandler({
   };
 
   const handleClickSkip = () => {
-    const preMeasurement = measurementInputData.measurements.find(
-      (data) => data.part === selectedPartId
-    )?.value;
+    const preMeasurement =
+      measurementInputData.measurements.find(
+        (data) => data.part === selectedPartId
+      )?.value ??
+      copiedItemMeasurementData?.[
+        partKeyName[
+          selectedPartId as keyof typeof partKeyName
+        ] as keyof TSizePartsParams
+      ];
 
     if (preMeasurement === undefined || preMeasurement === null) return;
 
@@ -377,7 +387,10 @@ export default function useSizeMeasurementHandler({
     return {
       id: data.part,
       partName: partName[data.part as keyof typeof partName],
-      preMeasurement: data.value,
+      preMeasurement:
+        data.value ??
+        copiedItemMeasurementData?.[partKey as keyof TSizePartsParams] ??
+        null,
       newMeasurement:
         formData.newMeasurement[partKey as keyof TSizePartsParams],
       actionMessage: formData.actionMessage[partKey as keyof TSizePartsParams],

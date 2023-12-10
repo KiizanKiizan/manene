@@ -1,5 +1,6 @@
 "use client";
 import useSizeMeasurementIndex from "@/app/_api/item_register/form/useSizeMeasurementIndex";
+import { TMeasurement } from "@/app/_api/items/itemsShowResponse";
 import { TOption } from "@/app/_api/judge_throw_away/getJudgeThrowAwayOptions";
 import LoadingDialog from "@/app/_components/common/dialog/loading-dialog";
 import { TCreateOrUpdateActionValue } from "../../item-register-container";
@@ -9,6 +10,7 @@ import { TItemData } from "./item-info-list";
 export type TSizeMeasurementFetcherProps = {
   stockingOrderId: number;
   itemData: TItemData[];
+  copiedItemMeasurementData: TMeasurement;
   itemImagePath: string;
   adminOptions: TOption[];
   onCloseItemInfo: () => void;
@@ -23,6 +25,7 @@ type TProps = TSizeMeasurementFetcherProps & {
 export default function SizeMeasurementFetcher({
   stockingOrderId,
   itemData,
+  copiedItemMeasurementData,
   itemImagePath,
   adminOptions,
   onCloseItemInfo,
@@ -43,6 +46,7 @@ export default function SizeMeasurementFetcher({
     <ItemInfoContainer
       measurementInputData={data.input}
       itemData={itemData}
+      copiedItemMeasurementData={copiedItemMeasurementData}
       itemImagePath={itemImagePath}
       adminOptions={adminOptions}
       arrivalSize={data.input.size as string}

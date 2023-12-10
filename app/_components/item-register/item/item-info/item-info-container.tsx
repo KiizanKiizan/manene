@@ -1,6 +1,10 @@
 import { TOption } from "@/app/_api/item_register/form/getFormOptionIndex";
 import useItemsCreate from "@/app/_api/item_register/useItemsCreate";
 import useItemsUpdate from "@/app/_api/item_register/useItemsUpdate";
+import {
+  TItemsShowResponse,
+  TMeasurement,
+} from "@/app/_api/items/itemsShowResponse";
 import { TMeasurementInput } from "@/app/_api/size_measurement/getSizeMeasurementIndex";
 import FooterButton from "@/app/_components/common/button/footer-button";
 import DisableBackDialog from "@/app/_components/common/dialog/disable-back-dialog";
@@ -8,8 +12,6 @@ import LoadingDialog from "@/app/_components/common/dialog/loading-dialog";
 import Header from "@/app/_components/common/pages/header";
 import SizeMeasurementsEditForm from "@/app/_components/size_measurements/[id]/size-measurement-edit-form";
 import { ORIGINAL_SIZE } from "@/app/_constants/original-size";
-
-import { TItemsShowResponse } from "@/app/_api/items/itemsShowResponse";
 import useSizeMeasurementHandler, {
   partKeyName,
 } from "@/app/_utils/hooks/useSizeMeasurementHandler";
@@ -24,6 +26,7 @@ import ItemInfoList, { TItemData } from "./item-info-list";
 type TProps = {
   measurementInputData: TMeasurementInput;
   itemData: TItemData[];
+  copiedItemMeasurementData: TMeasurement;
   itemImagePath: string;
   adminOptions: TOption[];
   arrivalSize: string;
@@ -32,11 +35,13 @@ type TProps = {
   onCreateOrUpdateCardState: (args: TCreateOrUpdateActionValue) => void;
   itemId?: number;
   adminId?: number;
+  copiedSize?: string | null;
 };
 
 export default function ItemInfoContainer({
   measurementInputData,
   itemData,
+  copiedItemMeasurementData,
   itemImagePath,
   adminOptions,
   arrivalSize,
@@ -45,6 +50,7 @@ export default function ItemInfoContainer({
   onCreateOrUpdateCardState,
   itemId,
   adminId,
+  copiedSize,
 }: TProps) {
   const {
     size,
@@ -63,13 +69,15 @@ export default function ItemInfoContainer({
     measurementInputData: measurementInputData,
     itemId: itemId,
     arrivalSize: arrivalSize,
+    copiedItemMeasurementData: copiedItemMeasurementData,
   });
   const [isAdminDialogOpen, setIsAdminDialogOpen] = useState<boolean>(false);
   const [selectedAdminId, setSelectedAdminId] = useState<number | undefined>(
     adminId
   );
+
   const [selectedSize, setSelectedSize] = useState<string | null>(
-    measurementInputData.size
+    measurementInputData.size ?? copiedSize ?? null
   );
   const [isSizeMeasurementDialogOpen, setIsSizeMeasurementDialogOpen] =
     useState<boolean>(false);
@@ -197,9 +205,15 @@ export default function ItemInfoContainer({
   )?.name;
 
   const getPreMeasurement = (fieldName: string): number | undefined | null => {
-    return measurementInputData.measurements.find(
-      (data) => partKeyName[data.part as keyof typeof partKeyName] === fieldName
-    )?.value;
+    return (
+      measurementInputData.measurements.find(
+        (data) =>
+          partKeyName[data.part as keyof typeof partKeyName] === fieldName
+      )?.value ??
+      copiedItemMeasurementData[
+        fieldName as keyof typeof copiedItemMeasurementData
+      ]
+    );
   };
 
   const partSize = [
@@ -287,7 +301,16 @@ export default function ItemInfoContainer({
       </Box>
       <FooterButton
         onClick={itemId ? handleClickUpdate : handleClickCreate}
-        disabled={!selectedSize || selectedAdminId === undefined}
+        disabled={
+          !selectedSize ||
+          selectedAdminId === undefined ||
+          Object.keys(formData.newMeasurement).every(
+            (key) =>
+              formData.newMeasurement[
+                key as keyof typeof formData.newMeasurement
+              ] === undefined
+          )
+        }
       >
         確定
       </FooterButton>

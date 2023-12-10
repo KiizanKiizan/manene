@@ -51,12 +51,28 @@ export default function SizeMeasurementSwitcher({
     },
   ];
 
+  const copiedItemMeasurementData = {
+    shoulder: cardState.shoulder,
+    bust: cardState.bust,
+    waist: cardState.waist,
+    minWaist: cardState.minWaist,
+    maxWaist: cardState.maxWaist,
+    hip: cardState.hip,
+    lengthTop: cardState.lengthTop,
+    roundNeck: cardState.roundNeck,
+    roundLeg: cardState.roundLeg,
+    outseam: cardState.outseam,
+    sleeveLength: cardState.sleeveLength,
+    hemWidth: cardState.hemWidth,
+  };
+
   return (
     <>
       {cardState.isRegistered && cardState.itemId && cardState.adminId ? (
         <SizeMeasurementFetcher
           stockingOrderId={cardState.stockingOrderId}
           itemData={itemData}
+          copiedItemMeasurementData={copiedItemMeasurementData}
           itemImagePath={cardState.itemImage}
           adminOptions={formOption.admins}
           onCloseItemInfo={onClose}
@@ -68,11 +84,14 @@ export default function SizeMeasurementSwitcher({
         <SizeMeasurementInputsFetcher
           stockingOrderId={cardState.stockingOrderId}
           itemData={itemData}
+          copiedItemMeasurementData={copiedItemMeasurementData}
           itemImagePath={cardState.itemImage}
           adminOptions={formOption.admins}
           onCloseItemInfo={onClose}
           onCreateOrUpdateCardState={onCreateOrUpdateCardState}
+          adminId={cardState.adminId}
           arrivalSize={arrivalSize}
+          copiedSize={cardState.size}
         />
       )}
     </>

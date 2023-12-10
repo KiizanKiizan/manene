@@ -5,17 +5,22 @@ import ItemInfoContainer from "./item-info-container";
 import { TSizeMeasurementFetcherProps } from "./size-measurement-fetcher";
 
 type TProps = TSizeMeasurementFetcherProps & {
+  adminId?: number;
   arrivalSize: string;
+  copiedSize?: string | null;
 };
 
 export default function SizeMeasurementInputsFetcher({
   stockingOrderId,
   itemData,
+  copiedItemMeasurementData,
   itemImagePath,
   adminOptions,
   onCloseItemInfo,
   onCreateOrUpdateCardState,
+  adminId,
   arrivalSize,
+  copiedSize,
 }: TProps) {
   const { data, isLoading, error } = useSizeMeasurementInputsIndex({
     stockingOrderId: stockingOrderId,
@@ -30,12 +35,15 @@ export default function SizeMeasurementInputsFetcher({
     <ItemInfoContainer
       measurementInputData={data.input}
       itemData={itemData}
+      copiedItemMeasurementData={copiedItemMeasurementData}
       itemImagePath={itemImagePath}
       adminOptions={adminOptions}
       stockingOrderId={stockingOrderId}
       onCloseItemInfo={onCloseItemInfo}
       onCreateOrUpdateCardState={onCreateOrUpdateCardState}
+      adminId={adminId}
       arrivalSize={arrivalSize}
+      copiedSize={copiedSize}
     />
   );
 }
