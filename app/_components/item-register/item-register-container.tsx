@@ -1,13 +1,18 @@
 "use client";
 import { TFormOptionIndexResponse } from "@/app/_api/item_register/form/getFormOptionIndex";
+import postItemsDuplicate from "@/app/_api/item_register/postitemsDuplicate";
 import fetchPreregisteredDataShow, {
   TPreregisteredDataResponse,
 } from "@/app/_api/item_register/preregistered_data/fetchPreregisteredDataShow";
 import fetchPreregisteredDataCountRegistered, {
   TPreregisteredDataCountRegisteredResponse,
 } from "@/app/_api/item_register/preregistered_data/fetchePreregisteredDataCountRegistered";
-import { TMeasurement } from "@/app/_api/items/itemsShowResponse";
+import {
+  TItemsShowResponse,
+  TMeasurement,
+} from "@/app/_api/items/itemsShowResponse";
 import { DROP_SIZE } from "@/app/_constants/drop-size";
+import { ORIGINAL_SIZE_LABEL } from "@/app/_constants/original-size";
 import {
   getRegisteredContentMessage,
   getRegisteredSizeMessage,
@@ -21,9 +26,20 @@ import {
   getSubColorName,
 } from "@/app/_utils/functions/getItemOptionName";
 import QrCode2Icon from "@mui/icons-material/QrCode2";
-import { Box, Fab } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Fab,
+  SelectChangeEvent,
+} from "@mui/material";
 import { ChangeEvent, useReducer, useState } from "react";
+import ItemDuplicationDialog from "./item/item-duplication-dialog";
 import SizeMeasurementSwitcher from "./item/item-info/size-measurement-switcher";
+import ItemOperationDialog from "./item/item-list/item-operation-dialog";
 import RegisteredItemCardList, {
   TCardInfo,
 } from "./item/item-list/registered-item-card-list";
@@ -42,10 +58,9 @@ export type TCardsState = {
   logo: string;
   originalSize: string;
   dropSize: string;
-  size?: string;
+  size?: string | null;
   adminId?: number;
   isRegistered: boolean;
-  createNum: number;
 } & TMeasurement;
 
 export type TCreateOrUpdateActionValue = {
@@ -57,7 +72,7 @@ export type TCreateOrUpdateActionValue = {
 type TCardsAction =
   | {
       type: "ADD_CARD";
-      value: TCardsState;
+      value: TCardsState[];
     }
   | {
       type: "CREATE_OR_UPDATE_CARD";
@@ -66,10 +81,6 @@ type TCardsAction =
   | {
       type: "DELETE_CARD";
       value: number;
-    }
-  | {
-      type: "Duplicate_CARD";
-      value: TCardsState[];
     };
 
 type TProps = {
@@ -93,17 +104,38 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
   const [preregisteredData, setPreregisteredData] =
     useState<TPreregisteredDataResponse>();
 
+  // 複製ダイアログ関連
+  const [duplicationTargetItemId, setDuplicationTargetItemId] =
+    useState<number>();
+  const [selectedCreateNum, setSelectedCreateNum] = useState<
+    number | undefined
+  >(1);
+  const [selectedAdminId, setSelectedAdminId] = useState<number>(2);
+
+  // カードコピーダイアログ関連
+  const [copyTargetCardId, setCopyTargetCardId] = useState<number>();
+
+  // カード消去ダイアログ関連
+  const [operationTargetCardId, setOperationTargetCardId] = useState<number>();
+  const [isDeleteConfirmDialogOpen, setIsDeleteConfirmDialogOpen] =
+    useState<boolean>(false);
+
   const cardsStateReducer = (
     cardsState: TCardsState[],
     action: TCardsAction
   ) => {
     if (action.type === "CREATE_OR_UPDATE_CARD") {
       setSelectedCardId(undefined);
+      setCopyTargetCardId(selectedCardId);
     }
 
     switch (action.type) {
       case "ADD_CARD":
-        return [...cardsState, action.value];
+        return [...cardsState, ...action.value];
+      case "DELETE_CARD":
+        return cardsState.filter((cardState, index) => {
+          if (index !== action.value) return cardState;
+        });
       case "CREATE_OR_UPDATE_CARD":
         return cardsState.map((cardState, index) => {
           if (index === selectedCardId) {
@@ -144,63 +176,140 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
   };
 
   const handleClickSize = (selectedSize: string) => {
-    if (preregisteredData) {
-      dispatch({
-        type: "ADD_CARD",
-        value: {
-          stockingOrderId: preregisteredData.tStockingOrderId,
-          itemImage: preregisteredData.tPreregisteredItem.itemImageUrl,
-          cateSmall: getCateSmallName(
-            formOption.categorySmalls,
-            preregisteredData.tPreregisteredItem.mCateSmallId
-          ),
-          brand: getBrandName(
-            formOption.brands,
-            preregisteredData.tPreregisteredItem.mBrandId
-          ),
-          color: getColorName(
-            formOption.colors,
-            preregisteredData.tPreregisteredItem.mColorId
-          ),
-          subColor: getSubColorName(
-            formOption.colors,
-            preregisteredData.tPreregisteredItem.mSubColorId
-          ),
-          pattern: getPatternName(
-            formOption.patterns,
-            preregisteredData.tPreregisteredItem.mPatternId
-          ),
-          logo: getLogoName(
-            formOption.logos,
-            preregisteredData.tPreregisteredItem.mLogoId
-          ),
-          originalSize: selectedSize,
-          dropSize: DROP_SIZE[preregisteredData.tPreregisteredItem.dropSize],
-          size: undefined,
-          adminId: undefined,
-          isRegistered: false,
-          createNum: 1,
-          shoulder: null,
-          bust: null,
-          waist: null,
-          minWaist: null,
-          maxWaist: null,
-          lengthTop: null,
-          roundNeck: null,
-          hip: null,
-          roundLeg: null,
-          outseam: null,
-          sleeveLength: null,
-          hemWidth: null,
-        },
+    // copyTargetCardIdがある場合はコピー
+    if (copyTargetCardId !== undefined || operationTargetCardId !== undefined) {
+      const copyTargetCardState = cardsState.find((cardState, index) => {
+        if (index === copyTargetCardId || index === operationTargetCardId)
+          return cardState;
       });
+      if (copyTargetCardState) {
+        dispatch({
+          type: "ADD_CARD",
+          value: [
+            {
+              stockingOrderId: copyTargetCardState.stockingOrderId,
+              itemImage: copyTargetCardState.itemImage,
+              cateSmall: copyTargetCardState.cateSmall,
+              brand: copyTargetCardState.brand,
+              color: copyTargetCardState.color,
+              subColor: copyTargetCardState.subColor,
+              pattern: copyTargetCardState.pattern,
+              logo: copyTargetCardState.logo,
+              originalSize: selectedSize,
+              dropSize: copyTargetCardState.dropSize,
+              size: selectedSize,
+              adminId: copyTargetCardState.adminId,
+              isRegistered: false,
+              shoulder: copyTargetCardState.shoulder,
+              bust: copyTargetCardState.bust,
+              waist: copyTargetCardState.waist,
+              minWaist: copyTargetCardState.minWaist,
+              maxWaist: copyTargetCardState.maxWaist,
+              lengthTop: copyTargetCardState.lengthTop,
+              roundNeck: copyTargetCardState.roundNeck,
+              hip: copyTargetCardState.hip,
+              roundLeg: copyTargetCardState.roundLeg,
+              outseam: copyTargetCardState.outseam,
+              sleeveLength: copyTargetCardState.sleeveLength,
+              hemWidth: copyTargetCardState.hemWidth,
+            },
+          ],
+        });
+      }
+      setCopyTargetCardId(undefined);
+      setOperationTargetCardId(undefined);
+    } else {
+      if (preregisteredData) {
+        const haveAlreadyRegisteredItem = (): number | undefined => {
+          switch (selectedSize) {
+            case "S":
+              if (preregisteredData.smallRefItemId !== null) {
+                return preregisteredData.smallRefItemId;
+              }
+              return undefined;
+            case "M":
+              if (preregisteredData.mediumRefItemId !== null) {
+                return preregisteredData.mediumRefItemId;
+              }
+              return undefined;
+            case "L":
+              if (preregisteredData.largeRefItemId !== null) {
+                return preregisteredData.largeRefItemId;
+              }
+              return undefined;
+            case "XL":
+              if (preregisteredData.extraLargeRefItemId !== null) {
+                return preregisteredData.extraLargeRefItemId;
+              }
+              return undefined;
+            default:
+              return undefined;
+          }
+        };
+        if (haveAlreadyRegisteredItem() !== undefined) {
+          setDuplicationTargetItemId(haveAlreadyRegisteredItem());
+        } else {
+          dispatch({
+            type: "ADD_CARD",
+            value: [
+              {
+                stockingOrderId: preregisteredData.tStockingOrderId,
+                itemImage: preregisteredData.tPreregisteredItem.itemImageUrl,
+                cateSmall: getCateSmallName(
+                  formOption.categorySmalls,
+                  preregisteredData.tPreregisteredItem.mCateSmallId
+                ),
+                brand: getBrandName(
+                  formOption.brands,
+                  preregisteredData.tPreregisteredItem.mBrandId
+                ),
+                color: getColorName(
+                  formOption.colors,
+                  preregisteredData.tPreregisteredItem.mColorId
+                ),
+                subColor: getSubColorName(
+                  formOption.colors,
+                  preregisteredData.tPreregisteredItem.mSubColorId
+                ),
+                pattern: getPatternName(
+                  formOption.patterns,
+                  preregisteredData.tPreregisteredItem.mPatternId
+                ),
+                logo: getLogoName(
+                  formOption.logos,
+                  preregisteredData.tPreregisteredItem.mLogoId
+                ),
+                originalSize: selectedSize,
+                dropSize:
+                  DROP_SIZE[preregisteredData.tPreregisteredItem.dropSize],
+                size: undefined,
+                adminId: undefined,
+                isRegistered: false,
+                shoulder: null,
+                bust: null,
+                waist: null,
+                minWaist: null,
+                maxWaist: null,
+                lengthTop: null,
+                roundNeck: null,
+                hip: null,
+                roundLeg: null,
+                outseam: null,
+                sleeveLength: null,
+                hemWidth: null,
+              },
+            ],
+          });
+          setPreregisteredData(undefined);
+        }
+      }
     }
+
     setSizeSelectionState(undefined);
-    setPreregisteredData(undefined);
   };
 
   const handleClickAdd = () => {
-    if (stockingDateCode !== undefined && stockingSequence !== undefined)
+    if (stockingDateCode !== undefined && stockingSequence !== undefined) {
       fetchPreregisteredDataShow({
         id: stockingDateCode + "-" + stockingSequence,
       })
@@ -231,7 +340,9 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
             }`
           );
         });
-    setIsStockingIdInputDialogOpen(false);
+
+      setIsStockingIdInputDialogOpen(false);
+    }
   };
 
   const cardInfo: TCardInfo[] = cardsState.map((card, index) => {
@@ -285,8 +396,154 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
     }
   );
 
+  const handleClickDuplicate = () => {
+    if (duplicationTargetItemId && selectedCreateNum)
+      postItemsDuplicate({
+        id: duplicationTargetItemId,
+        tAdminId: selectedAdminId,
+        createNum: selectedCreateNum,
+      })
+        .then((res: TItemsShowResponse[]) => {
+          dispatch({
+            type: "ADD_CARD",
+            value: res.map((item) => {
+              return {
+                stockingOrderId: item.tStockingOrderId,
+                itemImage: item.itemImageUrl,
+                itemId: item.id,
+                cateSmall: item.mCateSmall.name,
+                brand: item.mBrand.name,
+                color: item.mColor.name,
+                subColor: item.mSubColor?.name ?? "無し",
+                pattern: item.mPattern.name,
+                logo: item.mLogo.name,
+                originalSize:
+                  ORIGINAL_SIZE_LABEL[
+                    item.originalSize as keyof typeof ORIGINAL_SIZE_LABEL
+                  ],
+                dropSize: item.dropSize.name,
+                size: item.size,
+                adminId: item.tAdmin.id,
+                isRegistered: true,
+                shoulder: item.shoulder,
+                bust: item.bust,
+                waist: item.waist,
+                minWaist: item.minWaist,
+                maxWaist: item.maxWaist,
+                lengthTop: item.lengthTop,
+                roundNeck: item.roundNeck,
+                hip: item.hip,
+                roundLeg: item.roundLeg,
+                outseam: item.outseam,
+                sleeveLength: item.sleeveLength,
+                hemWidth: item.hemWidth,
+              };
+            }),
+          });
+        })
+        .catch((e) => {
+          alert(
+            `アイテムの複製に失敗しました。 ${
+              (e.response?.data as { message: string })?.message
+            }`
+          );
+        });
+    setPreregisteredData(undefined);
+    setDuplicationTargetItemId(undefined);
+  };
+
+  const handleClickCopy = (copyCardId: number) => {
+    fetchPreregisteredDataCountRegistered({
+      id: cardsState[copyCardId].stockingOrderId,
+    })
+      .then((countDataResponse: TPreregisteredDataCountRegisteredResponse) => {
+        setSizeSelectionState(countDataResponse);
+      })
+      .catch((e) => {
+        alert(
+          `データ取得に失敗しました。 ${
+            (e.response?.data as { message: string })?.message
+          }`
+        );
+      });
+  };
+
+  const deleteCard = () => {
+    if (operationTargetCardId !== undefined)
+      dispatch({
+        type: "DELETE_CARD",
+        value: operationTargetCardId,
+      });
+    setOperationTargetCardId(undefined);
+    setIsDeleteConfirmDialogOpen(false);
+  };
+
+  const deleteTargetItemId =
+    operationTargetCardId !== undefined
+      ? cardsState[operationTargetCardId].itemId
+      : undefined;
+
   return (
     <>
+      {operationTargetCardId !== undefined &&
+        deleteTargetItemId !== undefined && (
+          <ItemOperationDialog
+            deleteTargetItemId={deleteTargetItemId}
+            isRegistered={cardsState[operationTargetCardId].isRegistered}
+            isDeleteConfirmDialogOpen={isDeleteConfirmDialogOpen}
+            sizeSelectionState={sizeSelectionState}
+            deleteCard={deleteCard}
+            onClickDelete={() => setIsDeleteConfirmDialogOpen(true)}
+            onClickCancelOperationDialog={() =>
+              setOperationTargetCardId(undefined)
+            }
+            onClickCopy={() => {
+              handleClickCopy(operationTargetCardId);
+            }}
+            onClickCancelConfirmDialog={() => {
+              setOperationTargetCardId(undefined);
+              setIsDeleteConfirmDialogOpen(false);
+            }}
+          />
+        )}
+      {copyTargetCardId !== undefined && !sizeSelectionState && (
+        <Dialog open>
+          <DialogTitle>コピー</DialogTitle>
+          <DialogContent>続けて同アイテムを登録しますか?</DialogContent>
+          <DialogActions>
+            <Button onClick={() => setCopyTargetCardId(undefined)}>
+              キャンセル
+            </Button>
+            <Button onClick={() => handleClickCopy(copyTargetCardId)}>
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
+      {duplicationTargetItemId && (
+        <ItemDuplicationDialog
+          adminOption={formOption.admins}
+          selectedCreateNum={selectedCreateNum}
+          selectedAdminId={selectedAdminId}
+          onChangeSelectedCreateNum={(
+            e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) =>
+            setSelectedCreateNum(
+              isNaN(parseInt(e.target.value))
+                ? undefined
+                : parseInt(e.target.value)
+            )
+          }
+          onChangeAdminId={(e: SelectChangeEvent<number>) =>
+            setSelectedAdminId(Number(e.target.value))
+          }
+          onClose={() => {
+            setDuplicationTargetItemId(undefined);
+            setPreregisteredData(undefined);
+          }}
+          onClickAdd={handleClickDuplicate}
+        />
+      )}
       {sizeSelectionState ? (
         <SizeSelectionDialog
           stockingId={sizeSelectionState.stockingId}
@@ -302,6 +559,7 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
           onClose={() => {
             setSizeSelectionState(undefined);
             setPreregisteredData(undefined);
+            setOperationTargetCardId(undefined);
           }}
         />
       ) : selectedCardId !== undefined && selectedCardState !== undefined ? (
@@ -320,7 +578,7 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
               setSelectedCardId(cardId);
             }}
             onLongPress={(cardId: number) => {
-              alert(cardId);
+              setOperationTargetCardId(cardId);
             }}
           />
           <Box>
