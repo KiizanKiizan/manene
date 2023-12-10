@@ -43,7 +43,7 @@ export const getRegisteredSizeMessage = ({
   originalSize,
   dropSize,
 }: TMeasurement & {
-  size?: string;
+  size?: string | null;
   originalSize: string;
   dropSize: string;
 }): string => {
