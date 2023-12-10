@@ -17,7 +17,7 @@ import DisableBackDialog from "../../common/dialog/disable-back-dialog";
 
 type TProps = {
   adminOption: TOption[];
-  selectedCreateNum: number;
+  selectedCreateNum?: number;
   selectedAdminId: number;
   onChangeSelectedCreateNum: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

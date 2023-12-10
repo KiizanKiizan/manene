@@ -6,13 +6,13 @@ type TParams = {
 };
 
 type TPreregisteredItem = {
-  mCateSmallId: number; //使った
-  mBrandId: number; //使った
-  mColorId: number; //使った
-  mSubColorId?: number; //使った
-  mPatternId: number; //使った
-  mLogoId: number; //使った
-  dropSize: keyof typeof DROP_SIZE; //使った
+  mCateSmallId: number;
+  mBrandId: number;
+  mColorId: number;
+  mSubColorId?: number;
+  mPatternId: number;
+  mLogoId: number;
+  dropSize: keyof typeof DROP_SIZE;
   isMarriage: boolean;
   isElasticBand: boolean;
   itemImageUrl: string;
@@ -20,11 +20,11 @@ type TPreregisteredItem = {
 
 export type TPreregisteredDataResponse = {
   tPreregisteredItem: TPreregisteredItem;
-  tStockingOrderId: number; //使った
-  smallRefItemId?: number; //使った
-  mediumRefItemId?: number; //使った
-  largeRefItemId?: number; //使った
-  extraLargeRefItemId?: number; //使った
+  tStockingOrderId: number;
+  smallRefItemId: number | null;
+  mediumRefItemId: number | null;
+  largeRefItemId: number | null;
+  extraLargeRefItemId: number | null;
 };
 
 export default function fetchPreregisteredDataShow(params: TParams) {
