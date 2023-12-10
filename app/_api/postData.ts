@@ -22,12 +22,9 @@ export default async function postData<TResponse, TParams = object>({
     queryKey: [path, params],
     queryFn: () =>
       customAxios()
-        .post(`${HostUrl()}/igoue_admin/app_api/${path}`, {
+        .post(`${HostUrl()}/igoue_admin/app_api/${path}`, params, {
           headers: {
             "api-key": process.env.NEXT_PUBLIC_API_KEY,
-          },
-          params: {
-            ...params,
           },
         })
         .then((r) => {
