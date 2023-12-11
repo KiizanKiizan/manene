@@ -65,6 +65,7 @@ export default function ItemDuplicationDialog({
                   label="admin"
                   onChange={onChangeAdminId}
                   variant="standard"
+                  sx={{ maxHeight: "100vh", overflow: "auto" }}
                 >
                   {adminOption.map((admin) => (
                     <MenuItem key={admin.value} value={admin.value}>
