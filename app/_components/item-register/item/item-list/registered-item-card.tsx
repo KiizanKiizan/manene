@@ -42,7 +42,7 @@ export default function RegisteredItemCard({
   return (
     <Card
       sx={{
-        height: 230,
+        height: 280,
         display: "flex",
         alignItems: "center",
         borderBottom: "solid",
