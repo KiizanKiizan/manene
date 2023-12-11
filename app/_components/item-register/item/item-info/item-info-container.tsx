@@ -281,15 +281,10 @@ export default function ItemInfoContainer({
       <Header title={itemId ? "アイテム編集" : "アイテム新規追加"}>
         <Typography>入荷サイズ：{arrivalSize}</Typography>
       </Header>
-      <Box height="82vh" overflow="auto">
-        <Box display="flex" justifyContent="center" padding={3}>
-          <Image
-            alt="item_image"
-            src={itemImagePath}
-            width={120}
-            height={170}
-          />
-        </Box>
+      <Box display="flex" justifyContent="center" padding={3}>
+        <Image alt="item_image" src={itemImagePath} width={120} height={170} />
+      </Box>
+      <Box height="80vh" overflow="scroll">
         <ItemInfoList
           itemData={itemData}
           size={selectedSize}

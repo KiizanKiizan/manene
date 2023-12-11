@@ -572,15 +572,17 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
       ) : (
         <>
           <Header title={"アイテム登録"} />
-          <RegisteredItemCardList
-            cardInfo={cardInfo}
-            onClick={(cardId: number) => {
-              setSelectedCardId(cardId);
-            }}
-            onLongPress={(cardId: number) => {
-              setOperationTargetCardId(cardId);
-            }}
-          />
+          <Box maxHeight="100vh" overflow="scroll">
+            <RegisteredItemCardList
+              cardInfo={cardInfo}
+              onClick={(cardId: number) => {
+                setSelectedCardId(cardId);
+              }}
+              onLongPress={(cardId: number) => {
+                setOperationTargetCardId(cardId);
+              }}
+            />
+          </Box>
           <Box>
             <Fab
               size="large"
