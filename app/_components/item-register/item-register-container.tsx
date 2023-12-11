@@ -37,6 +37,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { ChangeEvent, useReducer, useState } from "react";
+import Header from "../common/pages/header";
 import ItemDuplicationDialog from "./item/item-duplication-dialog";
 import SizeMeasurementSwitcher from "./item/item-info/size-measurement-switcher";
 import ItemOperationDialog from "./item/item-list/item-operation-dialog";
@@ -485,27 +486,25 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
 
   return (
     <>
-      {operationTargetCardId !== undefined &&
-        deleteTargetItemId !== undefined && (
-          <ItemOperationDialog
-            deleteTargetItemId={deleteTargetItemId}
-            isRegistered={cardsState[operationTargetCardId].isRegistered}
-            isDeleteConfirmDialogOpen={isDeleteConfirmDialogOpen}
-            sizeSelectionState={sizeSelectionState}
-            deleteCard={deleteCard}
-            onClickDelete={() => setIsDeleteConfirmDialogOpen(true)}
-            onClickCancelOperationDialog={() =>
-              setOperationTargetCardId(undefined)
-            }
-            onClickCopy={() => {
-              handleClickCopy(operationTargetCardId);
-            }}
-            onClickCancelConfirmDialog={() => {
-              setOperationTargetCardId(undefined);
-              setIsDeleteConfirmDialogOpen(false);
-            }}
-          />
-        )}
+      {operationTargetCardId !== undefined && (
+        <ItemOperationDialog
+          deleteTargetItemId={deleteTargetItemId}
+          isDeleteConfirmDialogOpen={isDeleteConfirmDialogOpen}
+          sizeSelectionState={sizeSelectionState}
+          deleteCard={deleteCard}
+          onClickDelete={() => setIsDeleteConfirmDialogOpen(true)}
+          onClickCancelOperationDialog={() =>
+            setOperationTargetCardId(undefined)
+          }
+          onClickCopy={() => {
+            handleClickCopy(operationTargetCardId);
+          }}
+          onClickCancelConfirmDialog={() => {
+            setOperationTargetCardId(undefined);
+            setIsDeleteConfirmDialogOpen(false);
+          }}
+        />
+      )}
       {copyTargetCardId !== undefined && !sizeSelectionState && (
         <Dialog open>
           <DialogTitle>コピー</DialogTitle>
@@ -572,6 +571,7 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
         />
       ) : (
         <>
+          <Header title={"アイテム登録"} />
           <RegisteredItemCardList
             cardInfo={cardInfo}
             onClick={(cardId: number) => {

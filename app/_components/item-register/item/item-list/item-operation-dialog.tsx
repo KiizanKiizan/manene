@@ -1,14 +1,11 @@
 "use client";
-
+import deleteItemsDestroy from "@/app/_api/item_register/deleteItemsDestroy";
 import { TPreregisteredDataCountRegisteredResponse } from "@/app/_api/item_register/preregistered_data/fetchePreregisteredDataCountRegistered";
-import useItemsDestroy from "@/app/_api/item_register/useItemsDestroy";
-import LoadingDialog from "@/app/_components/common/dialog/loading-dialog";
 import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 import { AxiosError } from "axios";
 
 type TProps = {
-  deleteTargetItemId: number;
-  isRegistered: boolean;
+  deleteTargetItemId?: number;
   isDeleteConfirmDialogOpen: boolean;
   sizeSelectionState?: TPreregisteredDataCountRegisteredResponse;
   deleteCard: () => void;
@@ -20,7 +17,6 @@ type TProps = {
 
 export default function ItemOperationDialog({
   deleteTargetItemId,
-  isRegistered,
   isDeleteConfirmDialogOpen,
   sizeSelectionState,
   deleteCard,
@@ -29,26 +25,24 @@ export default function ItemOperationDialog({
   onClickCopy,
   onClickCancelConfirmDialog,
 }: TProps) {
-  const { mutate, isLoading } = useItemsDestroy({ id: deleteTargetItemId });
-
   const handleClickConfirmDelete = () => {
-    if (isRegistered) {
-      mutate(undefined, {
-        onError(error: AxiosError) {
+    if (deleteTargetItemId) {
+      deleteItemsDestroy({ id: deleteTargetItemId }).catch(
+        (error: AxiosError) => {
           alert(
             `アイテム消去に失敗しました。 ${
               (error.response?.data as { message: string })?.message
             }`
           );
-        },
-      });
+        }
+      );
     }
+
     deleteCard();
   };
 
   return (
     <>
-      <LoadingDialog isOpen={isLoading} />
       {isDeleteConfirmDialogOpen && (
         <Dialog open fullWidth>
           <DialogContent>確認</DialogContent>
