@@ -284,7 +284,7 @@ export default function ItemInfoContainer({
       <Box display="flex" justifyContent="center" padding={3}>
         <Image alt="item_image" src={itemImagePath} width={120} height={170} />
       </Box>
-      <Box height="80vh" overflow="scroll">
+      <Box height="80vh" overflow="auto">
         <ItemInfoList
           itemData={itemData}
           size={selectedSize}

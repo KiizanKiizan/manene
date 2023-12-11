@@ -572,7 +572,7 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
       ) : (
         <>
           <Header title={"アイテム登録"} />
-          <Box maxHeight="100vh" overflow="scroll">
+          <Box maxHeight="100vh" overflow="auto">
             <RegisteredItemCardList
               cardInfo={cardInfo}
               onClick={(cardId: number) => {
