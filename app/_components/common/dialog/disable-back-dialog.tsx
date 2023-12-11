@@ -44,7 +44,7 @@ export default function DisableBackDialog({
         maxHeight: "100vh",
       }}
     >
-      <div style={{ overflow: "auto" }}>{children}</div>
+      <div style={{ maxHeight: "100vh", overflow: "auto" }}>{children}</div>
     </Dialog>
   );
 }
