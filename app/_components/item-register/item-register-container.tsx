@@ -16,7 +16,7 @@ import { ORIGINAL_SIZE_LABEL } from "@/app/_constants/original-size";
 import {
   getRegisteredContentMessage,
   getRegisteredSizeMessage,
-} from "@/app/_service/item-register/getItemCardMessages";
+} from "@/app/_utils/functions/getItemCardMessages";
 import {
   getBrandName,
   getCateSmallName,
