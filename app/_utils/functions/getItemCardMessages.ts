@@ -1,4 +1,5 @@
 import { TMeasurement } from "@/app/_api/items/itemsShowResponse";
+import { TSize } from "@/app/_components/item-register/item-register-container";
 
 export const getRegisteredContentMessage = ({
   itemId,
@@ -17,7 +18,7 @@ export const getRegisteredContentMessage = ({
   subColor?: string;
   pattern: string;
   logo: string;
-  originalSize: string;
+  originalSize: TSize;
 }): string => {
   const itemIdString = itemId ? `${itemId}/` : "";
 
@@ -44,7 +45,7 @@ export const getRegisteredSizeMessage = ({
   dropSize,
 }: TMeasurement & {
   size?: string | null;
-  originalSize: string;
+  originalSize: TSize;
   dropSize: string;
 }): string => {
   const partSize = [

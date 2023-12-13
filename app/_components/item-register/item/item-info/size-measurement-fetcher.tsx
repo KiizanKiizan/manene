@@ -3,7 +3,10 @@ import useSizeMeasurementIndex from "@/app/_api/item_register/form/useSizeMeasur
 import { TMeasurement } from "@/app/_api/items/itemsShowResponse";
 import { TOption } from "@/app/_api/judge_throw_away/getJudgeThrowAwayOptions";
 import LoadingDialog from "@/app/_components/common/dialog/loading-dialog";
-import { TCreateOrUpdateActionValue } from "../../item-register-container";
+import {
+  TCreateOrUpdateActionValue,
+  TSize,
+} from "../../item-register-container";
 import ItemInfoContainer from "./item-info-container";
 import { TItemData } from "./item-info-list";
 
@@ -49,7 +52,7 @@ export default function SizeMeasurementFetcher({
       copiedItemMeasurementData={copiedItemMeasurementData}
       itemImagePath={itemImagePath}
       adminOptions={adminOptions}
-      arrivalSize={data.input.size as string}
+      arrivalSize={data.input.size as TSize}
       stockingOrderId={stockingOrderId}
       onCloseItemInfo={onCloseItemInfo}
       onCreateOrUpdateCardState={onCreateOrUpdateCardState}

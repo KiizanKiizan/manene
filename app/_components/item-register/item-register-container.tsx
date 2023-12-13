@@ -47,6 +47,8 @@ import RegisteredItemCardList, {
 import SizeSelectionDialog from "./item/size-selection-dialog";
 import StockingIdInputDialog from "./item/stocking-id-input-dialog";
 
+export type TSize = "S" | "L" | "M" | "XL" | "";
+
 export type TCardsState = {
   stockingOrderId: number;
   itemImage: string;
@@ -57,9 +59,9 @@ export type TCardsState = {
   subColor?: string;
   pattern: string;
   logo: string;
-  originalSize: string;
+  originalSize: TSize;
   dropSize: string;
-  size?: string | null;
+  size?: TSize | null;
   adminId?: number;
   isRegistered: boolean;
 } & TMeasurement;
@@ -67,7 +69,7 @@ export type TCardsState = {
 export type TCreateOrUpdateActionValue = {
   itemId: number;
   adminId: number;
-  size: string;
+  size: TSize;
 } & TMeasurement;
 
 type TCardsAction =
@@ -176,7 +178,7 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
     });
   };
 
-  const handleClickSize = (selectedSize: string) => {
+  const handleClickSize = (selectedSize: TSize) => {
     // copyTargetCardIdがある場合はコピー
     if (copyTargetCardId !== undefined || operationTargetCardId !== undefined) {
       const copyTargetCardState = cardsState.find((cardState, index) => {
@@ -418,10 +420,9 @@ export default function ItemRegisterContainer({ formOption }: TProps) {
                 subColor: item.mSubColor?.name ?? "無し",
                 pattern: item.mPattern.name,
                 logo: item.mLogo.name,
-                originalSize:
-                  ORIGINAL_SIZE_LABEL[
-                    item.originalSize as keyof typeof ORIGINAL_SIZE_LABEL
-                  ],
+                originalSize: ORIGINAL_SIZE_LABEL[
+                  item.originalSize as keyof typeof ORIGINAL_SIZE_LABEL
+                ] as TSize,
                 dropSize: item.dropSize.name,
                 size: item.size,
                 adminId: item.tAdmin.id,

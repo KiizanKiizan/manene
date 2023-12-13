@@ -1,13 +1,14 @@
 "use client";
 import useSizeMeasurementInputsIndex from "@/app/_api/item_register/form/useSizeMeasurementInputsIndex";
 import LoadingDialog from "@/app/_components/common/dialog/loading-dialog";
+import { TSize } from "../../item-register-container";
 import ItemInfoContainer from "./item-info-container";
 import { TSizeMeasurementFetcherProps } from "./size-measurement-fetcher";
 
 type TProps = TSizeMeasurementFetcherProps & {
   adminId?: number;
-  arrivalSize: string;
-  copiedSize?: string | null;
+  arrivalSize: TSize;
+  copiedSize?: TSize | null;
 };
 
 export default function SizeMeasurementInputsFetcher({

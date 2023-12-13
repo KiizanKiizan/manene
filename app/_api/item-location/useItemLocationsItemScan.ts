@@ -1,3 +1,4 @@
+import { TSize } from "@/app/_components/item-register/item-register-container";
 import { useGetRequest } from "../useGetRequest";
 
 export type TItemMaster = {
@@ -7,7 +8,7 @@ export type TItemMaster = {
 
 export type TItemLocationsItemScanResponse = {
   id: number;
-  size: string | null;
+  size: TSize | null;
   itemImageUrl: string;
   mCateSmall: TItemMaster;
   mLocation: TItemMaster | null;

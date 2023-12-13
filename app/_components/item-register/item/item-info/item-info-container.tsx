@@ -19,7 +19,10 @@ import { Box, DialogContent, Typography } from "@mui/material";
 import { AxiosError } from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { TCreateOrUpdateActionValue } from "../../item-register-container";
+import {
+  TCreateOrUpdateActionValue,
+  TSize,
+} from "../../item-register-container";
 import AdminList from "./admin-list";
 import ItemInfoList, { TItemData } from "./item-info-list";
 
@@ -29,13 +32,13 @@ type TProps = {
   copiedItemMeasurementData: TMeasurement;
   itemImagePath: string;
   adminOptions: TOption[];
-  arrivalSize: string;
+  arrivalSize: TSize;
   stockingOrderId: number;
   onCloseItemInfo: () => void;
   onCreateOrUpdateCardState: (args: TCreateOrUpdateActionValue) => void;
   itemId?: number;
   adminId?: number;
-  copiedSize?: string | null;
+  copiedSize?: TSize | null;
 };
 
 export default function ItemInfoContainer({
@@ -76,7 +79,7 @@ export default function ItemInfoContainer({
     adminId
   );
 
-  const [selectedSize, setSelectedSize] = useState<string | null>(
+  const [selectedSize, setSelectedSize] = useState<TSize | null>(
     measurementInputData.size ?? copiedSize ?? null
   );
   const [isSizeMeasurementDialogOpen, setIsSizeMeasurementDialogOpen] =

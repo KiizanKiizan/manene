@@ -1,3 +1,5 @@
+import { TSize } from "@/app/_components/item-register/item-register-container";
+
 export type TMeasurement = {
   shoulder: number | null;
   bust: number | null;
@@ -23,7 +25,7 @@ export type TItemsShowResponse = {
     status: number;
     name: string;
   };
-  size: string | null;
+  size: TSize | null;
   dropSize: {
     id: number;
     name: string;

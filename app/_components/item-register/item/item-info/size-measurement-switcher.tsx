@@ -2,13 +2,14 @@ import { TFormOptionIndexResponse } from "@/app/_api/item_register/form/getFormO
 import {
   TCardsState,
   TCreateOrUpdateActionValue,
+  TSize,
 } from "../../item-register-container";
 import SizeMeasurementFetcher from "./size-measurement-fetcher";
 import SizeMeasurementInputsFetcher from "./size-measurement-inputs-fetcher";
 
 type TProps = {
   cardState: TCardsState;
-  arrivalSize: string;
+  arrivalSize: TSize;
   formOption: TFormOptionIndexResponse;
   onClose: () => void;
   onCreateOrUpdateCardState: (args: TCreateOrUpdateActionValue) => void;

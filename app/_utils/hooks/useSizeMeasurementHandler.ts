@@ -4,6 +4,7 @@ import fetchSizeCalcIndex, {
 } from "@/app/_api/size_measurement/fetchSizeCalcIndex";
 import { TMeasurementInput } from "@/app/_api/size_measurement/getSizeMeasurementIndex";
 import { TSizePartsParams } from "@/app/_api/size_measurement/useSizeMeasurementUpdate";
+import { TSize } from "@/app/_components/item-register/item-register-container";
 import { SelectChangeEvent } from "@mui/material";
 import { AxiosError } from "axios";
 import React, { useReducer, useState } from "react";
@@ -62,8 +63,8 @@ export default function useSizeMeasurementHandler({
   arrivalSize,
   copiedItemMeasurementData,
 }: TArgs) {
-  const [size, setSize] = useState<string>(
-    measurementInputData.size ?? (arrivalSize as string)
+  const [size, setSize] = useState<TSize>(
+    measurementInputData.size ?? (arrivalSize as TSize)
   );
   const [rank, setRank] = useState<string>(measurementInputData.rank);
   const [measurement, setMeasurement] = useState<string>();
@@ -332,7 +333,7 @@ export default function useSizeMeasurementHandler({
   };
 
   const handleChangeSize = (e: SelectChangeEvent<string>) => {
-    setSize(e.target.value);
+    setSize(e.target.value as TSize);
   };
   const handleClickEnter = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {

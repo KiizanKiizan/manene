@@ -1,10 +1,11 @@
+import { TSize } from "@/app/_components/item-register/item-register-container";
 import { TItemsShowResponse } from "../items/itemsShowResponse";
 import { TSizePartsParams } from "../size_measurement/useSizeMeasurementUpdate";
 import { usePostRequest } from "../usePostRequest";
 
 export type TSizeAttributes = {
   tAdminId: number;
-  size: string;
+  size: TSize;
   tStockingOrderId: number;
   originalSize: number;
 } & TSizePartsParams;

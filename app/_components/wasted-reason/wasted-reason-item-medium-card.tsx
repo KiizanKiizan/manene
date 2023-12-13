@@ -1,12 +1,13 @@
 "use client";
 import { Box } from "@mui/material";
 import ExpandableImage from "../common/Image/expandable-image";
+import { TSize } from "../item-register/item-register-container";
 
 export type TIitemInfo = {
   id: number;
   itemImageUrl: string;
   mBrand: string;
-  size: string | null;
+  size: TSize | null;
   mCateSmall: string;
   mColor: string;
   status: string;
