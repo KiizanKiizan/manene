@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ChangeEvent } from "react";
-import DisableBackDialog from "../../common/dialog/disable-back-dialog";
+import DisableBackDialog from "../../../common/dialog/disable-back-dialog";
 
 type TProps = {
   isOpen: boolean;

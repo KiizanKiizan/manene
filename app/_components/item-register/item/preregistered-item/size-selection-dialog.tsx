@@ -1,6 +1,6 @@
 import { Box, Button, DialogContent, DialogTitle } from "@mui/material";
-import DisableBackDialog from "../../common/dialog/disable-back-dialog";
-import { TSize } from "../item-register-container";
+import DisableBackDialog from "../../../common/dialog/disable-back-dialog";
+import { TSize } from "../../item-register-container";
 import StockStatusTable from "./stock-status-table";
 
 type TProps = {
