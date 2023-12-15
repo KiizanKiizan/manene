@@ -1,6 +1,6 @@
 import fetchPreregisteredDataCountRegistered, {
   TPreregisteredDataCountRegisteredResponse,
-} from "@/app/_api/item_register/preregistered_data/fetchePreregisteredDataCountRegistered";
+} from "@/app/_api/item_register/preregistered_data/fetchPreregisteredDataCountRegistered";
 import {
   Button,
   Dialog,

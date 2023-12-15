@@ -2,7 +2,7 @@
 import deleteItemsDestroy from "@/app/_api/item_register/deleteItemsDestroy";
 import fetchPreregisteredDataCountRegistered, {
   TPreregisteredDataCountRegisteredResponse,
-} from "@/app/_api/item_register/preregistered_data/fetchePreregisteredDataCountRegistered";
+} from "@/app/_api/item_register/preregistered_data/fetchPreregisteredDataCountRegistered";
 import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 import { AxiosError } from "axios";
 import { useState } from "react";

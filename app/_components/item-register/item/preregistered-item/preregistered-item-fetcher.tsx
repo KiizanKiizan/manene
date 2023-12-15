@@ -1,9 +1,9 @@
+import fetchPreregisteredDataCountRegistered, {
+  TPreregisteredDataCountRegisteredResponse,
+} from "@/app/_api/item_register/preregistered_data/fetchPreregisteredDataCountRegistered";
 import fetchPreregisteredDataShow, {
   TPreregisteredDataResponse,
 } from "@/app/_api/item_register/preregistered_data/fetchPreregisteredDataShow";
-import fetchPreregisteredDataCountRegistered, {
-  TPreregisteredDataCountRegisteredResponse,
-} from "@/app/_api/item_register/preregistered_data/fetchePreregisteredDataCountRegistered";
 import QrCode2Icon from "@mui/icons-material/QrCode2";
 import { Box, Fab } from "@mui/material";
 import { ChangeEvent, useState } from "react";
