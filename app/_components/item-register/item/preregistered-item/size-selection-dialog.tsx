@@ -1,5 +1,6 @@
 import { Box, Button, DialogContent, DialogTitle } from "@mui/material";
-import DisableBackDialog from "../../common/dialog/disable-back-dialog";
+import DisableBackDialog from "../../../common/dialog/disable-back-dialog";
+import { TSize } from "../../item-register-container";
 import StockStatusTable from "./stock-status-table";
 
 type TProps = {
@@ -12,8 +13,7 @@ type TProps = {
   registeredMediumNum: number;
   registeredLargeNum: number;
   registeredExtraLargeNum: number;
-  onClickSize: (size: string) => void;
-  isOpen: boolean;
+  onClickSize: (size: TSize) => void;
   onClose: () => void;
 };
 
@@ -22,9 +22,9 @@ function SizeSelectionButton({
   isDisabled,
   onClickSize,
 }: {
-  size: string;
+  size: TSize;
   isDisabled: boolean;
-  onClickSize: (size: string) => void;
+  onClickSize: (size: TSize) => void;
 }) {
   return (
     <Button
@@ -50,11 +50,10 @@ export default function SizeSelectionDialog({
   registeredLargeNum,
   registeredExtraLargeNum,
   onClickSize,
-  isOpen,
   onClose,
 }: TProps) {
   return (
-    <DisableBackDialog open={isOpen} onClose={onClose}>
+    <DisableBackDialog open onClose={onClose}>
       <DialogTitle>入荷サイズ選択</DialogTitle>
       <DialogContent sx={{ padding: 0 }}>
         <StockStatusTable

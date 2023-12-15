@@ -1,3 +1,4 @@
+import { TSize } from "@/app/_components/item-register/item-register-container";
 import getNoCacheData from "../getNoCacheData";
 
 export type TMeasurement = {
@@ -7,7 +8,7 @@ export type TMeasurement = {
 
 export type TMeasurementInput = {
   mCateSmallId: number;
-  size: string | null;
+  size: TSize | null;
   measurements: TMeasurement[];
   needPartsForSizeCalc: number[];
   isSizeStable: boolean;

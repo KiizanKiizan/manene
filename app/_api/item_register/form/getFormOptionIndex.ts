@@ -11,7 +11,7 @@ export type TImageOption = {
   imagePath: string;
 };
 
-type TFormOptionIndexResponse = {
+export type TFormOptionIndexResponse = {
   categorySmalls: TOption[];
   brands: TOption[];
   colors: TImageOption[];

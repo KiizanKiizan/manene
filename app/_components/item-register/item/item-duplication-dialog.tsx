@@ -1,4 +1,6 @@
 import { TOption } from "@/app/_api/item_register/form/getFormOptionIndex";
+import postItemsDuplicate from "@/app/_api/item_register/postitemsDuplicate";
+import { TItemsShowResponse } from "@/app/_api/items/itemsShowResponse";
 import {
   Box,
   Button,
@@ -12,36 +14,48 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ChangeEvent } from "react";
+import { AxiosError } from "axios";
+import { ChangeEvent, useState } from "react";
 import DisableBackDialog from "../../common/dialog/disable-back-dialog";
 
 type TProps = {
-  isOpen: boolean;
+  cardId: number;
   adminOption: TOption[];
-  selectedCreateNum?: number;
-  selectedAdminId: number;
-  onChangeSelectedCreateNum: (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  onChangeAdminId: (e: SelectChangeEvent<number>) => void;
-  onClose: () => void;
-  onClickCancel: () => void;
-  onClickAdd: () => void;
+  onCloseDialog: () => void;
+  duplicateCard: (data: TItemsShowResponse[]) => void;
 };
 
 export default function ItemDuplicationDialog({
-  isOpen,
+  cardId,
   adminOption,
-  selectedCreateNum,
-  selectedAdminId,
-  onChangeSelectedCreateNum,
-  onChangeAdminId,
-  onClose,
-  onClickCancel,
-  onClickAdd,
+  onCloseDialog,
+  duplicateCard,
 }: TProps) {
+  const defaultCreateNum = 1;
+  const defaultAdminId = 2;
+  const [selectedCreateNum, setSelectedCreateNum] = useState<
+    number | undefined
+  >(defaultCreateNum);
+  const [selectedAdminId, setSelectedAdminId] =
+    useState<number>(defaultAdminId);
+
+  const handleClickDuplicate = () => {
+    if (cardId && selectedCreateNum)
+      postItemsDuplicate({
+        id: cardId,
+        tAdminId: selectedAdminId,
+        createNum: selectedCreateNum,
+      })
+        .then((res: TItemsShowResponse[]) => {
+          duplicateCard(res);
+        })
+        .catch((e: AxiosError) => {
+          alert(`アイテムの複製に失敗しました。 ${e.message}`);
+        });
+    onCloseDialog();
+  };
   return (
-    <DisableBackDialog open={isOpen} onClose={onClose}>
+    <DisableBackDialog open onClose={onCloseDialog}>
       <DialogTitle>一斉作成</DialogTitle>
       <DialogContent>
         <Box>
@@ -53,7 +67,15 @@ export default function ItemDuplicationDialog({
             <Typography>作成数：</Typography>
             <TextField
               value={selectedCreateNum}
-              onChange={onChangeSelectedCreateNum}
+              onChange={(
+                e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) =>
+                setSelectedCreateNum(
+                  isNaN(parseInt(e.target.value))
+                    ? undefined
+                    : parseInt(e.target.value)
+                )
+              }
               variant="standard"
               type="number"
               size="small"
@@ -67,8 +89,11 @@ export default function ItemDuplicationDialog({
                 <Select
                   value={selectedAdminId}
                   label="admin"
-                  onChange={onChangeAdminId}
+                  onChange={(e: SelectChangeEvent<number>) =>
+                    setSelectedAdminId(Number(e.target.value))
+                  }
                   variant="standard"
+                  sx={{ maxHeight: "100vh", overflow: "auto" }}
                 >
                   {adminOption.map((admin) => (
                     <MenuItem key={admin.value} value={admin.value}>
@@ -82,9 +107,9 @@ export default function ItemDuplicationDialog({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClickCancel}>キャンセル</Button>
+        <Button onClick={onCloseDialog}>キャンセル</Button>
         <Button
-          onClick={onClickAdd}
+          onClick={handleClickDuplicate}
           disabled={!selectedCreateNum || selectedCreateNum <= 0}
         >
           追加

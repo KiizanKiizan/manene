@@ -1,8 +1,9 @@
+import { TSize } from "@/app/_components/item-register/item-register-container";
 import getNoCacheData from "../getNoCacheData";
 
 export type TCoordePicksIndexResponse = {
   id: number;
-  size: string;
+  size: TSize;
   itemImageUrl: string;
   mCateSmallName: string;
   mColorName: string;

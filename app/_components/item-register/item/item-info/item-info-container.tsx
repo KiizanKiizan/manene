@@ -1,6 +1,10 @@
 import { TOption } from "@/app/_api/item_register/form/getFormOptionIndex";
 import useItemsCreate from "@/app/_api/item_register/useItemsCreate";
 import useItemsUpdate from "@/app/_api/item_register/useItemsUpdate";
+import {
+  TItemsShowResponse,
+  TMeasurement,
+} from "@/app/_api/items/itemsShowResponse";
 import { TMeasurementInput } from "@/app/_api/size_measurement/getSizeMeasurementIndex";
 import FooterButton from "@/app/_components/common/button/footer-button";
 import DisableBackDialog from "@/app/_components/common/dialog/disable-back-dialog";
@@ -8,39 +12,48 @@ import LoadingDialog from "@/app/_components/common/dialog/loading-dialog";
 import Header from "@/app/_components/common/pages/header";
 import SizeMeasurementsEditForm from "@/app/_components/size_measurements/[id]/size-measurement-edit-form";
 import { ORIGINAL_SIZE } from "@/app/_constants/original-size";
-
 import useSizeMeasurementHandler, {
   partKeyName,
 } from "@/app/_utils/hooks/useSizeMeasurementHandler";
 import { Box, DialogContent, Typography } from "@mui/material";
 import { AxiosError } from "axios";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  TCreateOrUpdateActionValue,
+  TSize,
+} from "../../item-register-container";
 import AdminList from "./admin-list";
 import ItemInfoList, { TItemData } from "./item-info-list";
 
 type TProps = {
   measurementInputData: TMeasurementInput;
   itemData: TItemData[];
+  copiedItemMeasurementData: TMeasurement;
   itemImagePath: string;
   adminOptions: TOption[];
-  arrivalSize: string;
+  arrivalSize: TSize;
   stockingOrderId: number;
   onCloseItemInfo: () => void;
+  onCreateOrUpdateCardState: (args: TCreateOrUpdateActionValue) => void;
   itemId?: number;
   adminId?: number;
+  copiedSize?: TSize | null;
 };
 
 export default function ItemInfoContainer({
   measurementInputData,
   itemData,
+  copiedItemMeasurementData,
   itemImagePath,
   adminOptions,
   arrivalSize,
   stockingOrderId,
   onCloseItemInfo,
+  onCreateOrUpdateCardState,
   itemId,
   adminId,
+  copiedSize,
 }: TProps) {
   const {
     size,
@@ -59,13 +72,15 @@ export default function ItemInfoContainer({
     measurementInputData: measurementInputData,
     itemId: itemId,
     arrivalSize: arrivalSize,
+    copiedItemMeasurementData: copiedItemMeasurementData,
   });
   const [isAdminDialogOpen, setIsAdminDialogOpen] = useState<boolean>(false);
   const [selectedAdminId, setSelectedAdminId] = useState<number | undefined>(
     adminId
   );
-  const [selectedSize, setSelectedSize] = useState<string | null>(
-    measurementInputData.size
+
+  const [selectedSize, setSelectedSize] = useState<TSize | null>(
+    measurementInputData.size ?? copiedSize ?? null
   );
   const [isSizeMeasurementDialogOpen, setIsSizeMeasurementDialogOpen] =
     useState<boolean>(false);
@@ -99,9 +114,25 @@ export default function ItemInfoContainer({
           },
         },
         {
-          onSuccess() {
-            onCloseItemInfo();
-            // ここでアイテムカードにレスポンスをセットする処理を書く
+          onSuccess(response) {
+            const item: TItemsShowResponse = response.data;
+            onCreateOrUpdateCardState({
+              itemId: item.id,
+              adminId: item.tAdmin.id,
+              size: item.size ?? "",
+              shoulder: item.shoulder,
+              bust: item.bust,
+              waist: item.waist,
+              minWaist: item.minWaist,
+              maxWaist: item.maxWaist,
+              hip: item.hip,
+              lengthTop: item.lengthTop,
+              roundNeck: item.roundNeck,
+              roundLeg: item.roundLeg,
+              outseam: item.outseam,
+              sleeveLength: item.sleeveLength,
+              hemWidth: item.hemWidth,
+            });
           },
           onError(error: AxiosError) {
             alert(
@@ -140,9 +171,25 @@ export default function ItemInfoContainer({
           },
         },
         {
-          onSuccess() {
-            onCloseItemInfo();
-            // ここでアイテムカードにレスポンスをセットする処理を書く
+          onSuccess(response) {
+            const item: TItemsShowResponse = response.data;
+            onCreateOrUpdateCardState({
+              itemId: item.id,
+              adminId: item.tAdmin.id,
+              size: item.size ?? "",
+              shoulder: item.shoulder,
+              bust: item.bust,
+              waist: item.waist,
+              minWaist: item.minWaist,
+              maxWaist: item.maxWaist,
+              hip: item.hip,
+              lengthTop: item.lengthTop,
+              roundNeck: item.roundNeck,
+              roundLeg: item.roundLeg,
+              outseam: item.outseam,
+              sleeveLength: item.sleeveLength,
+              hemWidth: item.hemWidth,
+            });
           },
           onError(error: AxiosError) {
             alert(
@@ -161,9 +208,15 @@ export default function ItemInfoContainer({
   )?.name;
 
   const getPreMeasurement = (fieldName: string): number | undefined | null => {
-    return measurementInputData.measurements.find(
-      (data) => partKeyName[data.part as keyof typeof partKeyName] === fieldName
-    )?.value;
+    return (
+      measurementInputData.measurements.find(
+        (data) =>
+          partKeyName[data.part as keyof typeof partKeyName] === fieldName
+      )?.value ??
+      copiedItemMeasurementData[
+        fieldName as keyof typeof copiedItemMeasurementData
+      ]
+    );
   };
 
   const partSize = [
@@ -218,21 +271,23 @@ export default function ItemInfoContainer({
     return v.partSize !== null && v.partSize !== undefined;
   }) as { partName: string; partSize: number }[];
 
+  useEffect(() => {
+    addEventListener("popstate", onCloseItemInfo);
+    return () => {
+      removeEventListener("popstate", onCloseItemInfo);
+    };
+  }, [onCloseItemInfo]);
+
   return (
     <>
       <LoadingDialog isOpen={isCreateLoading || isUpdateLoading} />
       <Header title={itemId ? "アイテム編集" : "アイテム新規追加"}>
         <Typography>入荷サイズ：{arrivalSize}</Typography>
       </Header>
-      <Box height="82vh" overflow="auto">
-        <Box display="flex" justifyContent="center" padding={3}>
-          <Image
-            alt="item_image"
-            src={itemImagePath}
-            width={120}
-            height={170}
-          />
-        </Box>
+      <Box display="flex" justifyContent="center" padding={3}>
+        <Image alt="item_image" src={itemImagePath} width={120} height={170} />
+      </Box>
+      <Box height="80vh" overflow="auto">
         <ItemInfoList
           itemData={itemData}
           size={selectedSize}
@@ -244,7 +299,16 @@ export default function ItemInfoContainer({
       </Box>
       <FooterButton
         onClick={itemId ? handleClickUpdate : handleClickCreate}
-        disabled={!selectedSize || selectedAdminId === undefined}
+        disabled={
+          !selectedSize ||
+          selectedAdminId === undefined ||
+          Object.keys(formData.newMeasurement).every(
+            (key) =>
+              formData.newMeasurement[
+                key as keyof typeof formData.newMeasurement
+              ] === undefined
+          )
+        }
       >
         確定
       </FooterButton>

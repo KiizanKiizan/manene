@@ -1,3 +1,4 @@
+import { TSize } from "@/app/_components/item-register/item-register-container";
 import { usePatchRequest } from "../usePatchRequest";
 
 export type TSizePartsParams = {
@@ -17,7 +18,7 @@ export type TSizePartsParams = {
 
 export type TSizeMeasurementUpdateParams = {
   id: number;
-  size: string;
+  size: TSize;
   rank: string;
 } & TSizePartsParams;
 

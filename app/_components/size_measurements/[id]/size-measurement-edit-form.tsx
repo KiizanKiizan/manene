@@ -10,11 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { TSize } from "../../item-register/item-register-container";
 import SizeMeasurementsList from "./size-measurements-list";
 import { TOptionDetail } from "./size-measurements-list-item";
 
 type TProps = {
-  size: string;
+  size: TSize;
   rank: string;
   measurement: string | undefined;
   optionDetails: TOptionDetail[];

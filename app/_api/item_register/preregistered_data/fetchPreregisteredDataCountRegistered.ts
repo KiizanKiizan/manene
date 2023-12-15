@@ -1,10 +1,10 @@
-import { useGetRequest } from "../../useGetRequest";
+import fetchData from "../../fetchData";
 
 type TParams = {
   id: number;
 };
 
-type TPreregisteredDataCountRegisteredResponse = {
+export type TPreregisteredDataCountRegisteredResponse = {
   stockingId: string;
   arrivedSmallNum: number;
   arrivedMediumNum: number;
@@ -16,12 +16,9 @@ type TPreregisteredDataCountRegisteredResponse = {
   registeredExtraLargeNum: number;
 };
 
-export default function usePreregisteredDataCountRegistered(params: TParams) {
-  const { data, error, isLoading } = useGetRequest<
-    TPreregisteredDataCountRegisteredResponse,
-    TParams
-  >({
+export default function fetchPreregisteredDataCountRegistered(params: TParams) {
+  const data = fetchData<TPreregisteredDataCountRegisteredResponse, TParams>({
     path: `/preregistered_data/${params.id}/count_registered`,
   });
-  return { data, error, isLoading };
+  return data;
 }

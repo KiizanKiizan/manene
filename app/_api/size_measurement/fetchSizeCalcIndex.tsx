@@ -1,3 +1,4 @@
+import { TSize } from "@/app/_components/item-register/item-register-container";
 import fetchData from "../fetchData";
 
 type TParams = {
@@ -7,7 +8,7 @@ type TParams = {
 };
 
 export type TSizeCalcIndexResponse = {
-  size: string;
+  size: TSize;
 };
 
 export default function fetchSizeCalcIndex(params: TParams) {

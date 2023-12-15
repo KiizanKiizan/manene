@@ -1,8 +1,9 @@
+import { TSize } from "@/app/_components/item-register/item-register-container";
 import { usePostRequest } from "../usePostRequest";
 
 export type TCoordePicksPickResponse = {
   id: number;
-  size: string;
+  size: TSize;
   itemImageUrl: string;
   mCateSmallName: string;
   mColorName: string;

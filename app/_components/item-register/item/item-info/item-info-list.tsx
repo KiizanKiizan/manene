@@ -2,6 +2,7 @@ import ItemSizeDetailCard, {
   TPartSize,
 } from "@/app/_components/common/item/item-size-detail-card";
 import { Box, Button, List, ListItem, Typography } from "@mui/material";
+import { TSize } from "../../item-register-container";
 import ItemInfoListItem from "./item-info-list-item";
 
 export type TItemData = {
@@ -11,7 +12,7 @@ export type TItemData = {
 
 type TProps = {
   itemData: TItemData[];
-  size: string | null;
+  size: TSize | null;
   partSize: TPartSize[];
   adminName?: string;
   onClickAdminSection: () => void;
