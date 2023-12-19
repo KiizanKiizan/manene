@@ -1,9 +1,10 @@
+import { TSize } from "@/app/_components/item-register/item-register-container";
 import { TInspectionGroup } from "../inspection-groups/getInspectionGroupsIndex";
 import { usePostRequest } from "../usePostRequest";
 
 export type TItemInfo = {
   id: number;
-  size: string;
+  size: TSize;
   itemImageUrl: string;
   mCateSmallName: string;
   mColorName: string;

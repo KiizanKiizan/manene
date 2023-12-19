@@ -1,9 +1,10 @@
 "use client";
+import { TSize } from "@/app/_components/item-register/item-register-container";
 import fetchData from "../fetchData";
 
 export type TItemLocationsItemScanResponse = {
   id: number;
-  size: string | null;
+  size: TSize | null;
   itemImageUrl: string;
   mCateSmall: {
     id: number;

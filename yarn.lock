@@ -2769,6 +2769,11 @@ log-update@^6.0.0:
     strip-ansi "^7.1.0"
     wrap-ansi "^9.0.0"
 
+long-press-event@^2.4.6:
+  version "2.4.6"
+  resolved "https://registry.yarnpkg.com/long-press-event/-/long-press-event-2.4.6.tgz#bbd81cf931aa62928f43c00ce1b4b396bbd5219f"
+  integrity sha512-59zL3M+uD7Q2DTuxJ2UkbVV3+0D9PrcI7zgem1AXRinH6g8mb7iN9vOKCqiVriW15S4L9OmKOr/d8q9qAaeCGQ==
+
 loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
@@ -3223,6 +3228,11 @@ react-dom@18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
+
+react-icons@^4.11.0:
+  version "4.11.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.11.0.tgz#4b0e31c9bfc919608095cc429c4f1846f4d66c65"
+  integrity sha512-V+4khzYcE5EBk/BvcuYRq6V/osf11ODUM2J8hg2FDSswRrGvqiYUYPRy4OdrWaQOBj4NcpJfmHZLNaD+VH0TyA==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
