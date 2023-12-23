@@ -108,6 +108,7 @@ export default function ItemInfoContainer({
             minWaist: formData.newMeasurement.minWaist,
             hip: formData.newMeasurement.hip,
             roundLeg: formData.newMeasurement.roundLeg,
+            lengthWaist: formData.newMeasurement.lengthWaist,
             outseam: formData.newMeasurement.outseam,
             sleeveLength: formData.newMeasurement.sleeveLength,
             hemWidth: formData.newMeasurement.hemWidth,
@@ -128,6 +129,7 @@ export default function ItemInfoContainer({
               hip: item.hip,
               lengthTop: item.lengthTop,
               roundNeck: item.roundNeck,
+              lengthWaist: item.lengthWaist,
               roundLeg: item.roundLeg,
               outseam: item.outseam,
               sleeveLength: item.sleeveLength,
@@ -165,6 +167,7 @@ export default function ItemInfoContainer({
             minWaist: formData.newMeasurement.minWaist,
             hip: formData.newMeasurement.hip,
             roundLeg: formData.newMeasurement.roundLeg,
+            lengthWaist: formData.newMeasurement.lengthWaist,
             outseam: formData.newMeasurement.outseam,
             sleeveLength: formData.newMeasurement.sleeveLength,
             hemWidth: formData.newMeasurement.hemWidth,
@@ -185,6 +188,7 @@ export default function ItemInfoContainer({
               hip: item.hip,
               lengthTop: item.lengthTop,
               roundNeck: item.roundNeck,
+              lengthWaist: item.lengthWaist,
               roundLeg: item.roundLeg,
               outseam: item.outseam,
               sleeveLength: item.sleeveLength,
@@ -253,6 +257,11 @@ export default function ItemInfoContainer({
         formData.newMeasurement.roundLeg ?? getPreMeasurement("roundLeg"),
     },
     {
+      partName: "股上",
+      partSize:
+        formData.newMeasurement.lengthWaist ?? getPreMeasurement("lengthWaist"),
+    },
+    {
       partName: "総丈",
       partSize: formData.newMeasurement.outseam ?? getPreMeasurement("outseam"),
     },
@@ -287,7 +296,7 @@ export default function ItemInfoContainer({
       <Box display="flex" justifyContent="center" padding={3}>
         <Image alt="item_image" src={itemImagePath} width={120} height={170} />
       </Box>
-      <Box height="80vh" overflow="auto">
+      <Box height="80vh" overflow="scroll">
         <ItemInfoList
           itemData={itemData}
           size={selectedSize}

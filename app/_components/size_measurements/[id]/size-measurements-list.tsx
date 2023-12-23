@@ -1,6 +1,6 @@
 import SizeMeasurementsListItem, {
   TOptionDetail,
-} from './size-measurements-list-item';
+} from "./size-measurements-list-item";
 
 type TProps = {
   optionDetails: TOptionDetail[];

@@ -37,6 +37,7 @@ export const partName = {
   6: "最大ウエスト",
   7: "ヒップ",
   8: "もも",
+  9: "股上",
   13: "総丈",
   14: "裄丈",
   15: "裾幅",
@@ -52,6 +53,7 @@ export const partKeyName = {
   6: "maxWaist",
   7: "hip",
   8: "roundLeg",
+  9: "lengthWaist",
   13: "outseam",
   14: "sleeveLength",
   15: "hemWidth",
@@ -82,6 +84,7 @@ export default function useSizeMeasurementHandler({
       minWaist: undefined,
       maxWaist: undefined,
       hip: undefined,
+      lengthWaist: undefined,
       roundLeg: undefined,
       outseam: undefined,
       sleeveLength: undefined,
@@ -95,6 +98,7 @@ export default function useSizeMeasurementHandler({
       waist: undefined,
       minWaist: undefined,
       maxWaist: undefined,
+      lengthWaist: undefined,
       hip: undefined,
       roundLeg: undefined,
       outseam: undefined,
@@ -254,6 +258,9 @@ export default function useSizeMeasurementHandler({
           break;
         case "roundLeg":
           inputResult = truncateDoubledValue(fieldName, value);
+          break;
+        case "lengthWaist":
+          inputResult = truncateValue(fieldName, value);
           break;
         case "outseam":
           inputResult = truncateValue(fieldName, value);

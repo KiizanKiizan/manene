@@ -24,6 +24,7 @@ export default function ItemDetailCardContainer({
     { partName: "ウエスト", partSize: itemInfo.waist },
     { partName: "ヒップ", partSize: itemInfo.hip },
     { partName: "もも", partSize: itemInfo.roundLeg },
+    { partName: "股上", partSize: itemInfo.lengthWaist },
     { partName: "総丈", partSize: itemInfo.outseam },
     { partName: "裄丈", partSize: itemInfo.sleeveLength },
     { partName: "裾幅", partSize: itemInfo.hemWidth },
