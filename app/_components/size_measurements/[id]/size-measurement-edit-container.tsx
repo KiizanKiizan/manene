@@ -70,6 +70,7 @@ export default function SizeMeasurementEditContainer({
           minWaist: formData.newMeasurement.minWaist,
           hip: formData.newMeasurement.hip,
           roundLeg: formData.newMeasurement.roundLeg,
+          lengthWaist: formData.newMeasurement.lengthWaist,
           outseam: formData.newMeasurement.outseam,
           sleeveLength: formData.newMeasurement.sleeveLength,
           hemWidth: formData.newMeasurement.hemWidth,

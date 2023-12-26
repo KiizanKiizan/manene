@@ -61,6 +61,7 @@ export default function SizeMeasurementSwitcher({
     hip: cardState.hip,
     lengthTop: cardState.lengthTop,
     roundNeck: cardState.roundNeck,
+    lengthWaist: cardState.lengthWaist,
     roundLeg: cardState.roundLeg,
     outseam: cardState.outseam,
     sleeveLength: cardState.sleeveLength,

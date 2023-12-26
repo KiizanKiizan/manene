@@ -11,6 +11,7 @@ export type TSizePartsParams = {
   maxWaist?: number;
   hip?: number;
   roundLeg?: number;
+  lengthWaist?: number;
   outseam?: number;
   sleeveLength?: number;
   hemWidth?: number;
